@@ -29,7 +29,7 @@ public class Measure<T> {
      */
     public static <T> Measure<T> executionTime(Supplier<T> supplier) {
         Objects.requireNonNull(supplier);
-        return new Measure<T>(supplier);
+        return new Measure<>(supplier);
     }
 
     /**

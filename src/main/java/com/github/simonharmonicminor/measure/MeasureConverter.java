@@ -4,8 +4,8 @@ package com.github.simonharmonicminor.measure;
  * A class which converts one measure unit to another
  */
 public class MeasureConverter {
-    private static final long MEGA_COEFFICIENT = 1000 * 1000;
-    private static final long KILO_COEFFICIENT = 1000;
+    private static final long MEGA_COEFFICIENT = 1000L * 1000L;
+    private static final long KILO_COEFFICIENT = 1000L;
 
     /**
      * Convert millis to nanos
