@@ -18,8 +18,7 @@ class MeasureTest {
 
     @Test
     void throwsNullPointerIfSupplierIsNull() {
-        Measure.Supplier supplier = null;
-        assertThrows(NullPointerException.class, () -> Measure.executionTime(supplier));
+        assertThrows(NullPointerException.class, () -> Measure.executionTime((Measure.Supplier<Integer>) null));
     }
 
     @Test
@@ -29,6 +28,24 @@ class MeasureTest {
         Measure measure2 = Measure.executionTime(() -> 1);
         assertNotNull(measure1);
         assertNotNull(measure2);
+    }
+
+    @Test
+    void ifInMillisThrowsExceptionReturnsFailed() {
+        ExecutionResult<Integer> executionResult =
+                Measure.executionTime((Measure.Supplier<Integer>) () -> {
+                    throw new RuntimeException();
+                }).inMillis();
+        assertTrue(executionResult.isFailed());
+    }
+
+    @Test
+    void ifInNanosThrowsExceptionReturnsFailed() {
+        ExecutionResult<Integer> executionResult =
+                Measure.executionTime((Measure.Supplier<Integer>) () -> {
+                    throw new RuntimeException();
+                }).inNanos();
+        assertTrue(executionResult.isFailed());
     }
 
     @Test

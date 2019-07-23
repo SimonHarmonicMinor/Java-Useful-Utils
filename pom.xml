@@ -6,7 +6,7 @@
 
     <groupId>com.github.simonharmonicminor</groupId>
     <artifactId>java-useful-utils</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
 
     <properties>
