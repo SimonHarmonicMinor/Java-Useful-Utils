@@ -1,4 +1,4 @@
-package com.github.simonharmonicminor.measure;
+package com.github.simonharmonicminor.juu.measure;
 
 import org.junit.jupiter.api.Test;
 

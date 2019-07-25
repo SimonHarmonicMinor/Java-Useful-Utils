@@ -1,4 +1,4 @@
-package com.github.simonharmonicminor.measure;
+package com.github.simonharmonicminor.juu.measure;
 
 /**
  * A class which contains the result of function execution and time spent for it
@@ -6,6 +6,7 @@ package com.github.simonharmonicminor.measure;
  * @param <T> function result type
  * @see Measure
  * @see MeasureUnit
+ * @since 0.1
  */
 public class ExecutionResult<T> {
     private static final ExecutionResult<?> FAILED = new ExecutionResult<>(null, -1, null);

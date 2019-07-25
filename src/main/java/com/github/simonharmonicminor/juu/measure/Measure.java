@@ -1,4 +1,4 @@
-package com.github.simonharmonicminor.measure;
+package com.github.simonharmonicminor.juu.measure;
 
 
 import java.util.Objects;
@@ -8,6 +8,7 @@ import java.util.Objects;
  *
  * @param <T> type of function return result
  * @see ExecutionResult
+ * @since 0.1
  */
 public class Measure<T> {
 

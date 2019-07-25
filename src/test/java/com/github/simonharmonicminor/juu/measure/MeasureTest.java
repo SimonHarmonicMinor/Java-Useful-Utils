@@ -1,8 +1,10 @@
-package com.github.simonharmonicminor.measure;
+package com.github.simonharmonicminor.juu.measure;
 
+import org.awaitility.Duration;
 import org.junit.jupiter.api.Test;
 
-import static com.github.simonharmonicminor.measure.MeasureConverter.nanosToMillis;
+import static com.github.simonharmonicminor.juu.measure.MeasureConverter.millisToNanos;
+import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -50,40 +52,38 @@ class MeasureTest {
 
     @Test
     void inMillisMeasuresCorrectSupplier() {
-        final long SLEEP_TIME_IN_MILLIS = 100;
-        ExecutionResult<Integer> executionResult =
-                Measure.executionTime(() -> {
-                    Thread.sleep(SLEEP_TIME_IN_MILLIS);
-                    return 1;
-                }).inMillis();
-        assertEquals(SLEEP_TIME_IN_MILLIS, executionResult.getTime(), SLEEP_TIME_IN_MILLIS / 50);
+        await().atLeast(Duration.ONE_SECOND)
+                .atMost(Duration.TWO_SECONDS)
+                .until(() -> Measure.executionTime(() -> {
+                    await().pollDelay(Duration.ONE_SECOND).until(() -> true);
+                    return true;
+                }).inMillis().getResult());
     }
 
     @Test
     void inNanosMeasuresCorrectSupplier() {
-        final long SLEEP_TIME_IN_NANOS = 1000000000L;
-        ExecutionResult<Integer> executionResult =
-                Measure.executionTime(() -> {
-                    Thread.sleep(nanosToMillis(SLEEP_TIME_IN_NANOS));
-                    return 1;
-                }).inNanos();
-        assertEquals(SLEEP_TIME_IN_NANOS, executionResult.getTime(), SLEEP_TIME_IN_NANOS / 50);
+        await().atLeast(Duration.ONE_SECOND)
+                .atMost(Duration.TWO_SECONDS)
+                .until(() -> Measure.executionTime(() -> {
+                    await().pollDelay(Duration.ONE_SECOND).until(() -> true);
+                    return true;
+                }).inNanos().getResult());
     }
 
     @Test
     void inMillisMeasuresCorrectAction() {
-        final long SLEEP_TIME_IN_MILLIS = 100;
         ExecutionResult<Void> executionResult =
-                Measure.executionTime(() -> Thread.sleep(SLEEP_TIME_IN_MILLIS)).inMillis();
-        assertEquals(SLEEP_TIME_IN_MILLIS, executionResult.getTime(), SLEEP_TIME_IN_MILLIS / 50);
+                Measure.executionTime(() -> await().pollDelay(Duration.ONE_SECOND).until(() -> true))
+                        .inMillis();
+        assertEquals(1000, executionResult.getTime(), 50);
     }
 
     @Test
     void inNanosMeasuresCorrectAction() {
-        final long SLEEP_TIME_IN_NANOS = 1000000000L;
         ExecutionResult<Void> executionResult =
-                Measure.executionTime(() -> Thread.sleep(nanosToMillis(SLEEP_TIME_IN_NANOS))).inNanos();
-        assertEquals(SLEEP_TIME_IN_NANOS, executionResult.getTime(), SLEEP_TIME_IN_NANOS / 50);
+                Measure.executionTime(() -> await().pollDelay(Duration.ONE_SECOND).until(() -> true))
+                        .inNanos();
+        assertEquals(millisToNanos(1000), executionResult.getTime(), millisToNanos(50));
     }
 
     @Test

@@ -6,12 +6,12 @@
 
     <groupId>com.github.simonharmonicminor</groupId>
     <artifactId>java-useful-utils</artifactId>
-    <version>1.0</version>
+    <version>0.1</version>
     <packaging>jar</packaging>
 
     <properties>
         <junit.version>5.5.1</junit.version>
-        <mockito.version>2.23.4</mockito.version>
+        <mockito.version>1.9.5</mockito.version>
     </properties>
 
     <build>
@@ -44,12 +44,14 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>${mockito.version}</version>
+            <groupId>org.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
+            <version>3.1.6</version>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 
 </project>
