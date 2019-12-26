@@ -8,6 +8,7 @@ import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ProfilerTest {
+    private static final int DELTA_MILLIS = 100;
 
     @Test
     void ifDefinedMeasureUnitIsCorrect() {
@@ -58,7 +59,7 @@ class ProfilerTest {
         Profiler profilerMillis = Profiler.startMeasuringInMillis();
         await().pollDelay(Duration.ONE_SECOND).until(() -> true);
         profilerMillis.stopMeasuring();
-        assertEquals(1000, profilerMillis.getTime(), 50);
+        assertEquals(1000, profilerMillis.getTime(), DELTA_MILLIS);
     }
 
     @Test
@@ -66,6 +67,6 @@ class ProfilerTest {
         Profiler profilerMillis = Profiler.startMeasuringInNanos();
         await().pollDelay(Duration.ONE_SECOND).until(() -> true);
         profilerMillis.stopMeasuring();
-        assertEquals(millisToNanos(1000), profilerMillis.getTime(), millisToNanos(50));
+        assertEquals(millisToNanos(1000), profilerMillis.getTime(), millisToNanos(DELTA_MILLIS));
     }
 }

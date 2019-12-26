@@ -11,11 +11,11 @@ import static org.junit.jupiter.api.Assertions.*;
  * @see Measure
  */
 class MeasureTest {
+    private static final int DELTA_MILLIS = 100;
 
     @Test
     void throwsNullPointerIfActionIsNull() {
-        Measure.Action action = null;
-        assertThrows(NullPointerException.class, () -> Measure.executionTime(action));
+        assertThrows(NullPointerException.class, () -> Measure.executionTime((Measure.Action) null));
     }
 
     @Test
@@ -25,9 +25,8 @@ class MeasureTest {
 
     @Test
     void executionTimeReturnsNotNull() {
-        Measure measure1 = Measure.executionTime(() -> {
-        });
-        Measure measure2 = Measure.executionTime(() -> 1);
+        Measure<Void> measure1 = Measure.executionTime(() -> { });
+        Measure<Integer> measure2 = Measure.executionTime(() -> 1);
         assertNotNull(measure1);
         assertNotNull(measure2);
     }
@@ -75,7 +74,7 @@ class MeasureTest {
         ExecutionResult<Void> executionResult =
                 Measure.executionTime(() -> await().pollDelay(Duration.ONE_SECOND).until(() -> true))
                         .inMillis();
-        assertEquals(1000, executionResult.getTime(), 50);
+        assertEquals(1000, executionResult.getTime(), DELTA_MILLIS);
     }
 
     @Test
@@ -83,7 +82,7 @@ class MeasureTest {
         ExecutionResult<Void> executionResult =
                 Measure.executionTime(() -> await().pollDelay(Duration.ONE_SECOND).until(() -> true))
                         .inNanos();
-        assertEquals(millisToNanos(1000), executionResult.getTime(), millisToNanos(50));
+        assertEquals(millisToNanos(1000), executionResult.getTime(), millisToNanos(DELTA_MILLIS));
     }
 
     @Test
