@@ -1,7 +1,10 @@
 package com.github.simonharmonicminor.juu.measure;
 
 
+import com.github.simonharmonicminor.juu.lambda.Action;
+
 import java.util.Objects;
+import java.util.function.Supplier;
 
 /**
  * A class for measuring time of function execution with retrieving result.
@@ -52,49 +55,19 @@ public class Measure<T> {
 
     /**
      * @return execution result measured in millis.
-     * If execution is failed, method will return {@link ExecutionResult#failed()}
      */
     public ExecutionResult<T> inMillis() {
-        try {
-            long time = System.currentTimeMillis();
-            T result = supplier.get();
-            return new ExecutionResult<>(result, System.currentTimeMillis() - time, MeasureUnit.MILLIS);
-        } catch (Exception e) {
-            return ExecutionResult.failed();
-        }
+        long time = System.currentTimeMillis();
+        T result = supplier.get();
+        return new ExecutionResult<>(result, System.currentTimeMillis() - time, MeasureUnit.MILLIS);
     }
 
     /**
      * @return execution result measured in nanos.
-     * If execution is failed, method will return {@link ExecutionResult#failed()}
      */
     public ExecutionResult<T> inNanos() {
-        try {
-            long time = System.nanoTime();
-            T result = supplier.get();
-            return new ExecutionResult<>(result, System.nanoTime() - time, MeasureUnit.NANOS);
-        } catch (Exception e) {
-            return ExecutionResult.failed();
-        }
-    }
-
-    /**
-     * A variant of java {@link java.util.function.Supplier} interface which allows to throw
-     * an {@link Exception}
-     *
-     * @param <T> return type
-     */
-    @FunctionalInterface
-    public interface Supplier<T> {
-        T get() throws Exception;
-    }
-
-    /**
-     * An interface with one method that takes nothing and returns nothing but allows
-     * to throw an {@link Exception}
-     */
-    @FunctionalInterface
-    public interface Action {
-        void execute() throws Exception;
+        long time = System.nanoTime();
+        T result = supplier.get();
+        return new ExecutionResult<>(result, System.nanoTime() - time, MeasureUnit.NANOS);
     }
 }

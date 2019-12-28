@@ -57,7 +57,7 @@ public class Profiler {
 
 
     /**
-     * Stops measuring and returns time. Multiply calls don't affect the result
+     * Stops measuring and returns time. Multiple calls don't affect the result
      * @return measured time
      */
     public long stopMeasuring() {
