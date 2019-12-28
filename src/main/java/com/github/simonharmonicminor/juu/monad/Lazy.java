@@ -60,8 +60,8 @@ public class Lazy<T> implements Streaming<T> {
      * For instance, this equation <br><br>
      * <div>
      * <code>
-     * Lazy.of(() -> 1) <br>
-     * &nbsp;&nbsp;&nbsp;.flatMap(v -> Lazy.of(() -> v + 1)) <br>
+     * Lazy.of(() -&gt; 1) <br>
+     * &nbsp;&nbsp;&nbsp;.flatMap(v -&gt; Lazy.of(() -&gt; v + 1)) <br>
      * &nbsp;&nbsp;&nbsp;.calculate()
      * </code>
      * </div>

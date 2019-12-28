@@ -140,8 +140,8 @@ public class Try<T> implements Streaming<T> {
      * <br>
      * <br>
      * <code>
-     * Try.of(() -> 1) <br>
-     * &nbsp;&nbsp;&nbsp;.flatMap(v -> Try.of(() -> v + 1)) <br>
+     * Try.of(() -&gt; 1) <br>
+     * &nbsp;&nbsp;&nbsp;.flatMap(v -&gt; Try.of(() -&gt; v + 1)) <br>
      * &nbsp;&nbsp;&nbsp;.orElse(-1)
      * </code>
      * <br>
@@ -150,8 +150,8 @@ public class Try<T> implements Streaming<T> {
      * <br>
      * <br>
      * <code>
-     * Try.of(() -> 1) <br>
-     * &nbsp;&nbsp;&nbsp;.flatMap(v -> Try.of(() -> v / 0)) <br>
+     * Try.of(() -&gt; 1) <br>
+     * &nbsp;&nbsp;&nbsp;.flatMap(v -&gt; Try.of(() -&gt; v / 0)) <br>
      * &nbsp;&nbsp;&nbsp;.orElse(-1)
      * </code>
      * <br>
