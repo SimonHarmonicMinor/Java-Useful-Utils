@@ -18,7 +18,7 @@ import java.util.stream.Stream;
  * Monad for retrieving values just like {@link java.util.Optional}, but instead a container
  * considered as an empty one if an exception has been thrown during calculations.
  * <p>
- * <br/>
+ * <br>
  * Class overrides {@link Object#equals(Object)} and {@link Object#hashCode()} methods.
  *
  * @param <T> the type of the return value
@@ -134,28 +134,28 @@ public class Try<T> implements Streaming<T> {
      * Maps the value from one to another and returns new container.
      * The mapping function must return another {@link Try} container.
      * If calculation does not fail, returns the new container, otherwise returns an empty one.
-     * <br/>
-     * <br/>
+     * <br>
+     * <br>
      * For instance,
-     * <br />
-     * <br />
+     * <br>
+     * <br>
      * <code>
-     * Try.of(() -> 1) <br/>
-     * &nbsp;&nbsp;&nbsp;.flatMap(v -> Try.of(() -> v + 1)) <br/>
+     * Try.of(() -> 1) <br>
+     * &nbsp;&nbsp;&nbsp;.flatMap(v -> Try.of(() -> v + 1)) <br>
      * &nbsp;&nbsp;&nbsp;.orElse(-1)
      * </code>
-     * <br />
-     * <br />
+     * <br>
+     * <br>
      * returns 2, while
-     * <br/>
-     * <br/>
+     * <br>
+     * <br>
      * <code>
-     * Try.of(() -> 1) <br/>
-     * &nbsp;&nbsp;&nbsp;.flatMap(v -> Try.of(() -> v / 0)) <br/>
+     * Try.of(() -> 1) <br>
+     * &nbsp;&nbsp;&nbsp;.flatMap(v -> Try.of(() -> v / 0)) <br>
      * &nbsp;&nbsp;&nbsp;.orElse(-1)
      * </code>
-     * <br/>
-     * <br/>
+     * <br>
+     * <br>
      * returns -1
      *
      * @param mapper mapping function
