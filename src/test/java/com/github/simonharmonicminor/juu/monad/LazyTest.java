@@ -20,6 +20,7 @@ class LazyTest {
 
     @Test
     void testLazyReallyActsLazy() {
+        @SuppressWarnings("unchecked")
         Collection<Integer> collection = (Collection<Integer>) mock(Collection.class);
         Lazy<Integer> lazy =
                 Lazy.of(() -> {

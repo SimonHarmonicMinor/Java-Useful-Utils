@@ -1,9 +1,9 @@
 package com.github.simonharmonicminor.juu.monad;
 
+import com.github.simonharmonicminor.juu.collection.Streaming;
 import com.github.simonharmonicminor.juu.lambda.Action;
 import com.github.simonharmonicminor.juu.lambda.CheckedFunction;
 import com.github.simonharmonicminor.juu.lambda.CheckedSupplier;
-import com.github.simonharmonicminor.juu.collection.Streaming;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;
@@ -97,9 +97,10 @@ public class Try<T> implements Streaming<T> {
      * @param <T> the type of the return value
      * @return empty container
      */
-    @SuppressWarnings("unchecked")
     public static <T> Try<T> empty() {
-        return (Try<T>) EMPTY;
+        @SuppressWarnings("unchecked")
+        Try<T> t = (Try<T>) EMPTY;
+        return t;
     }
 
     /**
