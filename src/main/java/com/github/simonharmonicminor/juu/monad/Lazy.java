@@ -53,7 +53,7 @@ public class Lazy<T> implements Streaming<T> {
      * <b>NB:</b> flatMap does not trigger the execution</div>
      * <br>
      * <div>
-     *     After triggering the execution flatChain returns not the lazy object, but the result
+     *     After triggering the execution flatMap returns not the lazy object, but the result
      *     of its inner calculation
      * </div>
      * <br>
