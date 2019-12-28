@@ -18,7 +18,7 @@ class MeasureTest {
 
     @Test
     void throwsNullPointerIfActionIsNull() {
-        assertThrows(NullPointerException.class, () -> Measure.executionTime((Action) null));
+        assertThrows(NullPointerException.class, () -> Measure.executionTime((Supplier<Integer>) null));
     }
 
     @Test

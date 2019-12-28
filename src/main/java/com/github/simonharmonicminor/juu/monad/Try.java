@@ -3,12 +3,11 @@ package com.github.simonharmonicminor.juu.monad;
 import com.github.simonharmonicminor.juu.lambda.Action;
 import com.github.simonharmonicminor.juu.lambda.CheckedFunction;
 import com.github.simonharmonicminor.juu.lambda.CheckedSupplier;
-import com.github.simonharmonicminor.juu.lambda.Streaming;
+import com.github.simonharmonicminor.juu.collection.Streaming;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;

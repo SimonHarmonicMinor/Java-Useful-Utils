@@ -1,4 +1,4 @@
-package com.github.simonharmonicminor.juu.lambda;
+package com.github.simonharmonicminor.juu.collection;
 
 import java.util.stream.Stream;
 
