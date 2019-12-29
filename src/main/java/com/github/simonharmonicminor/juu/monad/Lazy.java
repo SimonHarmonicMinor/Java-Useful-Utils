@@ -44,6 +44,7 @@ public class Lazy<T> implements Streaming<T> {
      * @throws NullPointerException if mapper is <code>null</code>
      */
     public <U> Lazy<U> map(Function<? super T, ? extends U> mapper) {
+        Objects.requireNonNull(mapper);
         return Lazy.of(() -> mapper.apply(supplier.get()));
     }
 
@@ -71,8 +72,10 @@ public class Lazy<T> implements Streaming<T> {
      * @param mapper mapping function
      * @param <U>    the return type
      * @return lazy object
+     * @throws NullPointerException if mapper is null
      */
     public <U> Lazy<U> flatMap(Function<? super T, ? extends Lazy<? extends U>> mapper) {
+        Objects.requireNonNull(mapper);
         return Lazy.of(() -> mapper.apply(supplier.get()).calculate());
     }
 

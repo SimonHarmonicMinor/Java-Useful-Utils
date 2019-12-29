@@ -125,8 +125,10 @@ public class Try<T> implements Streaming<T> {
      * @param <U>    the type of the new value
      * @param <E>    the type of the exception that mapper may throw
      * @return a container with the new value or an empty one
+     * @throws NullPointerException if mapper is null
      */
     public <U, E extends Throwable> Try<U> map(CheckedFunction<? super T, ? extends U, E> mapper) {
+        Objects.requireNonNull(mapper);
         return Try.of(() -> mapper.apply(value));
     }
 
@@ -216,8 +218,10 @@ public class Try<T> implements Streaming<T> {
      * @param supplier supplier for the new container
      * @param <E>      the type of the exception that container may throw
      * @return the container itself or the new one
+     * @throws NullPointerException if supplier is null
      */
     public <E extends Throwable> Try<T> orElseTry(CheckedSupplier<T, E> supplier) {
+        Objects.requireNonNull(supplier);
         return isPresent() ? this : Try.of(supplier);
     }
 
@@ -227,8 +231,10 @@ public class Try<T> implements Streaming<T> {
      *
      * @param supplier supplier which returns default value
      * @return the value of the container or the default one
+     * @throws NullPointerException if supplier is null
      */
     public T orElseGet(Supplier<? extends T> supplier) {
+        Objects.requireNonNull(supplier);
         return isPresent() ? value : supplier.get();
     }
 

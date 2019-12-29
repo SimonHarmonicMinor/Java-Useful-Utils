@@ -11,6 +11,6 @@ buildNumber.properties
 
 # Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)
 !/.mvn/wrapper/maven-wrapper.jar
-.idea/
-/.idea/workspace.xml
+.idea/**
+.idea/workspace.xml
 /java-useful-utils.iml
