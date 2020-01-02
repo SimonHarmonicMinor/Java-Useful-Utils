@@ -1,4 +1,4 @@
-package com.github.simonharmonicminor.juu.collection;
+package com.github.simonharmonicminor.juu.util;
 
 import java.util.stream.Stream;
 
@@ -6,6 +6,7 @@ import java.util.stream.Stream;
  * Allows to convert an object to {@link Stream}
  *
  * @param <T> the type of the stream content
+ * @since 1.0
  */
 @FunctionalInterface
 public interface Streaming<T> {
