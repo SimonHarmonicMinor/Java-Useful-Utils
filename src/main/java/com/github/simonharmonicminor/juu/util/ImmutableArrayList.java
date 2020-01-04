@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 /**
  * An immutable implementation of java native {@link ArrayList}.
  *
- * @param <T> the type of the object that list contains
+ * @param <T> the type of the content
  * @see ImmutableList
  * @see List
  * @see ArrayList

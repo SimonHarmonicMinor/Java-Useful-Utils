@@ -7,6 +7,12 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
 
+/**
+ * Provides useful reduction operations for java Stream API.
+ *
+ * @see java.util.stream.Collectors
+ * @since 1.0
+ */
 public class ImmutableCollectors {
     static final Set<Collector.Characteristics> CH_ID
             = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.IDENTITY_FINISH));
@@ -14,8 +20,17 @@ public class ImmutableCollectors {
             = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.UNORDERED,
             Collector.Characteristics.IDENTITY_FINISH));
 
-    public static <T, C extends ImmutableCollection<T>>
-    Collector<T, ?, C> toCollection(Function<Iterable<T>, C> collectionFactory) {
+    /**
+     * Provides collector to {@link ImmutableCollection}
+     *
+     * @param collectionFactory function that accepts {@link Iterable} and returns {@link ImmutableCollection}
+     * @param <T>               the type of the content
+     * @param <C>               the type of the return collection
+     * @return collector
+     */
+    public static <T, C extends ImmutableCollection<T>> Collector<T, ?, C> toCollection(
+            Function<Iterable<T>, C> collectionFactory
+    ) {
         return new CollectorImpl<>(
                 (Supplier<List<T>>) ArrayList::new,
                 List::add,
@@ -28,30 +43,27 @@ public class ImmutableCollectors {
         );
     }
 
+    /**
+     * Provides collector to {@link ImmutableList}
+     *
+     * @param <T> the type of the content
+     * @return collector
+     * @see ImmutableCollectors#toCollection(Function)
+     */
     public static <T> Collector<T, ?, ImmutableList<T>> toList() {
-        return new CollectorImpl<>(
-                (Supplier<List<T>>) ArrayList::new,
-                List::add,
-                (left, right) -> {
-                    left.addAll(right);
-                    return left;
-                },
-                ImmutableArrayList::new,
-                CH_ID);
+        return toCollection(ImmutableArrayList::new);
     }
 
+    /**
+     * Provides collector to {@link ImmutableSet}
+     *
+     * @param <T> the type of the content
+     * @return collector
+     * @see ImmutableCollectors#toCollection(Function)
+     */
     public static <T> Collector<T, ?, ImmutableSet<T>> toSet() {
-        return new CollectorImpl<>(
-                (Supplier<List<T>>) ArrayList::new,
-                List::add,
-                (left, right) -> {
-                    left.addAll(right);
-                    return left;
-                },
-                ImmutableHashSet::new,
-                CH_UNORDERED_ID);
+        return toCollection(ImmutableHashSet::new);
     }
-
 
     static class CollectorImpl<T, A, R> implements Collector<T, A, R> {
         private final Supplier<A> supplier;
