@@ -1,0 +1,40 @@
+package com.github.simonharmonicminor.juu.util;
+
+/**
+ * Immutable pair that keeps key and value.
+ * Used by {@link ImmutableMap}
+ *
+ * @param <K> the type of the key
+ * @param <V> the type of the value
+ * @since 1.0
+ */
+public interface Pair<K, V> {
+    K getKey();
+
+    V getValue();
+
+    /**
+     * Overrides method from {@link Object#equals(Object)}.
+     * Must be implemented.
+     */
+    boolean equals(Object o);
+
+    /**
+     * Overrides method from {@link Object#hashCode()}.
+     * Must be implemented.
+     */
+    int hashCode();
+
+    /**
+     * Instantiates new pair. Returns {@link PairImpl}
+     *
+     * @param key   the key
+     * @param value the value
+     * @param <K>   the type of the key
+     * @param <V>   the type of the value
+     * @return new pair
+     */
+    static <K, V> Pair<K, V> of(K key, V value) {
+        return new PairImpl<>(key, value);
+    }
+}

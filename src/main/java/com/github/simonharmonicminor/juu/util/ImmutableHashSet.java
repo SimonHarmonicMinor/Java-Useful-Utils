@@ -1,10 +1,13 @@
 package com.github.simonharmonicminor.juu.util;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
+
+import static com.github.simonharmonicminor.juu.util.ImmutableCollections.listOf;
 
 /**
  * An immutable implementation of java native {@link HashSet}
@@ -13,16 +16,17 @@ import java.util.stream.Stream;
  * @see ImmutableSet
  * @see Set
  * @see HashSet
+ * @see Serializable
  * @since 1.0
  */
-public class ImmutableHashSet<T> implements ImmutableSet<T> {
+public class ImmutableHashSet<T> implements ImmutableSet<T>, Serializable {
     private final HashSet<T> hashSet;
 
     public ImmutableHashSet(Iterable<T> iterable) {
         this(iterable, true);
     }
 
-    private ImmutableHashSet(Iterable<T> iterable, boolean needsCloning) {
+    ImmutableHashSet(Iterable<T> iterable, boolean needsCloning) {
         Objects.requireNonNull(iterable);
         if (iterable instanceof HashSet) {
             this.hashSet = needsCloning ? new HashSet<>((HashSet<T>) iterable) : (HashSet<T>) iterable;
@@ -97,7 +101,7 @@ public class ImmutableHashSet<T> implements ImmutableSet<T> {
 
     @Override
     public boolean isNotEmpty() {
-        return !isEmpty();
+        return !hashSet.isEmpty();
     }
 
     @Override
@@ -197,7 +201,7 @@ public class ImmutableHashSet<T> implements ImmutableSet<T> {
 
     @Override
     public ImmutableList<T> toList() {
-        return new ImmutableArrayList<>(this.hashSet);
+        return listOf(this.hashSet);
     }
 
     @Override
@@ -228,5 +232,18 @@ public class ImmutableHashSet<T> implements ImmutableSet<T> {
     @Override
     public Iterator<T> iterator() {
         return hashSet.iterator();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ImmutableHashSet<?> that = (ImmutableHashSet<?>) o;
+        return hashSet.equals(that.hashSet);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(hashSet);
     }
 }

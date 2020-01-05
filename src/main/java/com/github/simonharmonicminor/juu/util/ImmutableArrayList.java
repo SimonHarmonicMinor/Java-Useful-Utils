@@ -2,9 +2,12 @@ package com.github.simonharmonicminor.juu.util;
 
 import com.github.simonharmonicminor.juu.lambda.TriFunction;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Stream;
+
+import static com.github.simonharmonicminor.juu.util.ImmutableCollections.setOf;
 
 /**
  * An immutable implementation of java native {@link ArrayList}.
@@ -13,16 +16,17 @@ import java.util.stream.Stream;
  * @see ImmutableList
  * @see List
  * @see ArrayList
+ * @see Serializable
  * @since 1.0
  */
-public class ImmutableArrayList<T> implements ImmutableList<T> {
+public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
     private final ArrayList<T> arrayList;
 
     public ImmutableArrayList(Iterable<T> iterable) {
         this(iterable, true);
     }
 
-    private ImmutableArrayList(Iterable<T> iterable, boolean needCloning) {
+    ImmutableArrayList(Iterable<T> iterable, boolean needCloning) {
         Objects.requireNonNull(iterable);
         if (iterable instanceof ArrayList) {
             this.arrayList = needCloning ? new ArrayList<>((ArrayList<T>) iterable) : (ArrayList<T>) iterable;
@@ -244,7 +248,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T> {
 
     @Override
     public boolean isNotEmpty() {
-        return !isEmpty();
+        return !arrayList.isEmpty();
     }
 
     @Override
@@ -345,7 +349,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T> {
 
     @Override
     public ImmutableSet<T> toSet() {
-        return new ImmutableHashSet<>(arrayList);
+        return setOf(arrayList);
     }
 
     @Override
@@ -371,5 +375,18 @@ public class ImmutableArrayList<T> implements ImmutableList<T> {
     @Override
     public Iterator<T> iterator() {
         return arrayList.iterator();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ImmutableArrayList<?> that = (ImmutableArrayList<?>) o;
+        return arrayList.equals(that.arrayList);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(arrayList);
     }
 }

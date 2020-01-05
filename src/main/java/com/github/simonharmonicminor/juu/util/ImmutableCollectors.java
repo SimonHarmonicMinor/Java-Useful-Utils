@@ -21,6 +21,12 @@ public class ImmutableCollectors {
             Collector.Characteristics.IDENTITY_FINISH));
 
     /**
+     * Suppresses default constructor, ensuring non-instantiability.
+     */
+    private ImmutableCollectors() {
+    }
+
+    /**
      * Provides collector to {@link ImmutableCollection}
      *
      * @param collectionFactory function that accepts {@link Iterable} and returns {@link ImmutableCollection}
@@ -31,6 +37,7 @@ public class ImmutableCollectors {
     public static <T, C extends ImmutableCollection<T>> Collector<T, ?, C> toCollection(
             Function<Iterable<T>, C> collectionFactory
     ) {
+        Objects.requireNonNull(collectionFactory);
         return new CollectorImpl<>(
                 (Supplier<List<T>>) ArrayList::new,
                 List::add,
@@ -51,7 +58,16 @@ public class ImmutableCollectors {
      * @see ImmutableCollectors#toCollection(Function)
      */
     public static <T> Collector<T, ?, ImmutableList<T>> toList() {
-        return toCollection(ImmutableArrayList::new);
+        return new CollectorImpl<>(
+                (Supplier<List<T>>) ArrayList::new,
+                List::add,
+                (r1, r2) -> {
+                    r1.addAll(r2);
+                    return r1;
+                },
+                list -> new ImmutableArrayList<>(list, false),
+                CH_ID
+        );
     }
 
     /**
@@ -62,7 +78,75 @@ public class ImmutableCollectors {
      * @see ImmutableCollectors#toCollection(Function)
      */
     public static <T> Collector<T, ?, ImmutableSet<T>> toSet() {
-        return toCollection(ImmutableHashSet::new);
+        return new CollectorImpl<>(
+                (Supplier<Set<T>>) HashSet::new,
+                Set::add,
+                (r1, r2) -> {
+                    r1.addAll(r2);
+                    return r1;
+                },
+                set -> new ImmutableHashSet<>(set, false),
+                CH_UNORDERED_ID
+        );
+    }
+
+    /**
+     * Provides collector to {@link ImmutableMap}
+     *
+     * @param keyMapper   function that accepts value and produces map key
+     * @param valueMapper function that accepts value and produces map value
+     * @param <T>         the type of the content
+     * @param <K>         the type of the map key
+     * @param <V>         the type of the map value
+     * @return collector
+     * @throws IllegalStateException if keys were duplicated
+     */
+    @SuppressWarnings("unchecked")
+    public static <T, K, V> Collector<T, ?, ImmutableMap<K, V>> toMap(
+            Function<? super T, ? extends K> keyMapper,
+            Function<? super T, ? extends V> valueMapper
+    ) {
+        Objects.requireNonNull(keyMapper);
+        Objects.requireNonNull(valueMapper);
+        return new CollectorImpl<>(
+                HashMap::new,
+                uniqKeysMapAccumulator(keyMapper, valueMapper),
+                uniqKeysMapMerger(),
+                map -> new ImmutableHashMap<>((Map<K, V>) map, false),
+                CH_ID
+        );
+    }
+
+    private static <T, K, V>
+    BiConsumer<Map<K, V>, T> uniqKeysMapAccumulator(Function<? super T, ? extends K> keyMapper,
+                                                    Function<? super T, ? extends V> valueMapper) {
+        return (map, element) -> {
+            K k = keyMapper.apply(element);
+            V v = Objects.requireNonNull(valueMapper.apply(element));
+            V u = map.putIfAbsent(k, v);
+            if (u != null) throw duplicateKeyException(k, u, v);
+        };
+    }
+
+    private static <K, V, M extends Map<K, V>>
+    BinaryOperator<M> uniqKeysMapMerger() {
+        return (m1, m2) -> {
+            for (Map.Entry<K, V> e : m2.entrySet()) {
+                K k = e.getKey();
+                V v = Objects.requireNonNull(e.getValue());
+                V u = m1.putIfAbsent(k, v);
+                if (u != null) throw duplicateKeyException(k, u, v);
+            }
+            return m1;
+        };
+    }
+
+
+    private static IllegalStateException duplicateKeyException(
+            Object k, Object u, Object v) {
+        return new IllegalStateException(String.format(
+                "Duplicate key %s (attempted merging values %s and %s)",
+                k, u, v));
     }
 
     static class CollectorImpl<T, A, R> implements Collector<T, A, R> {
