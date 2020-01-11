@@ -1,4 +1,4 @@
-package com.github.simonharmonicminor.juu.util;
+package com.github.simonharmonicminor.juu.collection.immutable;
 
 import java.io.Serializable;
 import java.util.*;
@@ -6,7 +6,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static com.github.simonharmonicminor.juu.util.ImmutableCollections.listOf;
+import static com.github.simonharmonicminor.juu.collection.immutable.Immutable.listOf;
 
 /**
  * An immutable implementation of java native {@link HashSet}
@@ -42,7 +42,7 @@ public class ImmutableHashSet<T> implements ImmutableSet<T>, Serializable {
 
     private static <R> ImmutableSet<R> newImmutableHashSetWithoutCloning(Set<R> set) {
         if (set.isEmpty())
-            return ImmutableCollections.emptySet();
+            return Immutable.emptySet();
         return new ImmutableHashSet<>(set, false);
     }
 

@@ -1,9 +1,9 @@
 package com.github.simonharmonicminor.juu.monad;
 
+import com.github.simonharmonicminor.juu.collection.Streaming;
 import com.github.simonharmonicminor.juu.lambda.Action;
 import com.github.simonharmonicminor.juu.lambda.CheckedFunction;
 import com.github.simonharmonicminor.juu.lambda.CheckedSupplier;
-import com.github.simonharmonicminor.juu.util.Streaming;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;

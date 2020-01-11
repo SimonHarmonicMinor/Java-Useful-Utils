@@ -1,4 +1,4 @@
-package com.github.simonharmonicminor.juu.util;
+package com.github.simonharmonicminor.juu.collection.immutable;
 
 import java.util.function.Function;
 import java.util.function.Predicate;

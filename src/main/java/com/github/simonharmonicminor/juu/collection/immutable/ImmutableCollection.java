@@ -1,4 +1,6 @@
-package com.github.simonharmonicminor.juu.util;
+package com.github.simonharmonicminor.juu.collection.immutable;
+
+import com.github.simonharmonicminor.juu.collection.ParallelStreaming;
 
 import java.util.*;
 import java.util.function.BinaryOperator;

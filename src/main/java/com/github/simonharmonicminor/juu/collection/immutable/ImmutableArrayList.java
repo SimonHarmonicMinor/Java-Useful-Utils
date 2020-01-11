@@ -1,11 +1,11 @@
-package com.github.simonharmonicminor.juu.util;
+package com.github.simonharmonicminor.juu.collection.immutable;
 
 import java.io.Serializable;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Stream;
 
-import static com.github.simonharmonicminor.juu.util.ImmutableCollections.setOf;
+import static com.github.simonharmonicminor.juu.collection.immutable.Immutable.setOf;
 
 /**
  * An immutable implementation of java native {@link ArrayList}.
@@ -41,7 +41,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
 
     private static <R> ImmutableList<R> newImmutableListWithoutCloning(List<R> list) {
         if (list.isEmpty())
-            return ImmutableCollections.emptyList();
+            return Immutable.emptyList();
         return new ImmutableArrayList<>(list, false);
     }
 
@@ -75,7 +75,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
     @Override
     public ImmutableList<T> subList(int fromIndex, int toIndex) {
         if (fromIndex > toIndex)
-            return ImmutableCollections.emptyList();
+            return Immutable.emptyList();
         fromIndex = Math.max(0, fromIndex);
         toIndex = Math.min(size() - 1, toIndex);
         return newImmutableListWithoutCloning(arrayList.subList(fromIndex, toIndex));

@@ -1,4 +1,4 @@
-package com.github.simonharmonicminor.juu.util;
+package com.github.simonharmonicminor.juu.collection.immutable;
 
 import com.github.simonharmonicminor.juu.lambda.TriFunction;
 
@@ -141,6 +141,14 @@ public interface ImmutableMap<K, V> {
      * @return immutable set of (key -&gt; value) associations
      */
     ImmutableSet<Pair<K, V>> pairSet();
+
+    /**
+     * Converts this immutable map to mutable one.
+     * Creates new object, so its mutations does not affect the mutable one.
+     *
+     * @return new mutable map
+     */
+    Map<K, V> toMutableMap();
 
     /**
      * Overrides method from {@link Object#equals(Object)}.

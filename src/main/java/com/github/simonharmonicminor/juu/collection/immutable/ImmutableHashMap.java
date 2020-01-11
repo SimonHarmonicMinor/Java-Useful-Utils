@@ -1,4 +1,4 @@
-package com.github.simonharmonicminor.juu.util;
+package com.github.simonharmonicminor.juu.collection.immutable;
 
 import com.github.simonharmonicminor.juu.lambda.TriFunction;
 
@@ -8,8 +8,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.github.simonharmonicminor.juu.util.ImmutableCollections.listOf;
-import static com.github.simonharmonicminor.juu.util.ImmutableCollections.setOf;
+import static com.github.simonharmonicminor.juu.collection.immutable.Immutable.listOf;
+import static com.github.simonharmonicminor.juu.collection.immutable.Immutable.setOf;
 
 /**
  * An immutable implementation of java native {@link HashMap}
@@ -182,5 +182,10 @@ public class ImmutableHashMap<K, V> implements ImmutableMap<K, V>, Serializable 
     @Override
     public ImmutableSet<Pair<K, V>> pairSet() {
         return pairs;
+    }
+
+    @Override
+    public Map<K, V> toMutableMap() {
+        return new HashMap<>(hashMap);
     }
 }

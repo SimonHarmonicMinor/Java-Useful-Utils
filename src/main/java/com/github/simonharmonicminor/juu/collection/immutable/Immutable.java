@@ -1,4 +1,4 @@
-package com.github.simonharmonicminor.juu.util;
+package com.github.simonharmonicminor.juu.collection.immutable;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * @see Pair
  * @since 1.0
  */
-public class ImmutableCollections {
+public class Immutable {
     private static final ImmutableList<?> EMPTY_LIST = new ImmutableArrayList<>(Collections.emptyList());
     private static final ImmutableSet<?> EMPTY_SET = new ImmutableHashSet<>(Collections.emptyList());
     private static final Pair<?, ?> EMPTY_PAIR = Pair.of(null, null);
@@ -28,7 +28,7 @@ public class ImmutableCollections {
     /**
      * Suppresses default constructor, ensuring non-instantiability.
      */
-    private ImmutableCollections() {
+    private Immutable() {
     }
 
     /**
@@ -97,7 +97,7 @@ public class ImmutableCollections {
 
     /**
      * Creates new immutable list from given elements.
-     * If array is empty, returns {@link ImmutableCollections#emptyList()}.
+     * If array is empty, returns {@link Immutable#emptyList()}.
      * This is the preferred way of creating immutable lists, unless you need particular
      * implementation.
      *
@@ -116,7 +116,7 @@ public class ImmutableCollections {
 
     /**
      * Creates new immutable list from given elements.
-     * If iterable has no elements, returns {@link ImmutableCollections#emptyList()}.
+     * If iterable has no elements, returns {@link Immutable#emptyList()}.
      * This is the preferred way of creating immutable lists, unless you need particular
      * implementation.
      *
@@ -134,7 +134,7 @@ public class ImmutableCollections {
 
     /**
      * Creates new immutable set from given elements.
-     * If array is empty, returns {@link ImmutableCollections#emptySet()}.
+     * If array is empty, returns {@link Immutable#emptySet()}.
      * This is the preferred way of creating immutable sets, unless you need particular
      * implementation.
      *
@@ -153,7 +153,7 @@ public class ImmutableCollections {
 
     /**
      * Creates new immutable set from given elements.
-     * If iterable has no elements, returns {@link ImmutableCollections#emptySet()}.
+     * If iterable has no elements, returns {@link Immutable#emptySet()}.
      * This is the preferred way of creating immutable sets, unless you need particular
      * implementation.
      *
