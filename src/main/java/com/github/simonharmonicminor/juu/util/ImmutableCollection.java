@@ -1,9 +1,6 @@
 package com.github.simonharmonicminor.juu.util;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BinaryOperator;
 import java.util.function.Predicate;
 
@@ -41,7 +38,9 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
     /**
      * @return true if collection size is not zero, otherwise false
      */
-    boolean isNotEmpty();
+    default boolean isNotEmpty() {
+        return !isEmpty();
+    }
 
     /**
      * @param element the element whose presence in this collection is to be tested
@@ -53,7 +52,9 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
      * @param element the element whose presence in this collection is to be tested
      * @return true if collection NOT contains the element, otherwise false
      */
-    boolean notContains(T element);
+    default boolean notContains(T element) {
+        return !contains(element);
+    }
 
     /**
      * @param elements the elements whose presence in this collection is to be tested
@@ -110,8 +111,12 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
      * @param identity    start value
      * @param accumulator accumulation function
      * @return reduction result
+     * @throws NullPointerException if accumulator is null
      */
-    T reduce(T identity, BinaryOperator<T> accumulator);
+    default T reduce(T identity, BinaryOperator<T> accumulator) {
+        Objects.requireNonNull(accumulator);
+        return stream().reduce(identity, accumulator);
+    }
 
     /**
      * Performs a reduction on the
@@ -122,8 +127,12 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
      *
      * @param accumulator accumulation function
      * @return reduction result
+     * @throws NullPointerException if accumulator is null
      */
-    Optional<T> reduce(BinaryOperator<T> accumulator);
+    default Optional<T> reduce(BinaryOperator<T> accumulator) {
+        Objects.requireNonNull(accumulator);
+        return stream().reduce(accumulator);
+    }
 
     /**
      * Returns min value of the collection calculated with provided comparator.
@@ -131,17 +140,52 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
      *
      * @param comparator comparator, which determines min value
      * @return min value
+     * @throws NullPointerException if comparator is null
      */
-    Optional<T> min(Comparator<? super T> comparator);
+    default Optional<T> min(Comparator<? super T> comparator) {
+        Objects.requireNonNull(comparator);
+        return stream().min(comparator);
+    }
 
     /**
      * Returns max value of the collection calculated with provided comparator.
      * If collection is empty, returns {@link Optional#empty()}
      *
      * @param comparator comparator, which determines max value
-     * @return min value
+     * @return max value
+     * @throws NullPointerException if comparator is null
      */
-    Optional<T> max(Comparator<? super T> comparator);
+    default Optional<T> max(Comparator<? super T> comparator) {
+        Objects.requireNonNull(comparator);
+        return stream().max(comparator);
+    }
+
+    /**
+     * Returns first element in the collection. If it is empty,
+     * returns {@link Optional#empty()}. If collection is unordered,
+     * then the returning value may be different from time to time.
+     *
+     * @return first present value
+     */
+    Optional<T> findFirst();
+
+    /**
+     * Returns first element in the collection which value matches with the
+     * provided predicate. If no such element is found, returns {@link Optional#empty()}.
+     * If collection is unordered, then the returning value may be different from time to time.
+     *
+     * @param predicate predicate which determines the value
+     * @return first present value
+     * @throws NullPointerException if {@code comparator} is null
+     */
+    default Optional<T> findFirst(Predicate<? super T> predicate) {
+        Objects.requireNonNull(predicate);
+        for (T t : this) {
+            if (predicate.test(t))
+                return Optional.ofNullable(t);
+        }
+        return Optional.empty();
+    }
 
     /**
      * Converts collection to array. The array is completely new object. So array mutations
@@ -149,7 +193,15 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
      *
      * @return elements of collection as array
      */
-    T[] toArray();
+    @SuppressWarnings("unchecked")
+    default T[] toArray() {
+        Object[] array = new Object[size()];
+        int i = 0;
+        for (T t : this) {
+            array[i++] = t;
+        }
+        return (T[]) array;
+    }
 
     /**
      * @return collection converted to immutable list

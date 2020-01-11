@@ -82,6 +82,20 @@ public class ImmutableCollections {
     }
 
     /**
+     * Same behaviour as
+     * <pre>{@code
+     * ImmutableList<Pair<T, U>> res = left.zipWith(right);
+     * }</pre>
+     * @see ImmutableList#zipWith(ImmutableList)
+     * @throws NullPointerException if {@code left} or {@code right} is null
+     */
+    public static <T, U> ImmutableList<Pair<T, U>> zip(ImmutableList<T> left, ImmutableList<U> right) {
+        Objects.requireNonNull(left);
+        Objects.requireNonNull(right);
+        return left.zipWith(right);
+    }
+
+    /**
      * Creates new immutable list from given elements.
      * If array is empty, returns {@link ImmutableCollections#emptyList()}.
      * This is the preferred way of creating immutable lists, unless you need particular

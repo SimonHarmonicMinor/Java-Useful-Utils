@@ -2,7 +2,6 @@ package com.github.simonharmonicminor.juu.util;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -100,18 +99,8 @@ public class ImmutableHashSet<T> implements ImmutableSet<T>, Serializable {
     }
 
     @Override
-    public boolean isNotEmpty() {
-        return !hashSet.isEmpty();
-    }
-
-    @Override
     public boolean contains(T element) {
         return hashSet.contains(element);
-    }
-
-    @Override
-    public boolean notContains(T element) {
-        return !contains(element);
     }
 
     @Override
@@ -165,38 +154,8 @@ public class ImmutableHashSet<T> implements ImmutableSet<T>, Serializable {
     }
 
     @Override
-    public T reduce(T identity, BinaryOperator<T> accumulator) {
-        Objects.requireNonNull(accumulator);
-        return stream().reduce(identity, accumulator);
-    }
-
-    @Override
-    public Optional<T> reduce(BinaryOperator<T> accumulator) {
-        Objects.requireNonNull(accumulator);
-        return stream().reduce(accumulator);
-    }
-
-    @Override
-    public Optional<T> min(Comparator<? super T> comparator) {
-        Objects.requireNonNull(comparator);
-        return stream().min(comparator);
-    }
-
-    @Override
-    public Optional<T> max(Comparator<? super T> comparator) {
-        Objects.requireNonNull(comparator);
-        return stream().max(comparator);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public T[] toArray() {
-        Object[] array = new Object[size()];
-        int i = 0;
-        for (T t : this) {
-            array[i++] = t;
-        }
-        return (T[]) array;
+    public Optional<T> findFirst() {
+        return isEmpty() ? Optional.empty() : Optional.ofNullable(hashSet.iterator().next());
     }
 
     @Override

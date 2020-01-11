@@ -1,7 +1,5 @@
 package com.github.simonharmonicminor.juu.util;
 
-import com.github.simonharmonicminor.juu.lambda.TriFunction;
-
 import java.util.Comparator;
 import java.util.List;
 import java.util.ListIterator;
@@ -82,41 +80,32 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
     ImmutableList<T> concatWith(Iterable<T> iterable);
 
     /**
-     * Merges current list with provided list by applying merging function and returns
-     * new list.
+     * Zips current list with provided list and returns pairs, where key contains the
+     * element from the current list and value contains the element from the provided list.
      * For instance,
      * <pre>{@code
      * ImmutableList<Person> people = getPeople();
      * ImmutableList<Job> jobs = getJobs();
      *
-     * ImmutableList<String> pretty =
-     *      people.mergeWith(jobs, (p, j) ->
-     *              p.getName() + "_" + j.getName());
+     * ImmutableList<Pair<Person, Job>> zipped =
+     *      people.zipWith(jobs);
      * }</pre>
-     * If lists have different length, then at some point the first or the second param
-     * of the mergingFunction will become null.
-     * So, it is better to use it with {@link com.github.simonharmonicminor.juu.monad.Try}
+     * If lists have different length, then at some position the key or the value will become null.
      *
-     * @param list            provided list
-     * @param <U>             the type of the provided list
-     * @param <R>             the type of the result list
-     * @param mergingFunction function that applies for merging. The first param is the value
-     *                        from the current list, the second is from the provided list and
-     *                        the return value is the result value of the new list
-     * @return new list with the length of {@code Math.max(size(), list.size())}
-     * @throws NullPointerException if {@code list} is null or {@code mergingFunction} is null
+     * @param list provided list
+     * @param <R>  the type of the content of the provided list
+     * @return new list
+     * @throws NullPointerException if {@code list} is null
      */
-    <R, U> ImmutableList<R> mergeWith(ImmutableList<U> list, BiFunction<T, U, R> mergingFunction);
+    <R> ImmutableList<Pair<T, R>> zipWith(ImmutableList<R> list);
 
     /**
-     * This method has exactly the same behaviour as {@link ImmutableList#mergeWith(ImmutableList, BiFunction)},
-     * but merging function accepts three arguments:
-     * current index, the value of the current list and the value of the provided list.
+     * Returns two adjacent elements of the list as pairs.
+     * If list has length less then two, returns empty list.
      *
-     * @throws NullPointerException if {@code list} or {@code mergingFunction} is null
-     * @see ImmutableList#mergeWith(ImmutableList, BiFunction)
+     * @return new list
      */
-    <R, U> ImmutableList<R> mergeWithIndexed(ImmutableList<U> list, TriFunction<Integer, T, U, R> mergingFunction);
+    ImmutableList<Pair<T, T>> zipWithNext();
 
     /**
      * Maps the content of the list from one type to another

@@ -1,7 +1,5 @@
 package com.github.simonharmonicminor.juu.util;
 
-import com.github.simonharmonicminor.juu.lambda.TriFunction;
-
 import java.io.Serializable;
 import java.util.*;
 import java.util.function.*;
@@ -100,33 +98,24 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
     }
 
     @Override
-    public <R, U> ImmutableList<R> mergeWith(ImmutableList<U> list, BiFunction<T, U, R> mergingFunction) {
-        Objects.requireNonNull(list);
-        Objects.requireNonNull(mergingFunction);
-        int i = 0;
-        ArrayList<R> newList = new ArrayList<>(Math.max(size(), list.size()));
-        while (i < size() || i < list.size()) {
-            T curr = getValByIndex(this, i);
-            U other = getValByIndex(list, i);
-            newList.add(mergingFunction.apply(curr, other));
-            i++;
+    public <R> ImmutableList<Pair<T, R>> zipWith(ImmutableList<R> list) {
+        int maxSize = Math.max(size(), list.size());
+        ArrayList<Pair<T, R>> newArrayList = new ArrayList<>(maxSize);
+        for (int i = 0; i < maxSize; i++) {
+            T left = getValByIndex(this, i);
+            R right = getValByIndex(list, i);
+            newArrayList.add(Pair.of(left, right));
         }
-        return newImmutableListWithoutCloning(newList);
+        return newImmutableListWithoutCloning(newArrayList);
     }
 
     @Override
-    public <R, U> ImmutableList<R> mergeWithIndexed(ImmutableList<U> list, TriFunction<Integer, T, U, R> mergingFunction) {
-        Objects.requireNonNull(list);
-        Objects.requireNonNull(mergingFunction);
-        int i = 0;
-        ArrayList<R> newList = new ArrayList<>(Math.max(size(), list.size()));
-        while (i < size() || i < list.size()) {
-            T curr = getValByIndex(this, i);
-            U other = getValByIndex(list, i);
-            newList.add(mergingFunction.apply(i, curr, other));
-            i++;
+    public ImmutableList<Pair<T, T>> zipWithNext() {
+        ArrayList<Pair<T, T>> newArrayList = new ArrayList<>(size());
+        for (int i = 0; i < size() - 1; i++) {
+            newArrayList.add(Pair.of(get(i), get(i + 1)));
         }
-        return newImmutableListWithoutCloning(newList);
+        return newImmutableListWithoutCloning(newArrayList);
     }
 
     @Override
@@ -247,18 +236,8 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
     }
 
     @Override
-    public boolean isNotEmpty() {
-        return !arrayList.isEmpty();
-    }
-
-    @Override
     public boolean contains(T element) {
         return arrayList.contains(element);
-    }
-
-    @Override
-    public boolean notContains(T element) {
-        return !contains(element);
     }
 
     @Override
@@ -309,37 +288,8 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
     }
 
     @Override
-    public T reduce(T identity, BinaryOperator<T> accumulator) {
-        Objects.requireNonNull(accumulator);
-        return stream().reduce(identity, accumulator);
-    }
-
-    @Override
-    public Optional<T> reduce(BinaryOperator<T> accumulator) {
-        Objects.requireNonNull(accumulator);
-        return stream().reduce(accumulator);
-    }
-
-    @Override
-    public Optional<T> min(Comparator<? super T> comparator) {
-        Objects.requireNonNull(comparator);
-        return stream().min(comparator);
-    }
-
-    @Override
-    public Optional<T> max(Comparator<? super T> comparator) {
-        Objects.requireNonNull(comparator);
-        return stream().max(comparator);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public T[] toArray() {
-        Object[] array = new Object[size()];
-        for (int i = 0; i < arrayList.size(); i++) {
-            array[i] = arrayList.get(i);
-        }
-        return (T[]) array;
+    public Optional<T> findFirst() {
+        return isEmpty() ? Optional.empty() : Optional.ofNullable(get(0));
     }
 
     @Override

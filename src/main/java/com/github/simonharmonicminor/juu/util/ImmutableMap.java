@@ -34,7 +34,9 @@ public interface ImmutableMap<K, V> {
     /**
      * @return true if size is not zero, otherwise false
      */
-    boolean isNotEmpty();
+    default boolean isNotEmpty() {
+        return !isEmpty();
+    }
 
     /**
      * @param key the key whose presence is to be tested
@@ -46,7 +48,9 @@ public interface ImmutableMap<K, V> {
      * @param key the key whose presence is to be tested
      * @return true if map does not contain key, otherwise false
      */
-    boolean notContainsKey(K key);
+    default boolean notContainsKey(K key) {
+        return !containsKey(key);
+    }
 
     /**
      * @param value the value whose presence is to be tested
@@ -58,7 +62,9 @@ public interface ImmutableMap<K, V> {
      * @param value the value whose presence is to be tested
      * @return true if map does not contain value, otherwise false
      */
-    boolean notContainsValue(V value);
+    default boolean notContainsValue(V value) {
+        return !containsValue(value);
+    }
 
     /**
      * In case of occurring the same keys in two maps the value from the given map
@@ -66,6 +72,7 @@ public interface ImmutableMap<K, V> {
      *
      * @param map the map whose pairs will be added to the current one
      * @return new map with merged pairs
+     * @throws NullPointerException if {@code map} is null
      * @see ImmutableMap#concatWith(ImmutableMap, TriFunction)
      */
     ImmutableMap<K, V> concatWithOverride(ImmutableMap<K, V> map);
@@ -76,6 +83,7 @@ public interface ImmutableMap<K, V> {
      *
      * @param map the map whose pairs will be added to the current one
      * @return new map with merged pairs
+     * @throws NullPointerException if {@code map} is null
      * @see ImmutableMap#concatWith(ImmutableMap, TriFunction)
      */
     ImmutableMap<K, V> concatWithoutOverride(ImmutableMap<K, V> map);
@@ -94,6 +102,7 @@ public interface ImmutableMap<K, V> {
      *                          The third param is the value from the given map.
      *                          Function returns the value that will be added to the final result.
      * @return new map with merged pairs
+     * @throws NullPointerException if {@code map} is null or {@code overrideBehaviour} is null
      */
     ImmutableMap<K, V> concatWith(ImmutableMap<K, V> map, TriFunction<K, V, V, V> overrideBehaviour);
 

@@ -81,28 +81,13 @@ public class ImmutableHashMap<K, V> implements ImmutableMap<K, V>, Serializable 
     }
 
     @Override
-    public boolean isNotEmpty() {
-        return !hashMap.isEmpty();
-    }
-
-    @Override
     public boolean containsKey(K key) {
         return hashMap.containsKey(key);
     }
 
     @Override
-    public boolean notContainsKey(K key) {
-        return !hashMap.containsKey(key);
-    }
-
-    @Override
     public boolean containsValue(V value) {
         return hashMap.containsValue(value);
-    }
-
-    @Override
-    public boolean notContainsValue(V value) {
-        return !hashMap.containsValue(value);
     }
 
     private static <K, V> ImmutableMap<K, V> concatenation(

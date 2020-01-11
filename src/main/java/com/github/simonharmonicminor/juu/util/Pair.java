@@ -26,7 +26,7 @@ public interface Pair<K, V> {
     int hashCode();
 
     /**
-     * Instantiates new pair. Returns {@link PairImpl}
+     * Instantiates new pair.
      *
      * @param key   the key
      * @param value the value
