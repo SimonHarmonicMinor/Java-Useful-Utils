@@ -106,22 +106,6 @@ public class ImmutableHashMap<K, V> implements ImmutableMap<K, V>, Serializable 
         return new ImmutableHashMap<>(newHashMap, false);
     }
 
-    private static <K, V> ImmutableMap<K, V> concatenation(
-            Map<K, V> map,
-            HashMap<K, V> oldHashMap,
-            TriFunction<K, V, V, V> overrideBehaviour
-    ) {
-        HashMap<K, V> newHashMap = new HashMap<>(oldHashMap);
-        map.forEach((k, v) -> {
-            if (oldHashMap.containsKey(k)) {
-                newHashMap.put(k, overrideBehaviour.apply(k, oldHashMap.get(k), v));
-            } else {
-                newHashMap.put(k, v);
-            }
-        });
-        return new ImmutableHashMap<>(newHashMap, false);
-    }
-
     @Override
     @SuppressWarnings("unchecked")
     public ImmutableMap<K, V> concatWithOverride(ImmutableMap<K, V> map) {
@@ -138,27 +122,6 @@ public class ImmutableHashMap<K, V> implements ImmutableMap<K, V>, Serializable 
 
     @Override
     public ImmutableMap<K, V> concatWith(ImmutableMap<K, V> map, TriFunction<K, V, V, V> overrideBehaviour) {
-        Objects.requireNonNull(map);
-        Objects.requireNonNull(overrideBehaviour);
-        return concatenation(map, this.hashMap, overrideBehaviour);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public ImmutableMap<K, V> concatWithOverride(Map<K, V> map) {
-        Objects.requireNonNull(map);
-        return concatenation(map, this.hashMap, (TriFunction<K, V, V, V>) KEEP_OLD);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public ImmutableMap<K, V> concatWithoutOverride(Map<K, V> map) {
-        Objects.requireNonNull(map);
-        return concatenation(map, this.hashMap, (TriFunction<K, V, V, V>) KEEP_NEW);
-    }
-
-    @Override
-    public ImmutableMap<K, V> concatWith(Map<K, V> map, TriFunction<K, V, V, V> overrideBehaviour) {
         Objects.requireNonNull(map);
         Objects.requireNonNull(overrideBehaviour);
         return concatenation(map, this.hashMap, overrideBehaviour);

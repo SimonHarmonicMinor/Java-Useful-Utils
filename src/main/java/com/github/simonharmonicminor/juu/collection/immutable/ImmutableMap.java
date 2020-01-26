@@ -107,21 +107,6 @@ public interface ImmutableMap<K, V> {
     ImmutableMap<K, V> concatWith(ImmutableMap<K, V> map, TriFunction<K, V, V, V> overrideBehaviour);
 
     /**
-     * Same behaviour as {@link ImmutableMap#concatWithOverride(ImmutableMap)}
-     */
-    ImmutableMap<K, V> concatWithOverride(Map<K, V> map);
-
-    /**
-     * Same behaviour as {@link ImmutableMap#concatWithoutOverride(ImmutableMap)}
-     */
-    ImmutableMap<K, V> concatWithoutOverride(Map<K, V> map);
-
-    /**
-     * Same behaviour as {@link ImmutableMap#concatWith(ImmutableMap, TriFunction)}
-     */
-    ImmutableMap<K, V> concatWith(Map<K, V> map, TriFunction<K, V, V, V> overrideBehaviour);
-
-    /**
      * @param key the key whose associated value is to be found
      * @return the value that associates with the key if it is present, otherwise null
      */
