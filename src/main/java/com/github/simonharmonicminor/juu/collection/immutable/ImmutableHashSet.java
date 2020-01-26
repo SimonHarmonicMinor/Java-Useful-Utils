@@ -1,7 +1,10 @@
 package com.github.simonharmonicminor.juu.collection.immutable;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -94,68 +97,8 @@ public class ImmutableHashSet<T> implements ImmutableSet<T>, Serializable {
     }
 
     @Override
-    public boolean isEmpty() {
-        return hashSet.isEmpty();
-    }
-
-    @Override
     public boolean contains(T element) {
         return hashSet.contains(element);
-    }
-
-    @Override
-    public boolean containsAll(Iterable<T> elements) {
-        Objects.requireNonNull(elements);
-        for (T t : elements) {
-            if (!contains(t))
-                return false;
-        }
-        return true;
-    }
-
-    @Override
-    public boolean containsAny(Iterable<T> elements) {
-        Objects.requireNonNull(elements);
-        for (T t : elements) {
-            if (contains(t))
-                return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean allMatch(Predicate<? super T> predicate) {
-        Objects.requireNonNull(predicate);
-        for (T t : this) {
-            if (!predicate.test(t))
-                return false;
-        }
-        return true;
-    }
-
-    @Override
-    public boolean anyMatch(Predicate<? super T> predicate) {
-        Objects.requireNonNull(predicate);
-        for (T t : this) {
-            if (predicate.test(t))
-                return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean noneMatch(Predicate<? super T> predicate) {
-        Objects.requireNonNull(predicate);
-        for (T t : this) {
-            if (predicate.test(t))
-                return false;
-        }
-        return true;
-    }
-
-    @Override
-    public Optional<T> findFirst() {
-        return isEmpty() ? Optional.empty() : Optional.ofNullable(hashSet.iterator().next());
     }
 
     @Override
@@ -166,16 +109,6 @@ public class ImmutableHashSet<T> implements ImmutableSet<T>, Serializable {
     @Override
     public ImmutableSet<T> toSet() {
         return this;
-    }
-
-    @Override
-    public List<T> toMutableList() {
-        return new ArrayList<>(this.hashSet);
-    }
-
-    @Override
-    public Set<T> toMutableSet() {
-        return new HashSet<>(this.hashSet);
     }
 
     @Override

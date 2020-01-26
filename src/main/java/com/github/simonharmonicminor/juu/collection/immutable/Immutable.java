@@ -20,10 +20,12 @@ import java.util.stream.Collectors;
  * @since 1.0
  */
 public class Immutable {
-    private static final ImmutableList<?> EMPTY_LIST = new ImmutableArrayList<>(Collections.emptyList());
-    private static final ImmutableSet<?> EMPTY_SET = new ImmutableHashSet<>(Collections.emptyList());
+    private static final ImmutableArrayList<?> EMPTY_ARRAY_LIST = new ImmutableArrayList<>(Collections.emptyList());
+    private static final ImmutableHashSet<?> EMPTY_HASH_SET = new ImmutableHashSet<>(Collections.emptyList());
     private static final Pair<?, ?> EMPTY_PAIR = Pair.of(null, null);
-    private static final ImmutableMap<?, ?> EMPTY_MAP = new ImmutableHashMap<>(Collections.emptyMap());
+    private static final ImmutableHashMap<?, ?> EMPTY_HASH_MAP = new ImmutableHashMap<>(Collections.emptyMap());
+
+    private static final ImmutableTreeSet<?> EMPTY_TREE_SET = ImmutableTreeSet.of(Collections.emptyList());
 
     /**
      * Suppresses default constructor, ensuring non-instantiability.
@@ -40,7 +42,7 @@ public class Immutable {
      */
     @SuppressWarnings("unchecked")
     public static <T> ImmutableList<T> emptyList() {
-        return (ImmutableList<T>) EMPTY_LIST;
+        return (ImmutableList<T>) EMPTY_ARRAY_LIST;
     }
 
     /**
@@ -52,7 +54,17 @@ public class Immutable {
      */
     @SuppressWarnings("unchecked")
     public static <T> ImmutableSet<T> emptySet() {
-        return (ImmutableSet<T>) EMPTY_SET;
+        return (ImmutableSet<T>) EMPTY_HASH_SET;
+    }
+
+    @SuppressWarnings("unchecked")
+    static <T> ImmutableTreeSet<T> emptyTreeSet() {
+        return (ImmutableTreeSet<T>) EMPTY_TREE_SET;
+    }
+
+    @SuppressWarnings("unchecked")
+    static <T> ImmutableHashSet<T> emptyHashSet() {
+        return (ImmutableHashSet<T>) EMPTY_HASH_SET;
     }
 
     /**
@@ -78,7 +90,7 @@ public class Immutable {
      */
     @SuppressWarnings("unchecked")
     public static <K, V> ImmutableMap<K, V> emptyMap() {
-        return (ImmutableMap<K, V>) EMPTY_MAP;
+        return (ImmutableMap<K, V>) EMPTY_HASH_MAP;
     }
 
     /**
@@ -86,8 +98,9 @@ public class Immutable {
      * <pre>{@code
      * ImmutableList<Pair<T, U>> res = left.zipWith(right);
      * }</pre>
-     * @see ImmutableList#zipWith(ImmutableList)
+     *
      * @throws NullPointerException if {@code left} or {@code right} is null
+     * @see ImmutableList#zipWith(ImmutableList)
      */
     public static <T, U> ImmutableList<Pair<T, U>> zip(ImmutableList<T> left, ImmutableList<U> right) {
         Objects.requireNonNull(left);

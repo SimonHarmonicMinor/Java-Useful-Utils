@@ -39,10 +39,10 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
         }
     }
 
-    private static <R> ImmutableList<R> newImmutableListWithoutCloning(List<R> list) {
+    private static <R> ImmutableList<R> newImmutableList(List<R> list, boolean needsCloning) {
         if (list.isEmpty())
             return Immutable.emptyList();
-        return new ImmutableArrayList<>(list, false);
+        return new ImmutableArrayList<>(list, needsCloning);
     }
 
     @Override
@@ -63,22 +63,12 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
     }
 
     @Override
-    public ListIterator<T> listIterator() {
-        return arrayList.listIterator();
-    }
-
-    @Override
-    public ListIterator<T> listIterator(int index) {
-        return arrayList.listIterator(index);
-    }
-
-    @Override
     public ImmutableList<T> subList(int fromIndex, int toIndex) {
         if (fromIndex > toIndex)
             return Immutable.emptyList();
         fromIndex = Math.max(0, fromIndex);
         toIndex = Math.min(size() - 1, toIndex);
-        return newImmutableListWithoutCloning(arrayList.subList(fromIndex, toIndex));
+        return newImmutableList(arrayList.subList(fromIndex, toIndex), true);
     }
 
     @Override
@@ -88,7 +78,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
         for (T t : iterable) {
             copy.add(t);
         }
-        return newImmutableListWithoutCloning(copy);
+        return newImmutableList(copy, false);
     }
 
     private static <R> R getValByIndex(ImmutableList<R> immutableList, int index) {
@@ -106,7 +96,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
             R right = getValByIndex(list, i);
             newArrayList.add(Pair.of(left, right));
         }
-        return newImmutableListWithoutCloning(newArrayList);
+        return newImmutableList(newArrayList, false);
     }
 
     @Override
@@ -115,7 +105,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
         for (int i = 0; i < size() - 1; i++) {
             newArrayList.add(Pair.of(get(i), get(i + 1)));
         }
-        return newImmutableListWithoutCloning(newArrayList);
+        return newImmutableList(newArrayList, false);
     }
 
     @Override
@@ -125,7 +115,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
         for (T t : arrayList) {
             newList.add(mapper.apply(t));
         }
-        return newImmutableListWithoutCloning(newList);
+        return newImmutableList(newList, false);
     }
 
     @Override
@@ -135,7 +125,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
         for (int i = 0; i < arrayList.size(); i++) {
             newList.add(mapper.apply(i, arrayList.get(i)));
         }
-        return newImmutableListWithoutCloning(newList);
+        return newImmutableList(newList, false);
     }
 
     @Override
@@ -146,7 +136,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
             ImmutableArrayList<R> listElement = new ImmutableArrayList<>(mapper.apply(t));
             newList.addAll(listElement.arrayList);
         }
-        return newImmutableListWithoutCloning(newList);
+        return newImmutableList(newList, false);
     }
 
     @Override
@@ -158,7 +148,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
                     new ImmutableArrayList<>(mapper.apply(i, arrayList.get(i)));
             newList.addAll(listElement.arrayList);
         }
-        return newImmutableListWithoutCloning(newList);
+        return newImmutableList(newList, false);
     }
 
     @Override
@@ -169,7 +159,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
             if (predicate.test(t))
                 newList.add(t);
         }
-        return newImmutableListWithoutCloning(newList);
+        return newImmutableList(newList, false);
     }
 
     @Override
@@ -180,7 +170,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
             if (predicate.test(i, arrayList.get(i)))
                 newList.add(arrayList.get(i));
         }
-        return newImmutableListWithoutCloning(newList);
+        return newImmutableList(newList, false);
     }
 
     @Override
@@ -196,7 +186,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
         Objects.requireNonNull(comparator);
         ArrayList<T> copy = new ArrayList<>(arrayList);
         copy.sort(comparator);
-        return newImmutableListWithoutCloning(copy);
+        return newImmutableList(copy, false);
     }
 
     @Override
@@ -209,7 +199,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
         for (int i = 0; i < size; i++) {
             newList.add(arrayList.get(i));
         }
-        return newImmutableListWithoutCloning(newList);
+        return newImmutableList(newList, false);
     }
 
     @Override
@@ -222,7 +212,16 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
         for (int i = size; i < arrayList.size(); i++) {
             newList.add(arrayList.get(i));
         }
-        return newImmutableListWithoutCloning(newList);
+        return newImmutableList(newList, false);
+    }
+
+    @Override
+    public ImmutableList<T> reversed() {
+        ArrayList<T> newArrayList = new ArrayList<>(size());
+        for (int i = size() - 1; i >= 0; i--) {
+            newArrayList.add(get(i));
+        }
+        return newImmutableList(newArrayList, false);
     }
 
     @Override
@@ -231,65 +230,8 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
     }
 
     @Override
-    public boolean isEmpty() {
-        return arrayList.isEmpty();
-    }
-
-    @Override
     public boolean contains(T element) {
         return arrayList.contains(element);
-    }
-
-    @Override
-    public boolean containsAll(Iterable<T> elements) {
-        Objects.requireNonNull(elements);
-        ImmutableArrayList<T> immutableList = new ImmutableArrayList<>(elements);
-        return arrayList.containsAll(immutableList.arrayList);
-    }
-
-    @Override
-    public boolean containsAny(Iterable<T> elements) {
-        Objects.requireNonNull(elements);
-        for (T t : elements) {
-            if (contains(t))
-                return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean allMatch(Predicate<? super T> predicate) {
-        Objects.requireNonNull(predicate);
-        for (T t : arrayList) {
-            if (!predicate.test(t))
-                return false;
-        }
-        return true;
-    }
-
-    @Override
-    public boolean anyMatch(Predicate<? super T> predicate) {
-        Objects.requireNonNull(predicate);
-        for (T t : arrayList) {
-            if (predicate.test(t))
-                return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean noneMatch(Predicate<? super T> predicate) {
-        Objects.requireNonNull(predicate);
-        for (T t : arrayList) {
-            if (predicate.test(t))
-                return false;
-        }
-        return true;
-    }
-
-    @Override
-    public Optional<T> findFirst() {
-        return isEmpty() ? Optional.empty() : Optional.ofNullable(get(0));
     }
 
     @Override
@@ -300,16 +242,6 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
     @Override
     public ImmutableSet<T> toSet() {
         return setOf(arrayList);
-    }
-
-    @Override
-    public List<T> toMutableList() {
-        return new ArrayList<>(this.arrayList);
-    }
-
-    @Override
-    public Set<T> toMutableSet() {
-        return new HashSet<>(arrayList);
     }
 
     @Override

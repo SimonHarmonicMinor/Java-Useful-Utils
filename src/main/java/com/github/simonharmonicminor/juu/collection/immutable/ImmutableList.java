@@ -1,8 +1,6 @@
 package com.github.simonharmonicminor.juu.collection.immutable;
 
 import java.util.Comparator;
-import java.util.List;
-import java.util.ListIterator;
 import java.util.function.*;
 
 /**
@@ -40,23 +38,6 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
      * @return the first index of the element of -1
      */
     int lastIndexOf(T element);
-
-    /**
-     * Returns {@link ListIterator}
-     *
-     * @return list iterator
-     * @see List#listIterator()
-     */
-    ListIterator<T> listIterator();
-
-    /**
-     * Returns {@link ListIterator} at the specified index
-     *
-     * @param index start index
-     * @return list iterator
-     * @see List#listIterator(int)
-     */
-    ListIterator<T> listIterator(int index);
 
     /**
      * Returns sublist from {@code fromIndex} inclusively to {@code toIndex} exclusively.
@@ -224,4 +205,11 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
      * @throws IllegalArgumentException if {@code size} is less than zero
      */
     ImmutableList<T> skip(int size);
+
+    /**
+     * Reverses the list and returns its copy
+     *
+     * @return reversed list
+     */
+    ImmutableList<T> reversed();
 }

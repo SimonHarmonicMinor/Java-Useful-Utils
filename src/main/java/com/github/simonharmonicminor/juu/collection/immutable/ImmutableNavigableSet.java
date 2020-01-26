@@ -5,6 +5,10 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NavigableSet;
 
+/**
+ * @param <T>
+ * @see NavigableSet
+ */
 public interface ImmutableNavigableSet<T> extends ImmutableSortedSet<T> {
     /**
      * Returns the greatest element in this set strictly less than the

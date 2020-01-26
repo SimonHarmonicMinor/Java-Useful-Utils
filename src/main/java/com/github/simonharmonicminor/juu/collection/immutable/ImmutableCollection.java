@@ -35,7 +35,9 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
     /**
      * @return true if collection size is zero, otherwise false
      */
-    boolean isEmpty();
+    default boolean isEmpty() {
+        return size() == 0;
+    }
 
     /**
      * @return true if collection size is not zero, otherwise false
@@ -63,30 +65,60 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
      * @return true if collection contains all given elements, otherwise false
      * @throws NullPointerException if "elements" is null
      */
-    boolean containsAll(Iterable<T> elements);
+    default boolean containsAll(Iterable<T> elements) {
+        Objects.requireNonNull(elements);
+        for (T t : elements) {
+            if (notContains(t))
+                return false;
+        }
+        return true;
+    }
 
     /**
      * @param elements the elements whose presence in this collection is to be tested
      * @return true if collection contains any of given elements, otherwise false
      * @throws NullPointerException if "elements" is null
      */
-    boolean containsAny(Iterable<T> elements);
+    default boolean containsAny(Iterable<T> elements) {
+        Objects.requireNonNull(elements);
+        for (T t : elements) {
+            if (contains(t))
+                return true;
+        }
+        return false;
+    }
 
     /**
      * Returns whether all elements of this collection match the provided predicate.
      *
      * @param predicate predicate to apply to elements of this collection
      * @return true if predicate matches all elements, otherwise false
+     * @throws NullPointerException if predicate is null
      */
-    boolean allMatch(Predicate<? super T> predicate);
+    default boolean allMatch(Predicate<? super T> predicate) {
+        Objects.requireNonNull(predicate);
+        for (T t : this) {
+            if (!predicate.test(t))
+                return false;
+        }
+        return true;
+    }
 
     /**
      * Returns whether any element of this collection match the provided predicate.
      *
      * @param predicate predicate to apply to elements of this collection
      * @return true if predicate matches any element, otherwise false
+     * @throws NullPointerException if predicate is null
      */
-    boolean anyMatch(Predicate<? super T> predicate);
+    default boolean anyMatch(Predicate<? super T> predicate) {
+        Objects.requireNonNull(predicate);
+        for (T t : this) {
+            if (predicate.test(t))
+                return true;
+        }
+        return false;
+    }
 
 
     /**
@@ -94,8 +126,16 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
      *
      * @param predicate predicate to apply to elements of this collection
      * @return true if predicate does NOT match all elements, otherwise false
+     * @throws NullPointerException if predicate is null
      */
-    boolean noneMatch(Predicate<? super T> predicate);
+    default boolean noneMatch(Predicate<? super T> predicate) {
+        Objects.requireNonNull(predicate);
+        for (T t : this) {
+            if (predicate.test(t))
+                return false;
+        }
+        return true;
+    }
 
     /**
      * Performs a reduction on the
@@ -169,7 +209,9 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
      *
      * @return first present value
      */
-    Optional<T> findFirst();
+    default Optional<T> findFirst() {
+        return isEmpty() ? Optional.empty() : Optional.ofNullable(iterator().next());
+    }
 
     /**
      * Returns first element in the collection which value matches with the
@@ -242,7 +284,13 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
      *
      * @return mutable list that contains elements of the collection
      */
-    List<T> toMutableList();
+    default List<T> toMutableList() {
+        ArrayList<T> arrayList = new ArrayList<>(size());
+        for (T t : this) {
+            arrayList.add(t);
+        }
+        return arrayList;
+    }
 
     /**
      * Converts immutable collection to java native {@link Set}.
@@ -251,7 +299,13 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
      * @return mutable set that contains elements of the collection
      * @see ImmutableCollection#toMutableList()
      */
-    Set<T> toMutableSet();
+    default Set<T> toMutableSet() {
+        HashSet<T> hashSet = new HashSet<>(size());
+        for (T t : this) {
+            hashSet.add(t);
+        }
+        return hashSet;
+    }
 
     /**
      * Overrides method from {@link Object#hashCode()}.

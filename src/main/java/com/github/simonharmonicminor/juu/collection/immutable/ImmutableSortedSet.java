@@ -4,6 +4,10 @@ import java.util.Comparator;
 import java.util.Optional;
 import java.util.SortedSet;
 
+/**
+ * @param <T> the type of the objects that set contains
+ * @see SortedSet
+ */
 public interface ImmutableSortedSet<T> extends ImmutableSet<T> {
     /**
      * @return the comparator used to order the keys in this map, or
