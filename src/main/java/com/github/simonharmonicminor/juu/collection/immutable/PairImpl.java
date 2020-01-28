@@ -43,4 +43,9 @@ class PairImpl<K, V> implements Pair<K, V>, Serializable {
     public int hashCode() {
         return Objects.hash(key, value);
     }
+
+    @Override
+    public String toString() {
+        return String.format("{key=%s; value=%s}", key, value);
+    }
 }

@@ -6,6 +6,7 @@ import java.util.function.*;
 import java.util.stream.Stream;
 
 import static com.github.simonharmonicminor.juu.collection.immutable.Immutable.setOf;
+import static com.github.simonharmonicminor.juu.collection.immutable.StringUtils.listToString;
 
 /**
  * An immutable implementation of java native {@link ArrayList}.
@@ -39,36 +40,107 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
         }
     }
 
-    private static <R> ImmutableList<R> newImmutableList(List<R> list, boolean needsCloning) {
+    private static <R> ImmutableList<R> newImmutableList(List<R> list) {
         if (list.isEmpty())
             return Immutable.emptyList();
-        return new ImmutableArrayList<>(list, needsCloning);
+        return new ImmutableArrayList<>(list, false);
+    }
+
+    private int normalizeIndex(int index) {
+        return index >= 0 ? index : size() + index;
+    }
+
+    private void checkStepSize(int stepSize) {
+        if (stepSize == 0)
+            throw new IllegalArgumentException("Step size cannot be zero");
+    }
+
+    private void checkIndex(int index) {
+        if (index < 0 || index >= size())
+            throw new IndexOutOfBoundsException(
+                    String.format("Index %d is out of bounds", index)
+            );
     }
 
     @Override
     public T get(int index) {
-        if (index < 0 || index >= size())
-            throw new IndexOutOfBoundsException(String.format("Index %d is out of bounds", index));
-        return arrayList.get(index);
+        int normalized = normalizeIndex(index);
+        checkIndex(normalized);
+        return arrayList.get(normalized);
     }
 
     @Override
-    public int indexOf(T element) {
-        return arrayList.indexOf(element);
+    public OptionalInt indexOf(T element) {
+        int index = arrayList.indexOf(element);
+        if (index == -1)
+            return OptionalInt.empty();
+        return OptionalInt.of(index);
     }
 
     @Override
-    public int lastIndexOf(T element) {
-        return arrayList.lastIndexOf(element);
+    public OptionalInt lastIndexOf(T element) {
+        int index = arrayList.lastIndexOf(element);
+        if (index == -1)
+            return OptionalInt.empty();
+        return OptionalInt.of(index);
     }
 
     @Override
-    public ImmutableList<T> subList(int fromIndex, int toIndex) {
-        if (fromIndex > toIndex)
-            return Immutable.emptyList();
-        fromIndex = Math.max(0, fromIndex);
-        toIndex = Math.min(size() - 1, toIndex);
-        return newImmutableList(arrayList.subList(fromIndex, toIndex), true);
+    public ImmutableList<T> slice(int fromIndex) {
+        return slice(fromIndex, size(), 1);
+    }
+
+    @Override
+    public ImmutableList<T> slice(int fromIndex, int toIndex) {
+        int fromNorm = normalizeIndex(fromIndex);
+        int toNorm = normalizeIndex(toIndex);
+        return slice(fromNorm, toNorm, fromNorm < toNorm ? 1 : -1);
+    }
+
+    @Override
+    public ImmutableList<T> slice(int fromIndex, int toIndex, int stepSize) {
+        int fromNorm = normalizeIndex(fromIndex);
+        int toNorm = normalizeIndex(toIndex);
+        checkIndex(fromNorm);
+        checkStepSize(stepSize);
+        int start, end;
+        BiFunction<Integer, Integer, Boolean> condition;
+        Function<Integer, Integer> nextValueFunc;
+        if (fromNorm <= toNorm) {
+            start = fromNorm;
+            end = toNorm;
+            condition = (s, e) -> s < e && s < size();
+            nextValueFunc = index -> index + 1;
+        } else {
+            start = toNorm;
+            end = toNorm;
+            condition = (s, e) -> s > e && s >= 0;
+            nextValueFunc = index -> index - 1;
+        }
+        ArrayList<T> newArrayList = new ArrayList<>();
+        while (condition.apply(start, end)) {
+            newArrayList.add(get(start));
+            start = nextValueFunc.apply(start);
+        }
+        return newImmutableList(newArrayList);
+    }
+
+    @Override
+    public ImmutableList<T> step(int stepSize) {
+        if (stepSize > 0)
+            return step(0, stepSize);
+        else
+            return step(-1, stepSize);
+    }
+
+    @Override
+    public ImmutableList<T> step(int fromIndex, int stepSize) {
+        checkStepSize(stepSize);
+        checkIndex(fromIndex);
+        if (stepSize > 0)
+            return slice(fromIndex, size(), stepSize);
+        else
+            return slice(fromIndex, -size() - 1, stepSize);
     }
 
     @Override
@@ -78,7 +150,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
         for (T t : iterable) {
             copy.add(t);
         }
-        return newImmutableList(copy, false);
+        return newImmutableList(copy);
     }
 
     private static <R> R getValByIndex(ImmutableList<R> immutableList, int index) {
@@ -96,7 +168,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
             R right = getValByIndex(list, i);
             newArrayList.add(Pair.of(left, right));
         }
-        return newImmutableList(newArrayList, false);
+        return newImmutableList(newArrayList);
     }
 
     @Override
@@ -105,7 +177,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
         for (int i = 0; i < size() - 1; i++) {
             newArrayList.add(Pair.of(get(i), get(i + 1)));
         }
-        return newImmutableList(newArrayList, false);
+        return newImmutableList(newArrayList);
     }
 
     @Override
@@ -115,7 +187,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
         for (T t : arrayList) {
             newList.add(mapper.apply(t));
         }
-        return newImmutableList(newList, false);
+        return newImmutableList(newList);
     }
 
     @Override
@@ -125,7 +197,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
         for (int i = 0; i < arrayList.size(); i++) {
             newList.add(mapper.apply(i, arrayList.get(i)));
         }
-        return newImmutableList(newList, false);
+        return newImmutableList(newList);
     }
 
     @Override
@@ -136,7 +208,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
             ImmutableArrayList<R> listElement = new ImmutableArrayList<>(mapper.apply(t));
             newList.addAll(listElement.arrayList);
         }
-        return newImmutableList(newList, false);
+        return newImmutableList(newList);
     }
 
     @Override
@@ -148,7 +220,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
                     new ImmutableArrayList<>(mapper.apply(i, arrayList.get(i)));
             newList.addAll(listElement.arrayList);
         }
-        return newImmutableList(newList, false);
+        return newImmutableList(newList);
     }
 
     @Override
@@ -159,7 +231,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
             if (predicate.test(t))
                 newList.add(t);
         }
-        return newImmutableList(newList, false);
+        return newImmutableList(newList);
     }
 
     @Override
@@ -170,7 +242,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
             if (predicate.test(i, arrayList.get(i)))
                 newList.add(arrayList.get(i));
         }
-        return newImmutableList(newList, false);
+        return newImmutableList(newList);
     }
 
     @Override
@@ -186,7 +258,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
         Objects.requireNonNull(comparator);
         ArrayList<T> copy = new ArrayList<>(arrayList);
         copy.sort(comparator);
-        return newImmutableList(copy, false);
+        return newImmutableList(copy);
     }
 
     @Override
@@ -199,7 +271,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
         for (int i = 0; i < size; i++) {
             newList.add(arrayList.get(i));
         }
-        return newImmutableList(newList, false);
+        return newImmutableList(newList);
     }
 
     @Override
@@ -212,7 +284,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
         for (int i = size; i < arrayList.size(); i++) {
             newList.add(arrayList.get(i));
         }
-        return newImmutableList(newList, false);
+        return newImmutableList(newList);
     }
 
     @Override
@@ -221,7 +293,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
         for (int i = size() - 1; i >= 0; i--) {
             newArrayList.add(get(i));
         }
-        return newImmutableList(newArrayList, false);
+        return newImmutableList(newArrayList);
     }
 
     @Override
@@ -270,5 +342,10 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(arrayList);
+    }
+
+    @Override
+    public String toString() {
+        return listToString(this);
     }
 }

@@ -22,10 +22,8 @@ import java.util.stream.Collectors;
 public class Immutable {
     private static final ImmutableArrayList<?> EMPTY_ARRAY_LIST = new ImmutableArrayList<>(Collections.emptyList());
     private static final ImmutableHashSet<?> EMPTY_HASH_SET = new ImmutableHashSet<>(Collections.emptyList());
-    private static final Pair<?, ?> EMPTY_PAIR = Pair.of(null, null);
     private static final ImmutableHashMap<?, ?> EMPTY_HASH_MAP = new ImmutableHashMap<>(Collections.emptyMap());
-
-    private static final ImmutableTreeSet<?> EMPTY_TREE_SET = ImmutableTreeSet.of(Collections.emptyList());
+    private static final ImmutableTreeSet<?> EMPTY_TREE_SET = ImmutableTreeSet.of(Collections.emptyList(), null);
 
     /**
      * Suppresses default constructor, ensuring non-instantiability.
@@ -65,19 +63,6 @@ public class Immutable {
     @SuppressWarnings("unchecked")
     static <T> ImmutableHashSet<T> emptyHashSet() {
         return (ImmutableHashSet<T>) EMPTY_HASH_SET;
-    }
-
-    /**
-     * Returns empty pair. Does not create the new one,
-     * returns the same instance every time.
-     *
-     * @param <K> the type of the key
-     * @param <V> the type of the value
-     * @return empty pair
-     */
-    @SuppressWarnings("unchecked")
-    public static <K, V> Pair<K, V> emptyPair() {
-        return (Pair<K, V>) EMPTY_PAIR;
     }
 
     /**

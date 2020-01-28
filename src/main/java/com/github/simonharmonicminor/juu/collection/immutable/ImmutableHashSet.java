@@ -10,6 +10,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static com.github.simonharmonicminor.juu.collection.immutable.Immutable.listOf;
+import static com.github.simonharmonicminor.juu.collection.immutable.StringUtils.setToString;
 
 /**
  * An immutable implementation of java native {@link HashSet}
@@ -137,5 +138,10 @@ public class ImmutableHashSet<T> implements ImmutableSet<T>, Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(hashSet);
+    }
+
+    @Override
+    public String toString() {
+        return setToString(this);
     }
 }

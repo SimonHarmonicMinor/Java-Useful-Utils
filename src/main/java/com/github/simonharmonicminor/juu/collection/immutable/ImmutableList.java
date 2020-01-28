@@ -1,6 +1,7 @@
 package com.github.simonharmonicminor.juu.collection.immutable;
 
 import java.util.Comparator;
+import java.util.OptionalInt;
 import java.util.function.*;
 
 /**
@@ -15,41 +16,114 @@ import java.util.function.*;
  */
 public interface ImmutableList<T> extends ImmutableCollection<T> {
     /**
-     * Returns the element by its index
+     * Returns the element by its index. Supports negative indices in "python-way".
+     * For instance,
+     * <pre>{@code
+     * ImmutableList<Integer> list = getList(); // [1, 2, 3, 4, 5]
+     * list.get(1);     // 2
+     * list.get(3);     // 4
+     * list.get(-1);    // 5
+     * list.get(-3);    // 3
+     * list.get(-5);    // 1;
+     * list.get(0);     // 1;
+     * }</pre>
+     * If a is less than zero, then {@code list.get(a)} equals to
+     * {@code list.get(list.size() - Math.abs(a))}
      *
      * @param index index of the element to return
      * @return the element at the specified position
-     * @throws IndexOutOfBoundsException if the index is out of range
+     * @throws IndexOutOfBoundsException if the index is bigger than or equal to {@code list.size()}
+     *                                   or {@code list.size() - Math.abs(index)} is less than zero
+     *                                   if index is negative
      */
     T get(int index);
 
     /**
-     * Returns the first index of the specified element or -1, if element is not found
+     * Returns the first index of the specified element or {@link OptionalInt#empty()}, if element is not found
      *
      * @param element the searching element
-     * @return the first index of the element or -1
+     * @return the first index of the {@link OptionalInt#empty()}
      */
-    int indexOf(T element);
+    OptionalInt indexOf(T element);
 
     /**
-     * Returns the last index of the specified element or -1, if element is not found
+     * Returns the last index of the specified element or {@link OptionalInt#empty()}, if element is not found.
      *
      * @param element the searching element
-     * @return the first index of the element of -1
+     * @return the first index of the element or {@link OptionalInt#empty()}
      */
-    int lastIndexOf(T element);
+    OptionalInt lastIndexOf(T element);
 
     /**
-     * Returns sublist from {@code fromIndex} inclusively to {@code toIndex} exclusively.
-     * If {@code fromIndex} &lt; 0 or {@code toIndex} &ge; {@code size() - 1} or
-     * {@code fromIndex} &ge; {@code toIndex} method does not throw any exceptions but just
-     * returns empty list.
+     * Proxy method for {@code this.slice(fromIndex, size(), 1)}.
+     *
+     * @see ImmutableList#slice(int, int, int)
+     */
+    ImmutableList<T> slice(int fromIndex);
+
+
+    /**
+     * Proxy method for {@code this.slice(fromIndex, toIndex, 1)} if
+     * {@code fromIndex} is before {@code toIndex} and
+     * {@code this.slice(fromIndex, toIndex, -1)} otherwise
+     *
+     * @see ImmutableList#slice(int, int, int)
+     */
+    ImmutableList<T> slice(int fromIndex, int toIndex);
+
+    /**
+     * Returns sublist from {@code fromIndex} inclusively to {@code toIndex} exclusively with
+     * given step size.<br>
+     * Supports negative indices. If step size is negative, then the list will be traversed
+     * backwards.<br>
+     * For instance,
+     * <pre>{@code
+     * ImmutableList<Integer> list = getList(); // [1, 2, 3, 4, 5, 6]
+     * list.slice(0, 3, 1);         // [1, 2, 3]
+     * list.slice(-1, 2, -1);       // [6, 5, 4]
+     * list.slice(0, 6, 2);         // [0, 3, 5]
+     * }</pre>
      *
      * @param fromIndex start index (inclusively)
      * @param toIndex   end index (exclusively)
      * @return result sublist
+     * @throws IndexOutOfBoundsException if fromIndex is out of bounds
+     * @throws IllegalArgumentException  if stepSize is zero
+     * @see ImmutableList#get(int)
      */
-    ImmutableList<T> subList(int fromIndex, int toIndex);
+    ImmutableList<T> slice(int fromIndex, int toIndex, int stepSize);
+
+
+    /**
+     * Proxy method for {@code this.step(0, stepSize)} if stepSize is bigger than zero,
+     * otherwise {@code this.step(-1, stepSize)}
+     *
+     * @see ImmutableList#step(int, int)
+     */
+    ImmutableList<T> step(int stepSize);
+
+    /**
+     * Returns sublist traversed with given step starting from the given index.
+     * For instance,
+     * <pre>{@code
+     * ImmutableList<Integer> list = createList(); // [1, 2, 3, 4, 5, 6, 7]
+     * ImmutableList<Integer> newOne = list.step(0, 2) // [1, 3, 5, 7]
+     * ImmutableList<Integer> newTwo = list.step(1, 3) // [2, 5]
+     * }</pre>
+     * Step size might be negative as well. It means backwards traversing.
+     * <pre>{@code
+     * ImmutableList<Integer> list = createList(); [1, 2, 3, 4, 5, 6, 7]
+     * ImmutableList<Integer> newOne = list.step(-1, -2) // [7, 5, 3, 1]
+     * }</pre>
+     *
+     * @param fromIndex start index (might be negative)
+     * @param stepSize  size of the step
+     * @return stepped list
+     * @throws IndexOutOfBoundsException if fromIndex is out of bounds
+     * @throws IllegalArgumentException  if stepSize is zero
+     * @see ImmutableList#get(int)
+     */
+    ImmutableList<T> step(int fromIndex, int stepSize);
 
     /**
      * Joins current list with provided iterable object and returns new list

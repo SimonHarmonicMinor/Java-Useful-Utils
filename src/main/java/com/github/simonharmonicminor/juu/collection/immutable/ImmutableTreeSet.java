@@ -2,14 +2,16 @@ package com.github.simonharmonicminor.juu.collection.immutable;
 
 import com.github.simonharmonicminor.juu.monad.Try;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static com.github.simonharmonicminor.juu.collection.immutable.Immutable.*;
+import static com.github.simonharmonicminor.juu.collection.immutable.StringUtils.setToString;
 
-public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T> {
+public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializable {
     private final TreeSet<T> treeSet;
 
     public static <R extends Comparable<R>> ImmutableTreeSet<R> of(Iterable<R> iterable) {
@@ -24,7 +26,6 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T> {
 
     public static <R> ImmutableTreeSet<R> of(Iterable<R> iterable, Comparator<R> comparator) {
         Objects.requireNonNull(iterable);
-        Objects.requireNonNull(comparator);
         return new ImmutableTreeSet<>(iterable, comparator);
     }
 
@@ -259,4 +260,23 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T> {
     public Iterator<T> iterator() {
         return treeSet.iterator();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ImmutableTreeSet<?> that = (ImmutableTreeSet<?>) o;
+        return treeSet.equals(that.treeSet);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(treeSet);
+    }
+
+    @Override
+    public String toString() {
+        return setToString(this);
+    }
+
 }
