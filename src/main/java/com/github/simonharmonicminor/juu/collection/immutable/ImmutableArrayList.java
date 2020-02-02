@@ -6,7 +6,8 @@ import java.util.function.*;
 import java.util.stream.Stream;
 
 import static com.github.simonharmonicminor.juu.collection.immutable.Immutable.setOf;
-import static com.github.simonharmonicminor.juu.collection.immutable.StringUtils.listToString;
+import static com.github.simonharmonicminor.juu.collection.immutable.ImmutableCollectionUtils.listEquals;
+import static com.github.simonharmonicminor.juu.collection.immutable.ImmutableCollectionUtils.listToString;
 
 /**
  * An immutable implementation of java native {@link ArrayList}.
@@ -103,24 +104,15 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
         int toNorm = normalizeIndex(toIndex);
         checkIndex(fromNorm);
         checkStepSize(stepSize);
-        int start, end;
-        BiFunction<Integer, Integer, Boolean> condition;
-        Function<Integer, Integer> nextValueFunc;
-        if (fromNorm <= toNorm) {
-            start = fromNorm;
-            end = toNorm;
-            condition = (s, e) -> s < e && s < size();
-            nextValueFunc = index -> index + 1;
-        } else {
-            start = toNorm;
-            end = toNorm;
-            condition = (s, e) -> s > e && s >= 0;
-            nextValueFunc = index -> index - 1;
-        }
+        BiFunction<Integer, Integer, Boolean> condition =
+                fromNorm <= toNorm
+                        ? (from, to) -> from < to && from < size()
+                        : (from, to) -> from > to && from >= 0;
+        Function<Integer, Integer> nextValueFunc = index -> index + stepSize;
         ArrayList<T> newArrayList = new ArrayList<>();
-        while (condition.apply(start, end)) {
-            newArrayList.add(get(start));
-            start = nextValueFunc.apply(start);
+        while (condition.apply(fromNorm, toNorm)) {
+            newArrayList.add(get(fromNorm));
+            fromNorm = nextValueFunc.apply(fromNorm);
         }
         return newImmutableList(newArrayList);
     }
@@ -136,7 +128,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
     @Override
     public ImmutableList<T> step(int fromIndex, int stepSize) {
         checkStepSize(stepSize);
-        checkIndex(fromIndex);
+        checkIndex(normalizeIndex(fromIndex));
         if (stepSize > 0)
             return slice(fromIndex, size(), stepSize);
         else
@@ -161,6 +153,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
 
     @Override
     public <R> ImmutableList<Pair<T, R>> zipWith(ImmutableList<R> list) {
+        Objects.requireNonNull(list);
         int maxSize = Math.max(size(), list.size());
         ArrayList<Pair<T, R>> newArrayList = new ArrayList<>(maxSize);
         for (int i = 0; i < maxSize; i++) {
@@ -289,11 +282,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
 
     @Override
     public ImmutableList<T> reversed() {
-        ArrayList<T> newArrayList = new ArrayList<>(size());
-        for (int i = size() - 1; i >= 0; i--) {
-            newArrayList.add(get(i));
-        }
-        return newImmutableList(newArrayList);
+        return step(-1);
     }
 
     @Override
@@ -302,7 +291,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
     }
 
     @Override
-    public boolean contains(T element) {
+    public boolean contains(Object element) {
         return arrayList.contains(element);
     }
 
@@ -333,10 +322,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ImmutableArrayList<?> that = (ImmutableArrayList<?>) o;
-        return arrayList.equals(that.arrayList);
+        return listEquals(this, o);
     }
 
     @Override

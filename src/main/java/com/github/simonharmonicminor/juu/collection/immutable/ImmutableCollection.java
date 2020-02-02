@@ -49,14 +49,18 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
     /**
      * @param element the element whose presence in this collection is to be tested
      * @return true if collection contains the element, otherwise false
+     * @throws ClassCastException if the type of the specified element
+     *                            is incompatible with this list
      */
-    boolean contains(T element);
+    boolean contains(Object element);
 
     /**
      * @param element the element whose presence in this collection is to be tested
      * @return true if collection NOT contains the element, otherwise false
+     * @throws ClassCastException if the type of the specified element
+     *                            is incompatible with this list
      */
-    default boolean notContains(T element) {
+    default boolean notContains(Object element) {
         return !contains(element);
     }
 

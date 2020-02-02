@@ -9,7 +9,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static com.github.simonharmonicminor.juu.collection.immutable.Immutable.*;
-import static com.github.simonharmonicminor.juu.collection.immutable.StringUtils.setToString;
+import static com.github.simonharmonicminor.juu.collection.immutable.ImmutableCollectionUtils.setToString;
 
 public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializable {
     private final TreeSet<T> treeSet;
@@ -227,7 +227,7 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializab
     }
 
     @Override
-    public boolean contains(T element) {
+    public boolean contains(Object element) {
         return treeSet.contains(element);
     }
 

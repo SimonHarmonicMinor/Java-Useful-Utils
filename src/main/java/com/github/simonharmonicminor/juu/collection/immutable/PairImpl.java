@@ -3,6 +3,8 @@ package com.github.simonharmonicminor.juu.collection.immutable;
 import java.io.Serializable;
 import java.util.Objects;
 
+import static com.github.simonharmonicminor.juu.collection.immutable.ImmutableCollectionUtils.pairEquals;
+
 /**
  * Simple implementation of {@link Pair}
  *
@@ -32,11 +34,7 @@ class PairImpl<K, V> implements Pair<K, V>, Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        PairImpl<?, ?> entry = (PairImpl<?, ?>) o;
-        return Objects.equals(key, entry.key) &&
-                Objects.equals(value, entry.value);
+        return pairEquals(this, o);
     }
 
     @Override
@@ -46,6 +44,6 @@ class PairImpl<K, V> implements Pair<K, V>, Serializable {
 
     @Override
     public String toString() {
-        return String.format("{key=%s; value=%s}", key, value);
+        return String.format("(key=%s; value=%s)", key, value);
     }
 }
