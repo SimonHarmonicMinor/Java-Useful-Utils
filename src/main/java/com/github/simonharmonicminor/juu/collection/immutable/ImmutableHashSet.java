@@ -45,8 +45,7 @@ public class ImmutableHashSet<T> implements ImmutableSet<T>, Serializable {
     }
 
     private static <R> ImmutableSet<R> newImmutableHashSetWithoutCloning(Set<R> set) {
-        if (set.isEmpty())
-            return Immutable.emptySet();
+        if (set.isEmpty()) return Immutable.emptySet();
         return new ImmutableHashSet<>(set, false);
     }
 
@@ -86,8 +85,7 @@ public class ImmutableHashSet<T> implements ImmutableSet<T>, Serializable {
         Objects.requireNonNull(predicate);
         HashSet<T> newHashSet = new HashSet<>(size());
         for (T t : this) {
-            if (predicate.test(t))
-                newHashSet.add(t);
+            if (predicate.test(t)) newHashSet.add(t);
         }
         return newImmutableHashSetWithoutCloning(newHashSet);
     }

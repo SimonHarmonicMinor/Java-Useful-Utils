@@ -3,13 +3,11 @@ package com.github.simonharmonicminor.juu.collection.immutable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
 /**
- * Static class for retrieving empty sets and lists or instantiating immutable collections.
- * The class caches empty lists and sets in order not to create new objects unless it is necessary.
- * So, it is recommended to use methods from this class,
- * but not to create immutable collections via their
- * constructors.
+ * Static class for retrieving empty sets and lists or instantiating immutable collections. The
+ * class caches empty lists and sets in order not to create new objects unless it is necessary. So,
+ * it is recommended to use methods from this class, but not to create immutable collections via
+ * their constructors.
  *
  * @see Collections
  * @see ImmutableCollection
@@ -20,10 +18,14 @@ import java.util.stream.Collectors;
  * @since 1.0
  */
 public class Immutable {
-    private static final ImmutableArrayList<?> EMPTY_ARRAY_LIST = new ImmutableArrayList<>(Collections.emptyList());
-    private static final ImmutableHashSet<?> EMPTY_HASH_SET = new ImmutableHashSet<>(Collections.emptyList());
-    private static final ImmutableHashMap<?, ?> EMPTY_HASH_MAP = new ImmutableHashMap<>(Collections.emptyMap());
-    private static final ImmutableTreeSet<?> EMPTY_TREE_SET = ImmutableTreeSet.of(Collections.emptyList(), null);
+    private static final ImmutableArrayList<?> EMPTY_ARRAY_LIST =
+            new ImmutableArrayList<>(Collections.emptyList());
+    private static final ImmutableHashSet<?> EMPTY_HASH_SET =
+            new ImmutableHashSet<>(Collections.emptyList());
+    private static final ImmutableHashMap<?, ?> EMPTY_HASH_MAP =
+            new ImmutableHashMap<>(Collections.emptyMap());
+    private static final ImmutableTreeSet<?> EMPTY_TREE_SET =
+            ImmutableTreeSet.of(Collections.emptyList(), null);
 
     /**
      * Suppresses default constructor, ensuring non-instantiability.
@@ -32,8 +34,8 @@ public class Immutable {
     }
 
     /**
-     * Returns empty immutable list. Does not create the new one,
-     * returns the same instance every time.
+     * Returns empty immutable list. Does not create the new one, returns the same instance every
+     * time.
      *
      * @param <T> the type of the list content
      * @return empty list
@@ -44,8 +46,7 @@ public class Immutable {
     }
 
     /**
-     * Returns empty immutable set. Does not create the new one,
-     * returns the same instance every time.
+     * Returns empty immutable set. Does not create the new one, returns the same instance every time.
      *
      * @param <T> the type of the set content
      * @return empty set
@@ -66,8 +67,7 @@ public class Immutable {
     }
 
     /**
-     * Returns empty map. Does not create the new one,
-     * returns the same instance every time
+     * Returns empty map. Does not create the new one, returns the same instance every time
      *
      * @param <K> the type of the key
      * @param <V> the type of the value
@@ -80,6 +80,7 @@ public class Immutable {
 
     /**
      * Same behaviour as
+     *
      * <pre>{@code
      * ImmutableList<Pair<T, U>> res = left.zipWith(right);
      * }</pre>
@@ -87,17 +88,17 @@ public class Immutable {
      * @throws NullPointerException if {@code left} or {@code right} is null
      * @see ImmutableList#zipWith(ImmutableList)
      */
-    public static <T, U> ImmutableList<Pair<T, U>> zip(ImmutableList<T> left, ImmutableList<U> right) {
+    public static <T, U> ImmutableList<Pair<T, U>> zip(
+            ImmutableList<T> left, ImmutableList<U> right) {
         Objects.requireNonNull(left);
         Objects.requireNonNull(right);
         return left.zipWith(right);
     }
 
     /**
-     * Creates new immutable list from given elements.
-     * If array is empty, returns {@link Immutable#emptyList()}.
-     * This is the preferred way of creating immutable lists, unless you need particular
-     * implementation.
+     * Creates new immutable list from given elements. If array is empty, returns {@link
+     * Immutable#emptyList()}. This is the preferred way of creating immutable lists, unless you need
+     * particular implementation.
      *
      * @param elements array of elements
      * @param <T>      the type of the element
@@ -107,16 +108,14 @@ public class Immutable {
     @SafeVarargs
     public static <T> ImmutableList<T> listOf(T... elements) {
         Objects.requireNonNull(elements);
-        if (elements.length == 0)
-            return emptyList();
+        if (elements.length == 0) return emptyList();
         return new ImmutableArrayList<>(Arrays.stream(elements).collect(Collectors.toList()));
     }
 
     /**
-     * Creates new immutable list from given elements.
-     * If iterable has no elements, returns {@link Immutable#emptyList()}.
-     * This is the preferred way of creating immutable lists, unless you need particular
-     * implementation.
+     * Creates new immutable list from given elements. If iterable has no elements, returns {@link
+     * Immutable#emptyList()}. This is the preferred way of creating immutable lists, unless you need
+     * particular implementation.
      *
      * @param elements iterable elements
      * @param <T>      the type of the element
@@ -125,16 +124,14 @@ public class Immutable {
      */
     public static <T> ImmutableList<T> listOf(Iterable<T> elements) {
         Objects.requireNonNull(elements);
-        if (!elements.iterator().hasNext())
-            return emptyList();
+        if (!elements.iterator().hasNext()) return emptyList();
         return new ImmutableArrayList<>(elements);
     }
 
     /**
-     * Creates new immutable set from given elements.
-     * If array is empty, returns {@link Immutable#emptySet()}.
-     * This is the preferred way of creating immutable sets, unless you need particular
-     * implementation.
+     * Creates new immutable set from given elements. If array is empty, returns {@link
+     * Immutable#emptySet()}. This is the preferred way of creating immutable sets, unless you need
+     * particular implementation.
      *
      * @param elements array of elements
      * @param <T>      the type of the element
@@ -144,16 +141,14 @@ public class Immutable {
     @SafeVarargs
     public static <T> ImmutableSet<T> setOf(T... elements) {
         Objects.requireNonNull(elements);
-        if (elements.length == 0)
-            return emptySet();
+        if (elements.length == 0) return emptySet();
         return new ImmutableHashSet<>(Arrays.stream(elements).collect(Collectors.toSet()));
     }
 
     /**
-     * Creates new immutable set from given elements.
-     * If iterable has no elements, returns {@link Immutable#emptySet()}.
-     * This is the preferred way of creating immutable sets, unless you need particular
-     * implementation.
+     * Creates new immutable set from given elements. If iterable has no elements, returns {@link
+     * Immutable#emptySet()}. This is the preferred way of creating immutable sets, unless you need
+     * particular implementation.
      *
      * @param elements iterable elements
      * @param <T>      the type of the element
@@ -162,8 +157,7 @@ public class Immutable {
      */
     public static <T> ImmutableSet<T> setOf(Iterable<T> elements) {
         Objects.requireNonNull(elements);
-        if (!elements.iterator().hasNext())
-            return emptySet();
+        if (!elements.iterator().hasNext()) return emptySet();
         return new ImmutableHashSet<>(elements);
     }
 
@@ -174,8 +168,7 @@ public class Immutable {
 
     public static <K, V> ImmutableMap<K, V> mapOf(Iterable<Pair<K, V>> pairs) {
         Objects.requireNonNull(pairs);
-        if (!pairs.iterator().hasNext())
-            return emptyMap();
+        if (!pairs.iterator().hasNext()) return emptyMap();
         HashMap<K, V> hashMap = new HashMap<>();
         for (Pair<K, V> p : pairs) {
             hashMap.put(p.getKey(), p.getValue());
@@ -188,42 +181,21 @@ public class Immutable {
     }
 
     public static <K, V> ImmutableMap<K, V> mapOf(K k1, V v1, K k2, V v2) {
-        return mapOf(
-                Arrays.asList(Pair.of(k1, v1), Pair.of(k2, v2))
-        );
+        return mapOf(Arrays.asList(Pair.of(k1, v1), Pair.of(k2, v2)));
     }
 
     public static <K, V> ImmutableMap<K, V> mapOf(K k1, V v1, K k2, V v2, K k3, V v3) {
-        return mapOf(
-                Arrays.asList(
-                        Pair.of(k1, v1),
-                        Pair.of(k2, v2),
-                        Pair.of(k3, v3)
-                )
-        );
+        return mapOf(Arrays.asList(Pair.of(k1, v1), Pair.of(k2, v2), Pair.of(k3, v3)));
     }
 
     public static <K, V> ImmutableMap<K, V> mapOf(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
-        return mapOf(
-                Arrays.asList(
-                        Pair.of(k1, v1),
-                        Pair.of(k2, v2),
-                        Pair.of(k3, v3),
-                        Pair.of(k4, v4)
-                )
-        );
+        return mapOf(Arrays.asList(Pair.of(k1, v1), Pair.of(k2, v2), Pair.of(k3, v3), Pair.of(k4, v4)));
     }
 
-    public static <K, V> ImmutableMap<K, V> mapOf(K k1, V v1, K k2, V v2, K k3, V v3,
-                                                  K k4, V v4, K k5, V v5) {
+    public static <K, V> ImmutableMap<K, V> mapOf(
+            K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5) {
         return mapOf(
                 Arrays.asList(
-                        Pair.of(k1, v1),
-                        Pair.of(k2, v2),
-                        Pair.of(k3, v3),
-                        Pair.of(k4, v4),
-                        Pair.of(k5, v5)
-                )
-        );
+                        Pair.of(k1, v1), Pair.of(k2, v2), Pair.of(k3, v3), Pair.of(k4, v4), Pair.of(k5, v5)));
     }
 }

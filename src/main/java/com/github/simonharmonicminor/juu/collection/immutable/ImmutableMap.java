@@ -7,12 +7,12 @@ import java.util.Objects;
 import java.util.function.BiConsumer;
 
 /**
- * Defines an immutable map. Unlike native {@link Map} this interface
- * does not have any methods that can mutate its content. So it can be safely injected to
- * any methods or objects.
- * <p>
- * It is strongly recommended to instantiate this map with only immutable keys and values
- * in order not to face with some unexpected mutations.
+ * Defines an immutable map. Unlike native {@link Map} this interface does not have any methods that
+ * can mutate its content. So it can be safely injected to any methods or objects.
+ *
+ * <p>It is strongly recommended to instantiate this map with only immutable keys and values in
+ * order not to face with some unexpected mutations.
+ *
  * <p>
  *
  * @param <K> the type of the key
@@ -67,8 +67,8 @@ public interface ImmutableMap<K, V> {
     }
 
     /**
-     * In case of occurring the same keys in two maps the value from the given map
-     * will be added to final result.
+     * In case of occurring the same keys in two maps the value from the given map will be added to
+     * final result.
      *
      * @param map the map whose pairs will be added to the current one
      * @return new map with merged pairs
@@ -78,8 +78,8 @@ public interface ImmutableMap<K, V> {
     ImmutableMap<K, V> concatWithOverride(ImmutableMap<K, V> map);
 
     /**
-     * In case of occurring the same keys in two maps the value from the current map
-     * will be added to final result.
+     * In case of occurring the same keys in two maps the value from the current map will be added to
+     * final result.
      *
      * @param map the map whose pairs will be added to the current one
      * @return new map with merged pairs
@@ -89,18 +89,17 @@ public interface ImmutableMap<K, V> {
     ImmutableMap<K, V> concatWithoutOverride(ImmutableMap<K, V> map);
 
     /**
-     * Adds all pairs of keys and values from current map and the given map to the new one
-     * and returns new instance.
-     * <p>
-     * If these two maps have any equal keys, {@code overrideBehaviour} function will be called
-     * to resolve the conflict.
+     * Adds all pairs of keys and values from current map and the given map to the new one and returns
+     * new instance.
+     *
+     * <p>If these two maps have any equal keys, {@code overrideBehaviour} function will be called to
+     * resolve the conflict.
      *
      * @param map               the map whose pairs will be added to the current one
      * @param overrideBehaviour function is called every time when two same keys in two maps is found.
-     *                          The first param is the key.
-     *                          The second param is the value from the current map.
-     *                          The third param is the value from the given map.
-     *                          Function returns the value that will be added to the final result.
+     *                          The first param is the key. The second param is the value from the current map. The third
+     *                          param is the value from the given map. Function returns the value that will be added to the
+     *                          final result.
      * @return new map with merged pairs
      * @throws NullPointerException if {@code map} is null or {@code overrideBehaviour} is null
      */
@@ -128,22 +127,20 @@ public interface ImmutableMap<K, V> {
     ImmutableSet<Pair<K, V>> pairSet();
 
     /**
-     * Converts this immutable map to mutable one.
-     * Creates new object, so its mutations does not affect the mutable one.
+     * Converts this immutable map to mutable one. Creates new object, so its mutations does not
+     * affect the mutable one.
      *
      * @return new mutable map
      */
     Map<K, V> toMutableMap();
 
     /**
-     * Overrides method from {@link Object#equals(Object)}.
-     * Must be implemented.
+     * Overrides method from {@link Object#equals(Object)}. Must be implemented.
      */
     boolean equals(Object o);
 
     /**
-     * Overrides method from {@link Object#hashCode()}.
-     * Must be implemented.
+     * Overrides method from {@link Object#hashCode()}. Must be implemented.
      */
     int hashCode();
 

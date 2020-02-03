@@ -4,9 +4,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * Defines an immutable set. Unlike native {@link java.util.Set} this
- * interface does not have any methods that can mutate its content. So it can be safely injected to
- * any methods or objects.
+ * Defines an immutable set. Unlike native {@link java.util.Set} this interface does not have any
+ * methods that can mutate its content. So it can be safely injected to any methods or objects.
  *
  * @param <T> the type of the object, that set contains
  * @see ImmutableCollection
@@ -34,8 +33,8 @@ public interface ImmutableSet<T> extends ImmutableCollection<T> {
     <R> ImmutableSet<R> map(Function<? super T, ? extends R> mapper);
 
     /**
-     * Joins {@link Iterable} objects that mapper returns.
-     * For instance,
+     * Joins {@link Iterable} objects that mapper returns. For instance,
+     *
      * <pre>{@code
      * class Job {
      *     String name;
@@ -58,8 +57,7 @@ public interface ImmutableSet<T> extends ImmutableCollection<T> {
     /**
      * Returns new Set, which values match provided predicate
      *
-     * @param predicate predicate to apply to each element to determine if it
-     *                  should be included
+     * @param predicate predicate to apply to each element to determine if it should be included
      * @return new set
      * @throws NullPointerException if {@code predicate} is null
      */

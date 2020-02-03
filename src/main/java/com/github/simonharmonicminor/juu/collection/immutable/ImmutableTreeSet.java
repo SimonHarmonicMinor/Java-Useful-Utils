@@ -62,15 +62,14 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializab
         }
     }
 
-    private static <T> ImmutableTreeSet<T> newImmutableTreeSet(SortedSet<T> treeSet, boolean needsCloning) {
-        if (treeSet.isEmpty())
-            return emptyTreeSet();
+    private static <T> ImmutableTreeSet<T> newImmutableTreeSet(
+            SortedSet<T> treeSet, boolean needsCloning) {
+        if (treeSet.isEmpty()) return emptyTreeSet();
         return new ImmutableTreeSet<>(treeSet, needsCloning);
     }
 
     private static <T> ImmutableHashSet<T> newImmutableHashSetWithoutCloning(HashSet<T> hashSet) {
-        if (hashSet.isEmpty())
-            return emptyHashSet();
+        if (hashSet.isEmpty()) return emptyHashSet();
         return new ImmutableHashSet<>(hashSet, false);
     }
 
@@ -105,27 +104,20 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializab
     }
 
     @Override
-    public ImmutableNavigableSet<T> subSet(T fromElement, boolean fromInclusive, T toElement, boolean toInclusive) {
+    public ImmutableNavigableSet<T> subSet(
+            T fromElement, boolean fromInclusive, T toElement, boolean toInclusive) {
         return newImmutableTreeSet(
-                treeSet.subSet(fromElement, fromInclusive, toElement, toInclusive),
-                true
-        );
+                treeSet.subSet(fromElement, fromInclusive, toElement, toInclusive), true);
     }
 
     @Override
     public ImmutableNavigableSet<T> headSet(T toElement, boolean inclusive) {
-        return newImmutableTreeSet(
-                treeSet.headSet(toElement, inclusive),
-                true
-        );
+        return newImmutableTreeSet(treeSet.headSet(toElement, inclusive), true);
     }
 
     @Override
     public ImmutableNavigableSet<T> tailSet(T fromElement, boolean inclusive) {
-        return newImmutableTreeSet(
-                treeSet.tailSet(fromElement, inclusive),
-                true
-        );
+        return newImmutableTreeSet(treeSet.tailSet(fromElement, inclusive), true);
     }
 
     @Override
@@ -140,38 +132,27 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializab
 
     @Override
     public ImmutableSortedSet<T> subSet(T fromElement, T toElement) {
-        return newImmutableTreeSet(
-                treeSet.subSet(fromElement, toElement),
-                true
-        );
+        return newImmutableTreeSet(treeSet.subSet(fromElement, toElement), true);
     }
 
     @Override
     public ImmutableSortedSet<T> headSet(T toElement) {
-        return newImmutableTreeSet(
-                treeSet.headSet(toElement),
-                true
-        );
+        return newImmutableTreeSet(treeSet.headSet(toElement), true);
     }
 
     @Override
     public ImmutableSortedSet<T> tailSet(T fromElement) {
-        return newImmutableTreeSet(
-                treeSet.tailSet(fromElement),
-                true
-        );
+        return newImmutableTreeSet(treeSet.tailSet(fromElement), true);
     }
 
     @Override
     public Optional<T> first() {
-        return Try.of(() -> Optional.ofNullable(treeSet.first()))
-                .orElse(Optional.empty());
+        return Try.of(() -> Optional.ofNullable(treeSet.first())).orElse(Optional.empty());
     }
 
     @Override
     public Optional<T> last() {
-        return Try.of(() -> Optional.ofNullable(treeSet.last()))
-                .orElse(Optional.empty());
+        return Try.of(() -> Optional.ofNullable(treeSet.last())).orElse(Optional.empty());
     }
 
     @Override
@@ -215,8 +196,7 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializab
         Objects.requireNonNull(predicate);
         TreeSet<T> newTreeSet = new TreeSet<>(comparator());
         for (T t : this) {
-            if (predicate.test(t))
-                newTreeSet.add(t);
+            if (predicate.test(t)) newTreeSet.add(t);
         }
         return newImmutableTreeSet(newTreeSet, false);
     }
@@ -278,5 +258,4 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializab
     public String toString() {
         return setToString(this);
     }
-
 }

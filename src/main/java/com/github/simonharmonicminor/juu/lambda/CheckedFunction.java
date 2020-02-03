@@ -1,8 +1,7 @@
 package com.github.simonharmonicminor.juu.lambda;
 
 /**
- * Represents a function that accepts one argument and produces a result.
- * May throw an exception.
+ * Represents a function that accepts one argument and produces a result. May throw an exception.
  *
  * @param <T> the type of the input to the function
  * @param <R> the type of the result of the function

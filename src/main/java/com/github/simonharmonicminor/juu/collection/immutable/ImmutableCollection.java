@@ -7,20 +7,20 @@ import java.util.function.BinaryOperator;
 import java.util.function.Predicate;
 
 /**
- * Defines an immutable collection. Unlike native {@link java.util.Collection} this
- * interface does not have any methods that can mutate its content. So it can be safely injected to
- * any methods or objects.
- * <br>
- * It is strongly recommended to put only immutable objects to this class.
- * For instance,
+ * Defines an immutable collection. Unlike native {@link java.util.Collection} this interface does
+ * not have any methods that can mutate its content. So it can be safely injected to any methods or
+ * objects. <br>
+ * It is strongly recommended to put only immutable objects to this class. For instance,
+ *
  * <pre>{@code
  * ImmutableCollection<Person> collection = getSome();
  * for (Person p : collection) {
  *     p.setName("David");
  * }
  * }</pre>
- * Although the collection itself does not have any methods to remove or add new elements,
- * its content has been changed. So, pay attention to this.
+ * <p>
+ * Although the collection itself does not have any methods to remove or add new elements, its
+ * content has been changed. So, pay attention to this.
  *
  * @param <T> the type of the object, that collection contains
  * @see java.util.Collection
@@ -49,16 +49,12 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
     /**
      * @param element the element whose presence in this collection is to be tested
      * @return true if collection contains the element, otherwise false
-     * @throws ClassCastException if the type of the specified element
-     *                            is incompatible with this list
      */
     boolean contains(Object element);
 
     /**
      * @param element the element whose presence in this collection is to be tested
      * @return true if collection NOT contains the element, otherwise false
-     * @throws ClassCastException if the type of the specified element
-     *                            is incompatible with this list
      */
     default boolean notContains(Object element) {
         return !contains(element);
@@ -69,11 +65,10 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
      * @return true if collection contains all given elements, otherwise false
      * @throws NullPointerException if "elements" is null
      */
-    default boolean containsAll(Iterable<T> elements) {
+    default boolean containsAll(Iterable<?> elements) {
         Objects.requireNonNull(elements);
-        for (T t : elements) {
-            if (notContains(t))
-                return false;
+        for (Object t : elements) {
+            if (notContains(t)) return false;
         }
         return true;
     }
@@ -83,11 +78,10 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
      * @return true if collection contains any of given elements, otherwise false
      * @throws NullPointerException if "elements" is null
      */
-    default boolean containsAny(Iterable<T> elements) {
+    default boolean containsAny(Iterable<?> elements) {
         Objects.requireNonNull(elements);
-        for (T t : elements) {
-            if (contains(t))
-                return true;
+        for (Object t : elements) {
+            if (contains(t)) return true;
         }
         return false;
     }
@@ -102,8 +96,7 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
     default boolean allMatch(Predicate<? super T> predicate) {
         Objects.requireNonNull(predicate);
         for (T t : this) {
-            if (!predicate.test(t))
-                return false;
+            if (!predicate.test(t)) return false;
         }
         return true;
     }
@@ -118,12 +111,10 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
     default boolean anyMatch(Predicate<? super T> predicate) {
         Objects.requireNonNull(predicate);
         for (T t : this) {
-            if (predicate.test(t))
-                return true;
+            if (predicate.test(t)) return true;
         }
         return false;
     }
-
 
     /**
      * Returns whether all elements of this collection does NOT match the provided predicate.
@@ -135,23 +126,20 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
     default boolean noneMatch(Predicate<? super T> predicate) {
         Objects.requireNonNull(predicate);
         for (T t : this) {
-            if (predicate.test(t))
-                return false;
+            if (predicate.test(t)) return false;
         }
         return true;
     }
 
     /**
-     * Performs a reduction on the
-     * elements of this collection, using the provided identity value and an
-     * associative
-     * accumulation function, and returns the reduced value.  This is equivalent
-     * to:
+     * Performs a reduction on the elements of this collection, using the provided identity value and
+     * an associative accumulation function, and returns the reduced value. This is equivalent to:
+     *
      * <pre>{@code
-     *     T result = identity;
-     *     for (T element : this)
-     *         result = accumulator.apply(result, element)
-     *     return result;
+     * T result = identity;
+     * for (T element : this)
+     *     result = accumulator.apply(result, element)
+     * return result;
      * }</pre>
      *
      * @param identity    start value
@@ -165,11 +153,9 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
     }
 
     /**
-     * Performs a reduction on the
-     * elements of this collection, using the provided identity value and an
-     * associative
-     * accumulation function, and returns the reduced value.
-     * If collection is empty, returns {@link Optional#empty()}
+     * Performs a reduction on the elements of this collection, using the provided identity value and
+     * an associative accumulation function, and returns the reduced value. If collection is empty,
+     * returns {@link Optional#empty()}
      *
      * @param accumulator accumulation function
      * @return reduction result
@@ -181,8 +167,8 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
     }
 
     /**
-     * Returns min value of the collection calculated with provided comparator.
-     * If collection is empty, returns {@link Optional#empty()}
+     * Returns min value of the collection calculated with provided comparator. If collection is
+     * empty, returns {@link Optional#empty()}
      *
      * @param comparator comparator, which determines min value
      * @return min value
@@ -194,8 +180,8 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
     }
 
     /**
-     * Returns max value of the collection calculated with provided comparator.
-     * If collection is empty, returns {@link Optional#empty()}
+     * Returns max value of the collection calculated with provided comparator. If collection is
+     * empty, returns {@link Optional#empty()}
      *
      * @param comparator comparator, which determines max value
      * @return max value
@@ -207,9 +193,8 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
     }
 
     /**
-     * Returns first element in the collection. If it is empty,
-     * returns {@link Optional#empty()}. If collection is unordered,
-     * then the returning value may be different from time to time.
+     * Returns first element in the collection. If it is empty, returns {@link Optional#empty()}. If
+     * collection is unordered, then the returning value may be different from time to time.
      *
      * @return first present value
      */
@@ -218,9 +203,9 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
     }
 
     /**
-     * Returns first element in the collection which value matches with the
-     * provided predicate. If no such element is found, returns {@link Optional#empty()}.
-     * If collection is unordered, then the returning value may be different from time to time.
+     * Returns first element in the collection which value matches with the provided predicate. If no
+     * such element is found, returns {@link Optional#empty()}. If collection is unordered, then the
+     * returning value may be different from time to time.
      *
      * @param predicate predicate which determines the value
      * @return first present value
@@ -229,15 +214,14 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
     default Optional<T> findFirst(Predicate<? super T> predicate) {
         Objects.requireNonNull(predicate);
         for (T t : this) {
-            if (predicate.test(t))
-                return Optional.ofNullable(t);
+            if (predicate.test(t)) return Optional.ofNullable(t);
         }
         return Optional.empty();
     }
 
     /**
-     * Converts collection to array. The array is completely new object. So array mutations
-     * does not affect the collection
+     * Converts collection to array. The array is completely new object. So array mutations does not
+     * affect the collection
      *
      * @return elements of collection as array
      */
@@ -262,14 +246,13 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
     ImmutableSet<T> toSet();
 
     /**
-     * Converts immutable collection to java native {@link List}.
-     * Creates new object, so list mutations do not affect the collection.
+     * Converts immutable collection to java native {@link List}. Creates new object, so list
+     * mutations do not affect the collection. <br>
      * <br>
-     * <br>
-     * <b>NB:</b> this method does not clone objects the collection contains.
-     * <br>
+     * <b>NB:</b> this method does not clone objects the collection contains. <br>
      * <br>
      * For instance,
+     *
      * <pre>{@code
      * ImmutableCollection<Person> ic = getSome();
      * List<Person> list1 = ic.toMutableList();
@@ -297,8 +280,8 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
     }
 
     /**
-     * Converts immutable collection to java native {@link Set}.
-     * Creates new object, so set mutations do not affect the collection.
+     * Converts immutable collection to java native {@link Set}. Creates new object, so set mutations
+     * do not affect the collection.
      *
      * @return mutable set that contains elements of the collection
      * @see ImmutableCollection#toMutableList()
@@ -312,16 +295,14 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
     }
 
     /**
-     * Overrides method from {@link Object#hashCode()}.
-     * Must be implemented.
+     * Overrides method from {@link Object#hashCode()}. Must be implemented.
      *
      * @return hashcode of the collection
      */
     int hashCode();
 
     /**
-     * Overrides method from {@link Object#equals(Object)}
-     * Must be implemented.
+     * Overrides method from {@link Object#equals(Object)} Must be implemented.
      *
      * @param obj the object whose equality with the collection is to be tested
      * @return true if objects are equal, otherwise false

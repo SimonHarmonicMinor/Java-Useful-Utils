@@ -55,9 +55,9 @@ public class ExecutionResult<T> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ExecutionResult<?> that = (ExecutionResult<?>) o;
-        return time == that.time &&
-                Objects.equals(result, that.result) &&
-                measureUnit == that.measureUnit;
+        return time == that.time
+                && Objects.equals(result, that.result)
+                && measureUnit == that.measureUnit;
     }
 
     @Override

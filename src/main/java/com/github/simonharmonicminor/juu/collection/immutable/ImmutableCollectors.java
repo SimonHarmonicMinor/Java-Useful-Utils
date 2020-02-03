@@ -14,11 +14,12 @@ import java.util.stream.Collector;
  * @since 1.0
  */
 public class ImmutableCollectors {
-    static final Set<Collector.Characteristics> CH_ID
-            = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.IDENTITY_FINISH));
-    static final Set<Collector.Characteristics> CH_UNORDERED_ID
-            = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.UNORDERED,
-            Collector.Characteristics.IDENTITY_FINISH));
+    static final Set<Collector.Characteristics> CH_ID =
+            Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.IDENTITY_FINISH));
+    static final Set<Collector.Characteristics> CH_UNORDERED_ID =
+            Collections.unmodifiableSet(
+                    EnumSet.of(
+                            Collector.Characteristics.UNORDERED, Collector.Characteristics.IDENTITY_FINISH));
 
     /**
      * Suppresses default constructor, ensuring non-instantiability.
@@ -29,14 +30,14 @@ public class ImmutableCollectors {
     /**
      * Provides collector to {@link ImmutableCollection}
      *
-     * @param collectionFactory function that accepts {@link Iterable} and returns {@link ImmutableCollection}
+     * @param collectionFactory function that accepts {@link Iterable} and returns {@link
+     *                          ImmutableCollection}
      * @param <T>               the type of the content
      * @param <C>               the type of the return collection
      * @return collector
      */
     public static <T, C extends ImmutableCollection<T>> Collector<T, ?, C> toCollection(
-            Function<Iterable<T>, C> collectionFactory
-    ) {
+            Function<Iterable<T>, C> collectionFactory) {
         Objects.requireNonNull(collectionFactory);
         return new CollectorImpl<>(
                 (Supplier<List<T>>) ArrayList::new,
@@ -46,8 +47,7 @@ public class ImmutableCollectors {
                     return r1;
                 },
                 collectionFactory::apply,
-                CH_ID
-        );
+                CH_ID);
     }
 
     /**
@@ -66,8 +66,7 @@ public class ImmutableCollectors {
                     return r1;
                 },
                 list -> new ImmutableArrayList<>(list, false),
-                CH_ID
-        );
+                CH_ID);
     }
 
     /**
@@ -86,8 +85,7 @@ public class ImmutableCollectors {
                     return r1;
                 },
                 set -> new ImmutableHashSet<>(set, false),
-                CH_UNORDERED_ID
-        );
+                CH_UNORDERED_ID);
     }
 
     /**
@@ -103,9 +101,7 @@ public class ImmutableCollectors {
      */
     @SuppressWarnings("unchecked")
     public static <T, K, V> Collector<T, ?, ImmutableMap<K, V>> toMap(
-            Function<? super T, ? extends K> keyMapper,
-            Function<? super T, ? extends V> valueMapper
-    ) {
+            Function<? super T, ? extends K> keyMapper, Function<? super T, ? extends V> valueMapper) {
         Objects.requireNonNull(keyMapper);
         Objects.requireNonNull(valueMapper);
         return new CollectorImpl<>(
@@ -113,13 +109,11 @@ public class ImmutableCollectors {
                 uniqKeysMapAccumulator(keyMapper, valueMapper),
                 uniqKeysMapMerger(),
                 map -> new ImmutableHashMap<>((Map<K, V>) map, false),
-                CH_ID
-        );
+                CH_ID);
     }
 
-    private static <T, K, V>
-    BiConsumer<Map<K, V>, T> uniqKeysMapAccumulator(Function<? super T, ? extends K> keyMapper,
-                                                    Function<? super T, ? extends V> valueMapper) {
+    private static <T, K, V> BiConsumer<Map<K, V>, T> uniqKeysMapAccumulator(
+            Function<? super T, ? extends K> keyMapper, Function<? super T, ? extends V> valueMapper) {
         return (map, element) -> {
             K k = keyMapper.apply(element);
             V v = Objects.requireNonNull(valueMapper.apply(element));
@@ -128,8 +122,7 @@ public class ImmutableCollectors {
         };
     }
 
-    private static <K, V, M extends Map<K, V>>
-    BinaryOperator<M> uniqKeysMapMerger() {
+    private static <K, V, M extends Map<K, V>> BinaryOperator<M> uniqKeysMapMerger() {
         return (m1, m2) -> {
             for (Map.Entry<K, V> e : m2.entrySet()) {
                 K k = e.getKey();
@@ -141,12 +134,9 @@ public class ImmutableCollectors {
         };
     }
 
-
-    private static IllegalStateException duplicateKeyException(
-            Object k, Object u, Object v) {
-        return new IllegalStateException(String.format(
-                "Duplicate key %s (attempted merging values %s and %s)",
-                k, u, v));
+    private static IllegalStateException duplicateKeyException(Object k, Object u, Object v) {
+        return new IllegalStateException(
+                String.format("Duplicate key %s (attempted merging values %s and %s)", k, u, v));
     }
 
     static class CollectorImpl<T, A, R> implements Collector<T, A, R> {
@@ -156,11 +146,12 @@ public class ImmutableCollectors {
         private final Function<A, R> finisher;
         private final Set<Characteristics> characteristics;
 
-        CollectorImpl(Supplier<A> supplier,
-                      BiConsumer<A, T> accumulator,
-                      BinaryOperator<A> combiner,
-                      Function<A, R> finisher,
-                      Set<Characteristics> characteristics) {
+        CollectorImpl(
+                Supplier<A> supplier,
+                BiConsumer<A, T> accumulator,
+                BinaryOperator<A> combiner,
+                Function<A, R> finisher,
+                Set<Characteristics> characteristics) {
             this.supplier = supplier;
             this.accumulator = accumulator;
             this.combiner = combiner;

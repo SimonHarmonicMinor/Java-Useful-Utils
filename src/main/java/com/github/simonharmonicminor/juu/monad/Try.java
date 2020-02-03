@@ -17,8 +17,8 @@ import java.util.stream.Stream;
 /**
  * Monad for retrieving values just like {@link java.util.Optional}, but instead a container
  * considered as an empty one if an exception has been thrown during calculations.
- * <p>
- * <br>
+ *
+ * <p><br>
  * Class overrides {@link Object#equals(Object)} and {@link Object#hashCode()} methods.
  *
  * @param <T> the type of the return value
@@ -41,13 +41,14 @@ public class Try<T> implements Streaming<T> {
     }
 
     /**
-     * Instantiates a container by calculating the value of the supplier.
-     * If supplier fails with an exception, returns {@link Try#empty()}
+     * Instantiates a container by calculating the value of the supplier. If supplier fails with an
+     * exception, returns {@link Try#empty()}
      *
      * @param supplier function that returns value
      * @param <T>      the type of the return value
      * @param <E>      the type of the exception that supplier may throw
-     * @return a container with the retrieved value or an empty one, if calculation failed with an exception
+     * @return a container with the retrieved value or an empty one, if calculation failed with an
+     * exception
      * @throws NullPointerException if suppliers parameter is null
      */
     public static <T, E extends Throwable> Try<T> of(CheckedSupplier<T, E> supplier) {
@@ -60,8 +61,8 @@ public class Try<T> implements Streaming<T> {
     }
 
     /**
-     * Returns a container with the value of the first calculated supplier
-     * that didn't fail. If all suppliers fail, returns {@link Try#empty()}
+     * Returns a container with the value of the first calculated supplier that didn't fail. If all
+     * suppliers fail, returns {@link Try#empty()}
      *
      * @param suppliers collection of suppliers
      * @param <T>       the type of the return value
@@ -70,12 +71,12 @@ public class Try<T> implements Streaming<T> {
      * @throws NullPointerException if suppliers parameter is null
      * @see Try#of(CheckedSupplier)
      */
-    public static <T, E extends Throwable> Try<T> getFirst(Iterable<CheckedSupplier<T, E>> suppliers) {
+    public static <T, E extends Throwable> Try<T> getFirst(
+            Iterable<CheckedSupplier<T, E>> suppliers) {
         Objects.requireNonNull(suppliers);
         for (CheckedSupplier<T, E> supplier : suppliers) {
             Try<T> t = Try.of(supplier);
-            if (t.isPresent())
-                return t;
+            if (t.isPresent()) return t;
         }
         return empty();
     }
@@ -118,8 +119,8 @@ public class Try<T> implements Streaming<T> {
     }
 
     /**
-     * Maps the value from one to another and returns new container.
-     * If mapper throws an exception, returns {@link Try#empty()}
+     * Maps the value from one to another and returns new container. If mapper throws an exception,
+     * returns {@link Try#empty()}
      *
      * @param mapper mapping function
      * @param <U>    the type of the new value
@@ -133,30 +134,25 @@ public class Try<T> implements Streaming<T> {
     }
 
     /**
-     * Maps the value from one to another and returns new container.
-     * The mapping function must return another {@link Try} container.
-     * If calculation does not fail, returns the new container, otherwise returns an empty one.
+     * Maps the value from one to another and returns new container. The mapping function must return
+     * another {@link Try} container. If calculation does not fail, returns the new container,
+     * otherwise returns an empty one. <br>
      * <br>
-     * <br>
-     * For instance,
-     * <br>
+     * For instance, <br>
      * <br>
      * <code>
      * Try.of(() -&gt; 1) <br>
      * &nbsp;&nbsp;&nbsp;.flatMap(v -&gt; Try.of(() -&gt; v + 1)) <br>
      * &nbsp;&nbsp;&nbsp;.orElse(-1)
-     * </code>
+     * </code> <br>
      * <br>
-     * <br>
-     * returns 2, while
-     * <br>
+     * returns 2, while <br>
      * <br>
      * <code>
      * Try.of(() -&gt; 1) <br>
      * &nbsp;&nbsp;&nbsp;.flatMap(v -&gt; Try.of(() -&gt; v / 0)) <br>
      * &nbsp;&nbsp;&nbsp;.orElse(-1)
-     * </code>
-     * <br>
+     * </code> <br>
      * <br>
      * returns -1
      *
@@ -168,7 +164,8 @@ public class Try<T> implements Streaming<T> {
      * @see Try#map(CheckedFunction)
      */
     @SuppressWarnings("unchecked")
-    public <U, E extends Throwable> Try<U> flatMap(CheckedFunction<? super T, ? extends Try<? extends U>, E> mapper) {
+    public <U, E extends Throwable> Try<U> flatMap(
+            CheckedFunction<? super T, ? extends Try<? extends U>, E> mapper) {
         Objects.requireNonNull(mapper);
         try {
             return (Try<U>) mapper.apply(value);
@@ -178,8 +175,8 @@ public class Try<T> implements Streaming<T> {
     }
 
     /**
-     * If container is empty or predicate's test returns false, returns {@link Try#empty()},
-     * otherwise returns the container itself
+     * If container is empty or predicate's test returns false, returns {@link Try#empty()}, otherwise
+     * returns the container itself
      *
      * @param predicate predicate function
      * @return the container itself or an empty one
@@ -198,8 +195,7 @@ public class Try<T> implements Streaming<T> {
      * @throws NoSuchElementException if container is empty
      */
     public T get() {
-        if (isPresent())
-            return value;
+        if (isPresent()) return value;
         throw new NoSuchElementException("Container is empty");
     }
 
@@ -212,8 +208,8 @@ public class Try<T> implements Streaming<T> {
     }
 
     /**
-     * If container is not empty, returns itself, otherwise returns the new one
-     * with the given supplier
+     * If container is not empty, returns itself, otherwise returns the new one with the given
+     * supplier
      *
      * @param supplier supplier for the new container
      * @param <E>      the type of the exception that container may throw
@@ -226,8 +222,8 @@ public class Try<T> implements Streaming<T> {
     }
 
     /**
-     * If container is not empty, returns its value, otherwise returns the result
-     * of the given supplier
+     * If container is not empty, returns its value, otherwise returns the result of the given
+     * supplier
      *
      * @param supplier supplier which returns default value
      * @return the value of the container or the default one
@@ -249,8 +245,7 @@ public class Try<T> implements Streaming<T> {
      */
     public <E extends Throwable> T orElseThrow(Supplier<? extends E> exceptionSupplier) throws E {
         Objects.requireNonNull(exceptionSupplier);
-        if (isPresent())
-            return value;
+        if (isPresent()) return value;
         throw exceptionSupplier.get();
     }
 
@@ -262,8 +257,7 @@ public class Try<T> implements Streaming<T> {
      */
     public void ifPresent(Consumer<T> consumer) {
         Objects.requireNonNull(consumer);
-        if (isPresent())
-            consumer.accept(value);
+        if (isPresent()) consumer.accept(value);
     }
 
     /**
@@ -274,8 +268,7 @@ public class Try<T> implements Streaming<T> {
      */
     public void ifEmpty(Action action) {
         Objects.requireNonNull(action);
-        if (isEmpty())
-            action.execute();
+        if (isEmpty()) action.execute();
     }
 
     /**
@@ -291,8 +284,7 @@ public class Try<T> implements Streaming<T> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Try<?> aTry = (Try<?>) o;
-        return exceptionHasBeenThrown == aTry.exceptionHasBeenThrown &&
-                value.equals(aTry.value);
+        return exceptionHasBeenThrown == aTry.exceptionHasBeenThrown && value.equals(aTry.value);
     }
 
     @Override

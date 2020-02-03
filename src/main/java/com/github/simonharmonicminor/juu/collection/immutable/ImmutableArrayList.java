@@ -1,5 +1,7 @@
 package com.github.simonharmonicminor.juu.collection.immutable;
 
+import com.github.simonharmonicminor.juu.monad.Try;
+
 import java.io.Serializable;
 import java.util.*;
 import java.util.function.*;
@@ -29,7 +31,8 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
     ImmutableArrayList(Iterable<T> iterable, boolean needCloning) {
         Objects.requireNonNull(iterable);
         if (iterable instanceof ArrayList) {
-            this.arrayList = needCloning ? new ArrayList<>((ArrayList<T>) iterable) : (ArrayList<T>) iterable;
+            this.arrayList =
+                    needCloning ? new ArrayList<>((ArrayList<T>) iterable) : (ArrayList<T>) iterable;
         } else if (iterable instanceof ImmutableArrayList) {
             ImmutableArrayList<T> immutableArrayList = (ImmutableArrayList<T>) iterable;
             this.arrayList = immutableArrayList.arrayList;
@@ -42,8 +45,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
     }
 
     private static <R> ImmutableList<R> newImmutableList(List<R> list) {
-        if (list.isEmpty())
-            return Immutable.emptyList();
+        if (list.isEmpty()) return Immutable.emptyList();
         return new ImmutableArrayList<>(list, false);
     }
 
@@ -52,15 +54,12 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
     }
 
     private void checkStepSize(int stepSize) {
-        if (stepSize == 0)
-            throw new IllegalArgumentException("Step size cannot be zero");
+        if (stepSize == 0) throw new IllegalArgumentException("Step size cannot be zero");
     }
 
     private void checkIndex(int index) {
         if (index < 0 || index >= size())
-            throw new IndexOutOfBoundsException(
-                    String.format("Index %d is out of bounds", index)
-            );
+            throw new IndexOutOfBoundsException(String.format("Index %d is out of bounds", index));
     }
 
     @Override
@@ -73,16 +72,14 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
     @Override
     public OptionalInt indexOf(T element) {
         int index = arrayList.indexOf(element);
-        if (index == -1)
-            return OptionalInt.empty();
+        if (index == -1) return OptionalInt.empty();
         return OptionalInt.of(index);
     }
 
     @Override
     public OptionalInt lastIndexOf(T element) {
         int index = arrayList.lastIndexOf(element);
-        if (index == -1)
-            return OptionalInt.empty();
+        if (index == -1) return OptionalInt.empty();
         return OptionalInt.of(index);
     }
 
@@ -119,20 +116,16 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
 
     @Override
     public ImmutableList<T> step(int stepSize) {
-        if (stepSize > 0)
-            return step(0, stepSize);
-        else
-            return step(-1, stepSize);
+        if (stepSize > 0) return step(0, stepSize);
+        else return step(-1, stepSize);
     }
 
     @Override
     public ImmutableList<T> step(int fromIndex, int stepSize) {
         checkStepSize(stepSize);
         checkIndex(normalizeIndex(fromIndex));
-        if (stepSize > 0)
-            return slice(fromIndex, size(), stepSize);
-        else
-            return slice(fromIndex, -size() - 1, stepSize);
+        if (stepSize > 0) return slice(fromIndex, size(), stepSize);
+        else return slice(fromIndex, -size() - 1, stepSize);
     }
 
     @Override
@@ -146,8 +139,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
     }
 
     private static <R> R getValByIndex(ImmutableList<R> immutableList, int index) {
-        if (index < immutableList.size())
-            return immutableList.get(index);
+        if (index < immutableList.size()) return immutableList.get(index);
         return null;
     }
 
@@ -205,7 +197,8 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
     }
 
     @Override
-    public <R> ImmutableList<R> flatMapIndexed(BiFunction<Integer, ? super T, ? extends Iterable<R>> mapper) {
+    public <R> ImmutableList<R> flatMapIndexed(
+            BiFunction<Integer, ? super T, ? extends Iterable<R>> mapper) {
         Objects.requireNonNull(mapper);
         ArrayList<R> newList = new ArrayList<>(arrayList.size());
         for (int i = 0; i < arrayList.size(); i++) {
@@ -221,8 +214,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
         Objects.requireNonNull(predicate);
         ArrayList<T> newList = new ArrayList<>(arrayList.size());
         for (T t : arrayList) {
-            if (predicate.test(t))
-                newList.add(t);
+            if (predicate.test(t)) newList.add(t);
         }
         return newImmutableList(newList);
     }
@@ -232,8 +224,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
         Objects.requireNonNull(predicate);
         ArrayList<T> newList = new ArrayList<>(arrayList.size());
         for (int i = 0; i < arrayList.size(); i++) {
-            if (predicate.test(i, arrayList.get(i)))
-                newList.add(arrayList.get(i));
+            if (predicate.test(i, arrayList.get(i))) newList.add(arrayList.get(i));
         }
         return newImmutableList(newList);
     }
@@ -257,11 +248,9 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
     @Override
     public ImmutableList<T> limit(int size) {
         if (size < 0)
-            throw new IllegalArgumentException(
-                    String.format("Limit size is less than zero: %s", size)
-            );
+            throw new IllegalArgumentException(String.format("Limit size is less than zero: %s", size));
         ArrayList<T> newList = new ArrayList<>(arrayList.size());
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < Math.min(size(), size); i++) {
             newList.add(arrayList.get(i));
         }
         return newImmutableList(newList);
@@ -270,11 +259,9 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
     @Override
     public ImmutableList<T> skip(int size) {
         if (size < 0)
-            throw new IllegalArgumentException(
-                    String.format("Skip size is less than zero: %s", size)
-            );
+            throw new IllegalArgumentException(String.format("Skip size is less than zero: %s", size));
         ArrayList<T> newList = new ArrayList<>(arrayList.size());
-        for (int i = size; i < arrayList.size(); i++) {
+        for (int i = Math.min(size, size()); i < arrayList.size(); i++) {
             newList.add(arrayList.get(i));
         }
         return newImmutableList(newList);
@@ -292,7 +279,8 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
 
     @Override
     public boolean contains(Object element) {
-        return arrayList.contains(element);
+        return Try.of(() -> arrayList.contains(element))
+                .orElse(false);
     }
 
     @Override

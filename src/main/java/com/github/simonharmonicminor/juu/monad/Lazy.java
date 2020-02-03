@@ -34,8 +34,7 @@ public class Lazy<T> implements Streaming<T> {
     }
 
     /**
-     * Makes the chain with input parameter of previous execution.
-     * <br>
+     * Makes the chain with input parameter of previous execution. <br>
      * <b>NB:</b> map does not trigger execution.
      *
      * @param mapper mapping function
@@ -49,24 +48,17 @@ public class Lazy<T> implements Streaming<T> {
     }
 
     /**
-     * <div>Makes the chain with input parameter of previous execution
+     * <div>Makes the chain with input parameter of previous execution <br>
+     * <b>NB:</b> flatMap does not trigger the execution</div> <br>
+     * <div> After triggering the execution flatMap returns not the lazy object, but the result of its
+     * inner calculation </div> <br>
+     * For instance, this equation <br>
      * <br>
-     * <b>NB:</b> flatMap does not trigger the execution</div>
-     * <br>
-     * <div>
-     *     After triggering the execution flatMap returns not the lazy object, but the result
-     *     of its inner calculation
-     * </div>
-     * <br>
-     * For instance, this equation <br><br>
-     * <div>
-     * <code>
+     * <div> <code>
      * Lazy.of(() -&gt; 1) <br>
      * &nbsp;&nbsp;&nbsp;.flatMap(v -&gt; Lazy.of(() -&gt; v + 1)) <br>
      * &nbsp;&nbsp;&nbsp;.calculate()
-     * </code>
-     * </div>
-     * <br>
+     * </code> </div> <br>
      * returns 2
      *
      * @param mapper mapping function

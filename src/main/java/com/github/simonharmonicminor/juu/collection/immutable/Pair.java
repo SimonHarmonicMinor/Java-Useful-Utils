@@ -1,8 +1,7 @@
 package com.github.simonharmonicminor.juu.collection.immutable;
 
 /**
- * Immutable pair that keeps key and value.
- * Used by {@link ImmutableMap}
+ * Immutable pair that keeps key and value. Used by {@link ImmutableMap}
  *
  * @param <K> the type of the key
  * @param <V> the type of the value
@@ -14,14 +13,12 @@ public interface Pair<K, V> {
     V getValue();
 
     /**
-     * Overrides method from {@link Object#equals(Object)}.
-     * Must be implemented.
+     * Overrides method from {@link Object#equals(Object)}. Must be implemented.
      */
     boolean equals(Object o);
 
     /**
-     * Overrides method from {@link Object#hashCode()}.
-     * Must be implemented.
+     * Overrides method from {@link Object#hashCode()}. Must be implemented.
      */
     int hashCode();
 

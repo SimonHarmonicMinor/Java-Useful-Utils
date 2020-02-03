@@ -46,28 +46,24 @@ public class ImmutableHashMap<K, V> implements ImmutableMap<K, V>, Serializable 
             immutableMap.forEach(hashMap::put);
             this.keys = setOf(hashMap.keySet());
             this.values = listOf(hashMap.values());
-            this.pairs = setOf(
-                    hashMap.entrySet()
-                            .stream()
-                            .map(e -> Pair.of(e.getKey(), e.getValue()))
-                            .collect(Collectors.toList())
-            );
+            this.pairs =
+                    setOf(
+                            hashMap.entrySet().stream()
+                                    .map(e -> Pair.of(e.getKey(), e.getValue()))
+                                    .collect(Collectors.toList()));
         }
     }
 
     ImmutableHashMap(Map<K, V> map, boolean needsCloning) {
-        if (needsCloning || !(map instanceof HashMap))
-            this.hashMap = new HashMap<>(map);
-        else
-            this.hashMap = (HashMap<K, V>) map;
+        if (needsCloning || !(map instanceof HashMap)) this.hashMap = new HashMap<>(map);
+        else this.hashMap = (HashMap<K, V>) map;
         this.keys = setOf(hashMap.keySet());
         this.values = listOf(hashMap.values());
-        this.pairs = setOf(
-                hashMap.entrySet()
-                        .stream()
-                        .map(e -> Pair.of(e.getKey(), e.getValue()))
-                        .collect(Collectors.toList())
-        );
+        this.pairs =
+                setOf(
+                        hashMap.entrySet().stream()
+                                .map(e -> Pair.of(e.getKey(), e.getValue()))
+                                .collect(Collectors.toList()));
     }
 
     @Override
@@ -93,16 +89,16 @@ public class ImmutableHashMap<K, V> implements ImmutableMap<K, V>, Serializable 
     private static <K, V> ImmutableMap<K, V> concatenation(
             ImmutableMap<K, V> immutableMap,
             HashMap<K, V> oldHashMap,
-            TriFunction<K, V, V, V> overrideBehaviour
-    ) {
+            TriFunction<K, V, V, V> overrideBehaviour) {
         HashMap<K, V> newHashMap = new HashMap<>(oldHashMap);
-        immutableMap.forEach((k, v) -> {
-            if (oldHashMap.containsKey(k)) {
-                newHashMap.put(k, overrideBehaviour.apply(k, oldHashMap.get(k), v));
-            } else {
-                newHashMap.put(k, v);
-            }
-        });
+        immutableMap.forEach(
+                (k, v) -> {
+                    if (oldHashMap.containsKey(k)) {
+                        newHashMap.put(k, overrideBehaviour.apply(k, oldHashMap.get(k), v));
+                    } else {
+                        newHashMap.put(k, v);
+                    }
+                });
         return new ImmutableHashMap<>(newHashMap, false);
     }
 
@@ -121,7 +117,8 @@ public class ImmutableHashMap<K, V> implements ImmutableMap<K, V>, Serializable 
     }
 
     @Override
-    public ImmutableMap<K, V> concatWith(ImmutableMap<K, V> map, TriFunction<K, V, V, V> overrideBehaviour) {
+    public ImmutableMap<K, V> concatWith(
+            ImmutableMap<K, V> map, TriFunction<K, V, V, V> overrideBehaviour) {
         Objects.requireNonNull(map);
         Objects.requireNonNull(overrideBehaviour);
         return concatenation(map, this.hashMap, overrideBehaviour);
