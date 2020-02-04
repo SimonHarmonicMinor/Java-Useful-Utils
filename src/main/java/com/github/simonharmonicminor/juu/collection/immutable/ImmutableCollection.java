@@ -1,6 +1,7 @@
 package com.github.simonharmonicminor.juu.collection.immutable;
 
 import com.github.simonharmonicminor.juu.collection.ParallelStreaming;
+import com.github.simonharmonicminor.juu.monad.Try;
 
 import java.util.*;
 import java.util.function.BinaryOperator;
@@ -176,7 +177,8 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
      */
     default Optional<T> min(Comparator<? super T> comparator) {
         Objects.requireNonNull(comparator);
-        return stream().min(comparator);
+        return Try.of(() -> stream().min(comparator))
+                .orElse(Optional.empty());
     }
 
     /**
@@ -189,7 +191,8 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
      */
     default Optional<T> max(Comparator<? super T> comparator) {
         Objects.requireNonNull(comparator);
-        return stream().max(comparator);
+        return Try.of(() -> stream().max(comparator))
+                .orElse(Optional.empty());
     }
 
     /**
@@ -217,22 +220,6 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
             if (predicate.test(t)) return Optional.ofNullable(t);
         }
         return Optional.empty();
-    }
-
-    /**
-     * Converts collection to array. The array is completely new object. So array mutations does not
-     * affect the collection
-     *
-     * @return elements of collection as array
-     */
-    @SuppressWarnings("unchecked")
-    default T[] toArray() {
-        Object[] array = new Object[size()];
-        int i = 0;
-        for (T t : this) {
-            array[i++] = t;
-        }
-        return (T[]) array;
     }
 
     /**

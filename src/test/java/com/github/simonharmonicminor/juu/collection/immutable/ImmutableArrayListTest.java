@@ -921,4 +921,209 @@ class ImmutableArrayListTest {
         assertFalse(list.notContains(item1));
         assertTrue(list.notContains(-1));
     }
+
+    @Test
+    void containsAll() {
+        int item1 = 1251;
+        int item2 = -14214;
+        int item3 = 0;
+        int item4 = 41151;
+        int item5 = 44124;
+        ImmutableList<Integer> list = new ImmutableArrayList<>(
+                Arrays.asList(item1, item2, item3, item4, item5)
+        );
+
+        List<Integer> containing = Arrays.asList(item1, item2);
+        List<Integer> notContaining = Arrays.asList(item1, item2, item3, -item1);
+
+        assertTrue(list.containsAll(containing));
+        assertFalse(list.containsAll(notContaining));
+    }
+
+    @Test
+    void containsAny() {
+        int item1 = 1251;
+        int item2 = -14214;
+        int item3 = 1;
+        int item4 = 41151;
+        int item5 = 44124;
+        ImmutableList<Integer> list = new ImmutableArrayList<>(
+                Arrays.asList(item1, item2, item3, item4, item5)
+        );
+
+        List<Integer> containing = Arrays.asList(item1, item2, -item3);
+        List<Integer> notContaining = Arrays.asList(-item1, -item2, -item3);
+
+        assertTrue(list.containsAny(containing));
+        assertFalse(list.containsAny(notContaining));
+    }
+
+    @Test
+    void allMatch() {
+        int item1 = 1251;
+        int item2 = -14214;
+        int item3 = 1;
+        int item4 = 41151;
+        int item5 = 44124;
+        ImmutableList<Integer> list = new ImmutableArrayList<>(
+                Arrays.asList(item1, item2, item3, item4, item5)
+        );
+
+        assertTrue(list.allMatch(x -> true));
+        assertTrue(list.allMatch(x -> x != 0));
+        assertFalse(list.allMatch(x -> x > 0));
+    }
+
+    @Test
+    void anyMatch() {
+        int item1 = 1251;
+        int item2 = -14214;
+        int item3 = 1;
+        int item4 = 41151;
+        int item5 = 44124;
+        ImmutableList<Integer> list = new ImmutableArrayList<>(
+                Arrays.asList(item1, item2, item3, item4, item5)
+        );
+
+        assertTrue(list.anyMatch(x -> true));
+        assertTrue(list.anyMatch(x -> x > 0));
+        assertTrue(list.anyMatch(x -> x == 1));
+        assertFalse(list.anyMatch(x -> x == 0));
+    }
+
+    @Test
+    void noneMatch() {
+        int item1 = 1251;
+        int item2 = -14214;
+        int item3 = 1;
+        int item4 = 41151;
+        int item5 = 44124;
+        ImmutableList<Integer> list = new ImmutableArrayList<>(
+                Arrays.asList(item1, item2, item3, item4, item5)
+        );
+
+        assertFalse(list.noneMatch(x -> true));
+        assertFalse(list.noneMatch(x -> x > 0));
+        assertFalse(list.noneMatch(x -> x == 1));
+        assertTrue(list.noneMatch(x -> x == 0));
+    }
+
+    @Test
+    void reduce2() {
+        int item1 = 1251;
+        int item2 = -14214;
+        int item3 = 1;
+        ImmutableList<Integer> list = new ImmutableArrayList<>(
+                Arrays.asList(item1, item2, item3)
+        );
+
+        int identity = 12414;
+        int reduced = list.reduce(identity, Integer::sum);
+        assertEquals(identity + item1 + item2 + item3, reduced);
+    }
+
+    @Test
+    void reduce1() {
+        int item1 = 1251;
+        int item2 = -14214;
+        int item3 = 1;
+        ImmutableList<Integer> list = new ImmutableArrayList<>(
+                Arrays.asList(item1, item2, item3)
+        );
+        ImmutableList<Integer> emptyList = new ImmutableArrayList<>(
+                Collections.emptyList()
+        );
+
+        Optional<Integer> reduced = list.reduce(Integer::sum);
+
+        assertFalse(emptyList.reduce(Integer::sum).isPresent());
+        assertTrue(reduced.isPresent());
+        assertEquals(item1 + item2 + item3, reduced.get());
+    }
+
+    @Test
+    void min() {
+        int item1 = 1251;
+        int item2 = -14214;
+        int item3 = 1;
+        ImmutableList<Integer> list = new ImmutableArrayList<>(
+                Arrays.asList(item1, item2, item3)
+        );
+
+        Optional<Integer> min = list.min(Comparator.comparingInt(x -> x));
+
+        assertTrue(min.isPresent());
+        assertEquals(item2, min.get());
+
+        Optional<Integer> minWithLength = list.min(
+                Comparator.comparingInt(x -> String.valueOf(x).length())
+        );
+
+        assertTrue(minWithLength.isPresent());
+        assertEquals(item3, minWithLength.get());
+    }
+
+    @Test
+    void max() {
+        int item1 = 1251;
+        int item2 = -14214;
+        int item3 = 1;
+        ImmutableList<Integer> list = new ImmutableArrayList<>(
+                Arrays.asList(item1, item2, item3)
+        );
+
+        Optional<Integer> max = list.max(Comparator.comparingInt(x -> x));
+
+        assertTrue(max.isPresent());
+        assertEquals(item1, max.get());
+
+        Optional<Integer> maxWithLength = list.max(
+                Comparator.comparingInt(x -> String.valueOf(x).length())
+        );
+
+        assertTrue(maxWithLength.isPresent());
+        assertEquals(item2, maxWithLength.get());
+    }
+
+    @Test
+    void findFirst0() {
+        int item1 = 1251;
+        int item2 = -14214;
+        int item3 = 1;
+        ImmutableList<Integer> list = new ImmutableArrayList<>(
+                Arrays.asList(item1, item2, item3)
+        );
+        ImmutableList<Integer> emptyList = new ImmutableArrayList<>(
+                Collections.emptyList()
+        );
+
+        Optional<Integer> firstPresent = list.findFirst();
+        Optional<Integer> firstEmpty = emptyList.findFirst();
+
+        assertTrue(firstPresent.isPresent());
+        assertEquals(item1, firstPresent.get());
+
+        assertFalse(firstEmpty.isPresent());
+    }
+
+    @Test
+    void findFirst1() {
+        int item1 = 1251;
+        int item2 = -14214;
+        int item3 = 1;
+        ImmutableList<Integer> list = new ImmutableArrayList<>(
+                Arrays.asList(item1, item2, item3)
+        );
+        ImmutableList<Integer> emptyList = new ImmutableArrayList<>(
+                Collections.emptyList()
+        );
+
+        Optional<Integer> firstPresent = list.findFirst(x -> x == 1);
+        Optional<Integer> firstEmpty = emptyList.findFirst(x -> x == 12);
+
+        assertTrue(firstPresent.isPresent());
+        assertEquals(item3, firstPresent.get());
+
+        assertFalse(firstEmpty.isPresent());
+    }
 }
