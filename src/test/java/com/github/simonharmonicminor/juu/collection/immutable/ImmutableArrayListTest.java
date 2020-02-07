@@ -1126,4 +1126,23 @@ class ImmutableArrayListTest {
 
         assertFalse(firstEmpty.isPresent());
     }
+
+    @Test
+    void equalsAndNotEquals() {
+        int item1 = 1251;
+        int item2 = -14214;
+        int item3 = 1;
+        ImmutableList<Integer> list1 = new ImmutableArrayList<>(
+                Arrays.asList(item1, item2, item3)
+        );
+        ImmutableList<Integer> list2 = new ImmutableArrayList<>(
+                Arrays.asList(item1, item2, item3)
+        );
+        ImmutableList<Integer> list3 = new ImmutableArrayList<>(
+                Arrays.asList(item1, item2, item3, item3)
+        );
+
+        assertEquals(list1, list2);
+        assertNotEquals(list1, list3);
+    }
 }

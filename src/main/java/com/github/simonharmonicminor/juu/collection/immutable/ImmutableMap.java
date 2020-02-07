@@ -42,13 +42,13 @@ public interface ImmutableMap<K, V> {
      * @param key the key whose presence is to be tested
      * @return true if map contains key, otherwise false
      */
-    boolean containsKey(K key);
+    boolean containsKey(Object key);
 
     /**
      * @param key the key whose presence is to be tested
      * @return true if map does not contain key, otherwise false
      */
-    default boolean notContainsKey(K key) {
+    default boolean notContainsKey(Object key) {
         return !containsKey(key);
     }
 
@@ -56,13 +56,13 @@ public interface ImmutableMap<K, V> {
      * @param value the value whose presence is to be tested
      * @return true if map contains value, otherwise false
      */
-    boolean containsValue(V value);
+    boolean containsValue(Object value);
 
     /**
      * @param value the value whose presence is to be tested
      * @return true if map does not contain value, otherwise false
      */
-    default boolean notContainsValue(V value) {
+    default boolean notContainsValue(Object value) {
         return !containsValue(value);
     }
 
@@ -109,7 +109,7 @@ public interface ImmutableMap<K, V> {
      * @param key the key whose associated value is to be found
      * @return the value that associates with the key if it is present, otherwise null
      */
-    V get(K key);
+    V get(Object key);
 
     /**
      * @return immutable set of keys, that map contains
@@ -117,7 +117,7 @@ public interface ImmutableMap<K, V> {
     ImmutableSet<K> keySet();
 
     /**
-     * @return immutable set of values, that map contains
+     * @return immutable list of values, that map contains
      */
     ImmutableList<V> values();
 
@@ -151,7 +151,7 @@ public interface ImmutableMap<K, V> {
      * @param defaultValue the value that returns in case of key absence
      * @return the value or the default one
      */
-    default V getOrDefault(K key, V defaultValue) {
+    default V getOrDefault(Object key, V defaultValue) {
         return containsKey(key) ? get(key) : defaultValue;
     }
 

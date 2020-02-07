@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import static com.github.simonharmonicminor.juu.collection.immutable.Immutable.listOf;
 import static com.github.simonharmonicminor.juu.collection.immutable.Immutable.setOf;
+import static com.github.simonharmonicminor.juu.collection.immutable.ImmutableCollectionUtils.mapEquals;
 
 /**
  * An immutable implementation of java native {@link HashMap}
@@ -34,36 +35,15 @@ public class ImmutableHashMap<K, V> implements ImmutableMap<K, V>, Serializable 
         this(map, true);
     }
 
-    public ImmutableHashMap(ImmutableMap<K, V> immutableMap) {
-        if (immutableMap instanceof ImmutableHashMap) {
-            ImmutableHashMap<K, V> immutableHashMap = (ImmutableHashMap<K, V>) immutableMap;
-            this.hashMap = immutableHashMap.hashMap;
-            this.keys = immutableHashMap.keys;
-            this.values = immutableHashMap.values;
-            this.pairs = immutableHashMap.pairs;
-        } else {
-            this.hashMap = new HashMap<>();
-            immutableMap.forEach(hashMap::put);
-            this.keys = setOf(hashMap.keySet());
-            this.values = listOf(hashMap.values());
-            this.pairs =
-                    setOf(
-                            hashMap.entrySet().stream()
-                                    .map(e -> Pair.of(e.getKey(), e.getValue()))
-                                    .collect(Collectors.toList()));
-        }
-    }
-
     ImmutableHashMap(Map<K, V> map, boolean needsCloning) {
         if (needsCloning || !(map instanceof HashMap)) this.hashMap = new HashMap<>(map);
         else this.hashMap = (HashMap<K, V>) map;
         this.keys = setOf(hashMap.keySet());
         this.values = listOf(hashMap.values());
         this.pairs =
-                setOf(
-                        hashMap.entrySet().stream()
-                                .map(e -> Pair.of(e.getKey(), e.getValue()))
-                                .collect(Collectors.toList()));
+                setOf(hashMap.entrySet().stream()
+                        .map(e -> Pair.of(e.getKey(), e.getValue()))
+                        .collect(Collectors.toList()));
     }
 
     @Override
@@ -77,12 +57,12 @@ public class ImmutableHashMap<K, V> implements ImmutableMap<K, V>, Serializable 
     }
 
     @Override
-    public boolean containsKey(K key) {
+    public boolean containsKey(Object key) {
         return hashMap.containsKey(key);
     }
 
     @Override
-    public boolean containsValue(V value) {
+    public boolean containsValue(Object value) {
         return hashMap.containsValue(value);
     }
 
@@ -125,7 +105,7 @@ public class ImmutableHashMap<K, V> implements ImmutableMap<K, V>, Serializable 
     }
 
     @Override
-    public V get(K key) {
+    public V get(Object key) {
         return hashMap.get(key);
     }
 
@@ -147,5 +127,15 @@ public class ImmutableHashMap<K, V> implements ImmutableMap<K, V>, Serializable 
     @Override
     public Map<K, V> toMutableMap() {
         return new HashMap<>(hashMap);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return mapEquals(this, o);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(hashMap);
     }
 }

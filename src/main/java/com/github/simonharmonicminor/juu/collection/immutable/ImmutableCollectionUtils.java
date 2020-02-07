@@ -3,6 +3,7 @@ package com.github.simonharmonicminor.juu.collection.immutable;
 import com.github.simonharmonicminor.juu.monad.Try;
 
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 class ImmutableCollectionUtils {
@@ -38,7 +39,8 @@ class ImmutableCollectionUtils {
         ImmutableSet<?> otherSet = (ImmutableSet<?>) other;
         if (current.size() != otherSet.size()) return false;
         for (Object obj : otherSet) {
-            if (Try.of(() -> current.notContains(obj)).orElse(false)) return false;
+            if (current.notContains(obj))
+                return false;
         }
         return true;
     }
@@ -49,5 +51,26 @@ class ImmutableCollectionUtils {
         Pair<?, ?> otherPair = (Pair<?, ?>) other;
         return Objects.equals(current.getKey(), otherPair.getKey())
                 && Objects.equals(current.getValue(), otherPair.getValue());
+    }
+
+    static boolean mapEquals(ImmutableMap<?, ?> current, Object other) {
+        if (current == other) return true;
+        if (!(other instanceof ImmutableMap)) return false;
+        ImmutableMap<?, ?> otherMap = (ImmutableMap<?, ?>) other;
+
+        Consumer<ImmutableMap<?, ?>> checkForEquality = map -> {
+            map.forEach((k, v) -> {
+                if (current.notContainsKey(k)
+                        || otherMap.notContainsKey(k)
+                        || current.get(k) != otherMap.get(k))
+                    throw new RuntimeException("not equal");
+            });
+        };
+
+        return Try.of(() -> {
+            checkForEquality.accept(current);
+            checkForEquality.accept(otherMap);
+            return true;
+        }).orElse(false);
     }
 }

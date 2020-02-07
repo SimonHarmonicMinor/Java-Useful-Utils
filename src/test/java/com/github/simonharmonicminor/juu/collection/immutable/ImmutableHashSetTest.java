@@ -264,4 +264,25 @@ class ImmutableHashSetTest {
         );
         assertNotNull(immutableSet.toString());
     }
+
+    @Test
+    void equalsAndNotEquals() {
+        String item1 = "dasgsdfg";
+        String item2 = "123afdasgsdfg";
+        String item3 = "223afda14fsdffg";
+        String item4 = "323adfgdfgfda14fsdffg";
+
+        ImmutableSet<String> immutableSet1 = new ImmutableHashSet<>(
+                Stream.of(item1, item2, item3, item4).collect(Collectors.toSet())
+        );
+        ImmutableSet<String> immutableSet2 = new ImmutableHashSet<>(
+                Stream.of(item1, item2, item3, item4).collect(Collectors.toSet())
+        );
+        ImmutableSet<String> immutableSet3 = new ImmutableHashSet<>(
+                Stream.of(item1, item2, item3).collect(Collectors.toSet())
+        );
+
+        assertEquals(immutableSet1, immutableSet2);
+        assertNotEquals(immutableSet1, immutableSet3);
+    }
 }
