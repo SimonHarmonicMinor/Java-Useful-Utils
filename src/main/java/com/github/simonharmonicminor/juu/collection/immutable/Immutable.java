@@ -79,23 +79,6 @@ public class Immutable {
     }
 
     /**
-     * Same behaviour as
-     *
-     * <pre>{@code
-     * ImmutableList<Pair<T, U>> res = left.zipWith(right);
-     * }</pre>
-     *
-     * @throws NullPointerException if {@code left} or {@code right} is null
-     * @see ImmutableList#zipWith(ImmutableList)
-     */
-    public static <T, U> ImmutableList<Pair<T, U>> zip(
-            ImmutableList<T> left, ImmutableList<U> right) {
-        Objects.requireNonNull(left);
-        Objects.requireNonNull(right);
-        return left.zipWith(right);
-    }
-
-    /**
      * Creates new immutable list from given elements. If array is empty, returns {@link
      * Immutable#emptyList()}. This is the preferred way of creating immutable lists, unless you need
      * particular implementation.
@@ -196,6 +179,10 @@ public class Immutable {
             K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5) {
         return mapOf(
                 Arrays.asList(
-                        Pair.of(k1, v1), Pair.of(k2, v2), Pair.of(k3, v3), Pair.of(k4, v4), Pair.of(k5, v5)));
+                        Pair.of(k1, v1),
+                        Pair.of(k2, v2),
+                        Pair.of(k3, v3),
+                        Pair.of(k4, v4),
+                        Pair.of(k5, v5)));
     }
 }
