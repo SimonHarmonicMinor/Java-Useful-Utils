@@ -10,6 +10,7 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static com.github.simonharmonicminor.juu.collection.immutable.Immutable.*;
+import static com.github.simonharmonicminor.juu.collection.immutable.ImmutableCollectionUtils.setEquals;
 import static com.github.simonharmonicminor.juu.collection.immutable.ImmutableCollectionUtils.setToString;
 
 public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializable {
@@ -57,7 +58,7 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializab
         return new ImmutableHashSet<>(hashSet, false);
     }
 
-    private Optional<T> tryOptOrEmpty(Supplier<T> supplier) {
+    private Optional<T> tryGetElement(Supplier<T> supplier) {
         return Try.of(supplier::get)
                 .map(Optional::ofNullable)
                 .orElse(Optional.empty());
@@ -65,22 +66,22 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializab
 
     @Override
     public Optional<T> lower(T t) {
-        return tryOptOrEmpty(() -> treeSet.lower(t));
+        return tryGetElement(() -> treeSet.lower(t));
     }
 
     @Override
     public Optional<T> floor(T t) {
-        return tryOptOrEmpty(() -> treeSet.floor(t));
+        return tryGetElement(() -> treeSet.floor(t));
     }
 
     @Override
     public Optional<T> ceiling(T t) {
-        return tryOptOrEmpty(() -> treeSet.ceiling(t));
+        return tryGetElement(() -> treeSet.ceiling(t));
     }
 
     @Override
     public Optional<T> higher(T t) {
-        return tryOptOrEmpty(() -> treeSet.higher(t));
+        return tryGetElement(() -> treeSet.higher(t));
     }
 
     @Override
@@ -93,21 +94,33 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializab
         return treeSet.descendingIterator();
     }
 
+    private ImmutableNavigableSet<T> tryGetSubSet(Supplier<ImmutableNavigableSet<T>> supplier) {
+        return Try.of(supplier::get)
+                .orElse(emptyTreeSet());
+    }
+
     @Override
-    public ImmutableNavigableSet<T> subSet(
-            T fromElement, boolean fromInclusive, T toElement, boolean toInclusive) {
-        return newImmutableTreeSet(
-                treeSet.subSet(fromElement, fromInclusive, toElement, toInclusive), true);
+    public ImmutableNavigableSet<T> subSet(T fromElement, boolean fromInclusive, T toElement, boolean toInclusive) {
+        return tryGetSubSet(() ->
+                newImmutableTreeSet(
+                        treeSet.subSet(fromElement, fromInclusive, toElement, toInclusive),
+                        true));
     }
 
     @Override
     public ImmutableNavigableSet<T> headSet(T toElement, boolean inclusive) {
-        return newImmutableTreeSet(treeSet.headSet(toElement, inclusive), true);
+        return tryGetSubSet(() ->
+                newImmutableTreeSet(
+                        treeSet.headSet(toElement, inclusive),
+                        true));
     }
 
     @Override
     public ImmutableNavigableSet<T> tailSet(T fromElement, boolean inclusive) {
-        return newImmutableTreeSet(treeSet.tailSet(fromElement, inclusive), true);
+        return tryGetSubSet(() ->
+                newImmutableTreeSet(
+                        treeSet.tailSet(fromElement, inclusive),
+                        true));
     }
 
     @Override
@@ -122,27 +135,36 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializab
 
     @Override
     public ImmutableSortedSet<T> subSet(T fromElement, T toElement) {
-        return newImmutableTreeSet(treeSet.subSet(fromElement, toElement), true);
+        return tryGetSubSet(() ->
+                newImmutableTreeSet(
+                        treeSet.subSet(fromElement, toElement),
+                        true));
     }
 
     @Override
     public ImmutableSortedSet<T> headSet(T toElement) {
-        return newImmutableTreeSet(treeSet.headSet(toElement), true);
+        return tryGetSubSet(() ->
+                newImmutableTreeSet(
+                        treeSet.headSet(toElement),
+                        true));
     }
 
     @Override
     public ImmutableSortedSet<T> tailSet(T fromElement) {
-        return newImmutableTreeSet(treeSet.tailSet(fromElement), true);
+        return tryGetSubSet(() ->
+                newImmutableTreeSet(
+                        treeSet.tailSet(fromElement),
+                        true));
     }
 
     @Override
     public Optional<T> first() {
-        return tryOptOrEmpty(treeSet::first);
+        return tryGetElement(treeSet::first);
     }
 
     @Override
     public Optional<T> last() {
-        return tryOptOrEmpty(treeSet::last);
+        return tryGetElement(treeSet::last);
     }
 
     @Override
@@ -212,11 +234,6 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializab
     }
 
     @Override
-    public Set<T> toMutableSet() {
-        return new TreeSet<>(treeSet);
-    }
-
-    @Override
     public Stream<T> parallelStream() {
         return treeSet.parallelStream();
     }
@@ -233,10 +250,7 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializab
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ImmutableTreeSet<?> that = (ImmutableTreeSet<?>) o;
-        return treeSet.equals(that.treeSet);
+        return setEquals(this, o);
     }
 
     @Override
