@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static com.github.simonharmonicminor.juu.collection.immutable.Immutable.*;
@@ -19,7 +20,7 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializab
         return new ImmutableTreeSet<>(iterable, null);
     }
 
-    public static <R> ImmutableTreeSet<R> of(SortedSet<R> sortedSet) {
+    public static <R> ImmutableTreeSet<R> ofSortedSet(SortedSet<R> sortedSet) {
         Objects.requireNonNull(sortedSet);
         return new ImmutableTreeSet<>(sortedSet, true);
     }
@@ -56,24 +57,30 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializab
         return new ImmutableHashSet<>(hashSet, false);
     }
 
-    @Override
-    public T lower(T t) {
-        return treeSet.lower(t);
+    private Optional<T> tryOptOrEmpty(Supplier<T> supplier) {
+        return Try.of(supplier::get)
+                .map(Optional::ofNullable)
+                .orElse(Optional.empty());
     }
 
     @Override
-    public T floor(T t) {
-        return treeSet.floor(t);
+    public Optional<T> lower(T t) {
+        return tryOptOrEmpty(() -> treeSet.lower(t));
     }
 
     @Override
-    public T ceiling(T t) {
-        return treeSet.ceiling(t);
+    public Optional<T> floor(T t) {
+        return tryOptOrEmpty(() -> treeSet.floor(t));
     }
 
     @Override
-    public T higher(T t) {
-        return treeSet.higher(t);
+    public Optional<T> ceiling(T t) {
+        return tryOptOrEmpty(() -> treeSet.ceiling(t));
+    }
+
+    @Override
+    public Optional<T> higher(T t) {
+        return tryOptOrEmpty(() -> treeSet.higher(t));
     }
 
     @Override
@@ -130,12 +137,12 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializab
 
     @Override
     public Optional<T> first() {
-        return Try.of(() -> Optional.ofNullable(treeSet.first())).orElse(Optional.empty());
+        return tryOptOrEmpty(treeSet::first);
     }
 
     @Override
     public Optional<T> last() {
-        return Try.of(() -> Optional.ofNullable(treeSet.last())).orElse(Optional.empty());
+        return tryOptOrEmpty(treeSet::last);
     }
 
     @Override

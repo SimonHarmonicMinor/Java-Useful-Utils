@@ -3,6 +3,7 @@ package com.github.simonharmonicminor.juu.collection.immutable;
 import com.github.simonharmonicminor.juu.monad.Try;
 
 import java.util.Objects;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -37,11 +38,18 @@ class ImmutableCollectionUtils {
         if (current == other) return true;
         if (!(other instanceof ImmutableSet)) return false;
         ImmutableSet<?> otherSet = (ImmutableSet<?>) other;
-        if (current.size() != otherSet.size()) return false;
-        for (Object obj : otherSet) {
-            if (current.notContains(obj))
-                return false;
-        }
+        if (current.size() != otherSet.size())
+            return false;
+
+        BiConsumer<ImmutableSet<?>, ImmutableSet<?>> checkForEquality =
+                (set1, set2) -> {
+                    for (Object obj : set1) {
+                        if (set2.notContains(obj))
+                            throw new RuntimeException("not equal");
+                    }
+                };
+        checkForEquality.accept(current, otherSet);
+        checkForEquality.accept(otherSet, current);
         return true;
     }
 
@@ -57,15 +65,16 @@ class ImmutableCollectionUtils {
         if (current == other) return true;
         if (!(other instanceof ImmutableMap)) return false;
         ImmutableMap<?, ?> otherMap = (ImmutableMap<?, ?>) other;
+        if (current.size() != otherMap.size())
+            return false;
 
-        Consumer<ImmutableMap<?, ?>> checkForEquality = map -> {
-            map.forEach((k, v) -> {
-                if (current.notContainsKey(k)
-                        || otherMap.notContainsKey(k)
-                        || current.get(k) != otherMap.get(k))
-                    throw new RuntimeException("not equal");
-            });
-        };
+        Consumer<ImmutableMap<?, ?>> checkForEquality = map ->
+                map.forEach((k, v) -> {
+                    if (current.notContainsKey(k)
+                            || otherMap.notContainsKey(k)
+                            || current.get(k) != otherMap.get(k))
+                        throw new RuntimeException("not equal");
+                });
 
         return Try.of(() -> {
             checkForEquality.accept(current);

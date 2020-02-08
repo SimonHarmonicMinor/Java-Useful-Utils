@@ -29,15 +29,6 @@ public interface ImmutableSortedSet<T> extends ImmutableSet<T> {
      * @param toElement   high endpoint (exclusive) of the returned set
      * @return a view of the portion of this set whose elements range from {@code fromElement},
      * inclusive, to {@code toElement}, exclusive
-     * @throws ClassCastException       if {@code fromElement} and {@code toElement} cannot be compared to
-     *                                  one another using this set's comparator (or, if the set has no comparator, using natural
-     *                                  ordering). Implementations may, but are not required to, throw this exception if {@code
-     *                                  fromElement} or {@code toElement} cannot be compared to elements currently in the set.
-     * @throws NullPointerException     if {@code fromElement} or {@code toElement} is null and this set
-     *                                  does not permit null elements
-     * @throws IllegalArgumentException if {@code fromElement} is greater than {@code toElement}; or
-     *                                  if this set itself has a restricted range, and {@code fromElement} or {@code toElement}
-     *                                  lies outside the bounds of the range
      */
     ImmutableSortedSet<T> subSet(T fromElement, T toElement);
 
@@ -53,14 +44,6 @@ public interface ImmutableSortedSet<T> extends ImmutableSet<T> {
      * @param toElement high endpoint (exclusive) of the returned set
      * @return a view of the portion of this set whose elements are strictly less than {@code
      * toElement}
-     * @throws ClassCastException       if {@code toElement} is not compatible with this set's comparator
-     *                                  (or, if the set has no comparator, if {@code toElement} does not implement {@link
-     *                                  Comparable}). Implementations may, but are not required to, throw this exception if {@code
-     *                                  toElement} cannot be compared to elements currently in the set.
-     * @throws NullPointerException     if {@code toElement} is null and this set does not permit null
-     *                                  elements
-     * @throws IllegalArgumentException if this set itself has a restricted range, and {@code
-     *                                  toElement} lies outside the bounds of the range
      */
     ImmutableSortedSet<T> headSet(T toElement);
 
@@ -76,14 +59,6 @@ public interface ImmutableSortedSet<T> extends ImmutableSet<T> {
      * @param fromElement low endpoint (inclusive) of the returned set
      * @return a view of the portion of this set whose elements are greater than or equal to {@code
      * fromElement}
-     * @throws ClassCastException       if {@code fromElement} is not compatible with this set's comparator
-     *                                  (or, if the set has no comparator, if {@code fromElement} does not implement {@link
-     *                                  Comparable}). Implementations may, but are not required to, throw this exception if {@code
-     *                                  fromElement} cannot be compared to elements currently in the set.
-     * @throws NullPointerException     if {@code fromElement} is null and this set does not permit null
-     *                                  elements
-     * @throws IllegalArgumentException if this set itself has a restricted range, and {@code
-     *                                  fromElement} lies outside the bounds of the range
      */
     ImmutableSortedSet<T> tailSet(T fromElement);
 
