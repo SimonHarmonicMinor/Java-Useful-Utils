@@ -4,7 +4,6 @@ import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collector;
 
 /**
@@ -36,18 +35,18 @@ public class ImmutableCollectors {
      * @param <C>               the type of the return collection
      * @return collector
      */
-    public static <T, C extends ImmutableCollection<T>> Collector<T, ?, C> toCollection(
-            Function<Iterable<T>, C> collectionFactory) {
+    public static <T, C extends ImmutableCollection<T>> Collector<T, List<T>, C> toCollection(
+            Function<List<T>, C> collectionFactory) {
         Objects.requireNonNull(collectionFactory);
-        return new CollectorImpl<>(
-                (Supplier<List<T>>) ArrayList::new,
+        return Collector.of(
+                ArrayList::new,
                 List::add,
-                (r1, r2) -> {
-                    r1.addAll(r2);
-                    return r1;
+                (res1, res2) -> {
+                    res1.addAll(res2);
+                    return res1;
                 },
-                collectionFactory::apply,
-                CH_ID);
+                collectionFactory
+        );
     }
 
     /**
@@ -57,16 +56,8 @@ public class ImmutableCollectors {
      * @return collector
      * @see ImmutableCollectors#toCollection(Function)
      */
-    public static <T> Collector<T, ?, ImmutableList<T>> toList() {
-        return new CollectorImpl<>(
-                (Supplier<List<T>>) ArrayList::new,
-                List::add,
-                (r1, r2) -> {
-                    r1.addAll(r2);
-                    return r1;
-                },
-                list -> new ImmutableArrayList<>(list, false),
-                CH_ID);
+    public static <T> Collector<T, List<T>, ImmutableList<T>> toList() {
+        return toCollection(list -> new ImmutableArrayList<>(list, false));
     }
 
     /**
@@ -77,15 +68,7 @@ public class ImmutableCollectors {
      * @see ImmutableCollectors#toCollection(Function)
      */
     public static <T> Collector<T, ?, ImmutableSet<T>> toSet() {
-        return new CollectorImpl<>(
-                (Supplier<Set<T>>) HashSet::new,
-                Set::add,
-                (r1, r2) -> {
-                    r1.addAll(r2);
-                    return r1;
-                },
-                set -> new ImmutableHashSet<>(set, false),
-                CH_UNORDERED_ID);
+        return toCollection(set -> new ImmutableHashSet<>(set, false));
     }
 
     /**
@@ -99,17 +82,16 @@ public class ImmutableCollectors {
      * @return collector
      * @throws IllegalStateException if keys were duplicated
      */
-    @SuppressWarnings("unchecked")
-    public static <T, K, V> Collector<T, ?, ImmutableMap<K, V>> toMap(
+    public static <T, K, V> Collector<T, Map<K, V>, ImmutableMap<K, V>> toMap(
             Function<? super T, ? extends K> keyMapper, Function<? super T, ? extends V> valueMapper) {
         Objects.requireNonNull(keyMapper);
         Objects.requireNonNull(valueMapper);
-        return new CollectorImpl<>(
+        return Collector.of(
                 HashMap::new,
                 uniqKeysMapAccumulator(keyMapper, valueMapper),
                 uniqKeysMapMerger(),
-                map -> new ImmutableHashMap<>((Map<K, V>) map, false),
-                CH_ID);
+                map -> new ImmutableHashMap<>(map, false)
+        );
     }
 
     private static <T, K, V> BiConsumer<Map<K, V>, T> uniqKeysMapAccumulator(
@@ -137,51 +119,5 @@ public class ImmutableCollectors {
     private static IllegalStateException duplicateKeyException(Object k, Object u, Object v) {
         return new IllegalStateException(
                 String.format("Duplicate key %s (attempted merging values %s and %s)", k, u, v));
-    }
-
-    static class CollectorImpl<T, A, R> implements Collector<T, A, R> {
-        private final Supplier<A> supplier;
-        private final BiConsumer<A, T> accumulator;
-        private final BinaryOperator<A> combiner;
-        private final Function<A, R> finisher;
-        private final Set<Characteristics> characteristics;
-
-        CollectorImpl(
-                Supplier<A> supplier,
-                BiConsumer<A, T> accumulator,
-                BinaryOperator<A> combiner,
-                Function<A, R> finisher,
-                Set<Characteristics> characteristics) {
-            this.supplier = supplier;
-            this.accumulator = accumulator;
-            this.combiner = combiner;
-            this.finisher = finisher;
-            this.characteristics = characteristics;
-        }
-
-        @Override
-        public Supplier<A> supplier() {
-            return supplier;
-        }
-
-        @Override
-        public BiConsumer<A, T> accumulator() {
-            return accumulator;
-        }
-
-        @Override
-        public BinaryOperator<A> combiner() {
-            return combiner;
-        }
-
-        @Override
-        public Function<A, R> finisher() {
-            return finisher;
-        }
-
-        @Override
-        public Set<Characteristics> characteristics() {
-            return characteristics;
-        }
     }
 }

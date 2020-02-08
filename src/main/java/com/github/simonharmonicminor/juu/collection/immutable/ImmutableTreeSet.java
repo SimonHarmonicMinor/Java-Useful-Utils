@@ -29,23 +29,6 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializab
         return new ImmutableTreeSet<>(iterable, comparator);
     }
 
-    public static <R> ImmutableTreeSet<R> of(ImmutableNavigableSet<R> immutableNavigableSet) {
-        Objects.requireNonNull(immutableNavigableSet);
-        return new ImmutableTreeSet<>(immutableNavigableSet);
-    }
-
-    ImmutableTreeSet(ImmutableNavigableSet<T> immutableNavigableSet) {
-        if (immutableNavigableSet instanceof ImmutableTreeSet) {
-            ImmutableTreeSet<T> immutableTreeSet = (ImmutableTreeSet<T>) immutableNavigableSet;
-            this.treeSet = immutableTreeSet.treeSet;
-        } else {
-            this.treeSet = new TreeSet<>(immutableNavigableSet.comparator());
-            for (T t : immutableNavigableSet) {
-                this.treeSet.add(t);
-            }
-        }
-    }
-
     ImmutableTreeSet(Iterable<T> iterable, Comparator<T> comparator) {
         Objects.requireNonNull(iterable);
         treeSet = new TreeSet<>(comparator);
