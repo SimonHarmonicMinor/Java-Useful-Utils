@@ -1,8 +1,8 @@
 package com.github.simonharmonicminor.juu.measure;
 
 /**
- * Measures time between object instantiating
- * and stopping measuring
+ * Measures time between object instantiating and stopping measuring
+ *
  * @since 0.1
  */
 public class Profiler {
@@ -42,22 +42,20 @@ public class Profiler {
         return measureUnit;
     }
 
-
     /**
-     * Returns measured time, calculated after {@link Profiler#stopMeasuring()} call.
-     * If measure is not calculated, returns {@link Profiler#STILL_MEASURING}
+     * Returns measured time, calculated after {@link Profiler#stopMeasuring()} call. If measure is
+     * not calculated, returns {@link Profiler#STILL_MEASURING}
      *
      * @return measured time or {@link Profiler#STILL_MEASURING}
      */
     public long getTime() {
-        if (endPoint == STILL_MEASURING)
-            return STILL_MEASURING;
+        if (endPoint == STILL_MEASURING) return STILL_MEASURING;
         return endPoint - startPoint;
     }
 
-
     /**
-     * Stops measuring and returns time. Multiply calls don't affect the result
+     * Stops measuring and returns time. Multiple calls don't affect the result
+     *
      * @return measured time
      */
     public long stopMeasuring() {
@@ -70,5 +68,4 @@ public class Profiler {
         }
         return getTime();
     }
-
 }

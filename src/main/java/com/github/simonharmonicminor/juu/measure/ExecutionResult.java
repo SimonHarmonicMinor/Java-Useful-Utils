@@ -1,5 +1,7 @@
 package com.github.simonharmonicminor.juu.measure;
 
+import java.util.Objects;
+
 /**
  * A class which contains the result of function execution and time spent for it
  *
@@ -9,33 +11,22 @@ package com.github.simonharmonicminor.juu.measure;
  * @since 0.1
  */
 public class ExecutionResult<T> {
-    private static final ExecutionResult<?> FAILED = new ExecutionResult<>(null, -1, null);
-
     private final T result;
     private final long time;
     private final MeasureUnit measureUnit;
 
     /**
-     * Returns an immutable instance which defines that measurement has failed
-     * @param <T> function return type
-     * @return a failed result instance
+     * Instantiates object
+     *
+     * @param result      result of calculation, can be null
+     * @param time        time spent
+     * @param measureUnit measure units, cannot be null
+     * @throws NullPointerException if measureUnit is null
      */
-    public static <T> ExecutionResult<T> failed() {
-        return (ExecutionResult<T>) FAILED;
-    }
-
     public ExecutionResult(T result, long time, MeasureUnit measureUnit) {
         this.result = result;
         this.time = time;
-        this.measureUnit = measureUnit;
-    }
-
-    /**
-     * Check whether execution result was failed or not
-     * @return true if measurement has failed
-     */
-    public boolean isFailed() {
-        return this == FAILED;
+        this.measureUnit = Objects.requireNonNull(measureUnit);
     }
 
     /**
@@ -57,5 +48,20 @@ public class ExecutionResult<T> {
      */
     public MeasureUnit getMeasureUnit() {
         return measureUnit;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ExecutionResult<?> that = (ExecutionResult<?>) o;
+        return time == that.time
+                && Objects.equals(result, that.result)
+                && measureUnit == that.measureUnit;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(result, time, measureUnit);
     }
 }

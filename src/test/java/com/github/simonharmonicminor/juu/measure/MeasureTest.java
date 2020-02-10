@@ -1,7 +1,10 @@
 package com.github.simonharmonicminor.juu.measure;
 
+import com.github.simonharmonicminor.juu.lambda.Action;
 import org.awaitility.Duration;
 import org.junit.jupiter.api.Test;
+
+import java.util.function.Supplier;
 
 import static com.github.simonharmonicminor.juu.measure.MeasureConverter.millisToNanos;
 import static org.awaitility.Awaitility.await;
@@ -15,38 +18,21 @@ class MeasureTest {
 
     @Test
     void throwsNullPointerIfActionIsNull() {
-        assertThrows(NullPointerException.class, () -> Measure.executionTime((Measure.Action) null));
+        assertThrows(NullPointerException.class, () -> Measure.executionTime((Supplier<Integer>) null));
     }
 
     @Test
     void throwsNullPointerIfSupplierIsNull() {
-        assertThrows(NullPointerException.class, () -> Measure.executionTime((Measure.Supplier<Integer>) null));
+        assertThrows(NullPointerException.class, () -> Measure.executionTime((Action) null));
     }
 
     @Test
     void executionTimeReturnsNotNull() {
-        Measure<Void> measure1 = Measure.executionTime(() -> { });
+        Measure<Void> measure1 = Measure.executionTime(() -> {
+        });
         Measure<Integer> measure2 = Measure.executionTime(() -> 1);
         assertNotNull(measure1);
         assertNotNull(measure2);
-    }
-
-    @Test
-    void ifInMillisThrowsExceptionReturnsFailed() {
-        ExecutionResult<Integer> executionResult =
-                Measure.executionTime((Measure.Supplier<Integer>) () -> {
-                    throw new RuntimeException();
-                }).inMillis();
-        assertTrue(executionResult.isFailed());
-    }
-
-    @Test
-    void ifInNanosThrowsExceptionReturnsFailed() {
-        ExecutionResult<Integer> executionResult =
-                Measure.executionTime((Measure.Supplier<Integer>) () -> {
-                    throw new RuntimeException();
-                }).inNanos();
-        assertTrue(executionResult.isFailed());
     }
 
     @Test

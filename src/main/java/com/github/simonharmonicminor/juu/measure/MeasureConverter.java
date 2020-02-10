@@ -2,6 +2,7 @@ package com.github.simonharmonicminor.juu.measure;
 
 /**
  * A class which converts one measure unit to another
+ *
  * @since 0.1
  */
 public class MeasureConverter {
