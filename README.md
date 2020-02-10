@@ -197,8 +197,8 @@ List<Integer> result = doSomething(numbers);
 
 Have this list been changed? What have been returned by
 `doSomething()`? The same list or the new one?
-If we delete an ele ment from `numbers`, 
-will we affect `result`? 
+If we delete an element from `numbers`, 
+will it have an effect on `result`? 
 
 Well, we can implement our own "immutable" list 
 that inherits `java.util.List` and make mutating
@@ -264,7 +264,7 @@ ImmutableMap<String, Integer> map =
 
 You can user Stream API with immutable collections as well,
 but `ImmutableList` and `ImmutableSet` provides kotlin-like methods:
-`map`, `flatMap`, `filter`, `sorted`, `min`, `max`.
+`map`, `flatMap`, `filter`, `sorted`, `min`, `max` and `zip` (for lists).
 `ImmutableList` also has indexed methods: 
 `mapIndexed`, `flatMapIndexed`, `filterIndexed`.
 
@@ -289,3 +289,24 @@ list.slice(0, 6, 2);                              // [0, 3, 5]
 list.step(3)                                      // [1, 4]
 list.step(-2)                                     // [6, 4]
 ```
+
+###### Mutable containers
+
+Sometimes we need to return several values from method. 
+Problem can be solved by creating values wrapper. 
+But it may produce tons of "infrastructural code", especially if types vary.
+JUU has special mutable containers that can be passed as a parameter.
+For instance
+
+```java
+List<Row> someList = ...;
+MutableValue<Row> biggest = new MutableValue<>(null);
+// suppose to call `biggest.setValue(row)`
+int affectedRows = fillWithMagic(someList, biggest);
+...
+return biggest.getValue();
+```
+Also lib has implementations for each primitive type.
+`MutableInt`, `MutableDouble`, `MutableShort`,
+`MutableLong`, `MutableFloat`, `MutableChar`,
+`MutableByte`, `MutableBoolean`.
