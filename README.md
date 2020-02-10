@@ -283,11 +283,14 @@ Which means, that you can use negative indices, steps and negative steps.
 ```java
 ImmutableList<Integer> list = getList();          // [1, 2, 3, 4, 5, 6]
 assert list.get(list.size() - 1) == list.get(-1)  // 6
+
+// startIndex (inclusively), endIndex (exclusively), stepSize
 list.slice(0, 3, 1);                              // [1, 2, 3]
 list.slice(-1, 2, -1);                            // [6, 5, 4]
-list.slice(0, 6, 2);                              // [0, 3, 5]
+list.slice(0, 6, 2);                              // [1, 3, 5]
 list.step(3)                                      // [1, 4]
-list.step(-2)                                     // [6, 4]
+// if stepSize is negative, startIndex is -1
+list.step(-2)                                     // [6, 4, 2]
 ```
 
 ###### Mutable containers
