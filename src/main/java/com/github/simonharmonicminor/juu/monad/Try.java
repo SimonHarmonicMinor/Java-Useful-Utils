@@ -29,18 +29,13 @@ import java.util.stream.Stream;
  */
 public class Try<T> implements Streaming<T> {
     private static final String CONTAINER_IS_EMPTY_MSG = "Container is empty";
-    private static final Try<?> EMPTY = new Try<>(new EmptyContainerException(CONTAINER_IS_EMPTY_MSG, null));
+    private static final Try<?> EMPTY = new Try<>(null, new EmptyContainerException(CONTAINER_IS_EMPTY_MSG, null));
 
     private final T value;
     private final Throwable reasonOfEmptiness;
 
-    private Try(T value) {
+    private Try(T value, Throwable reasonOfEmptiness) {
         this.value = value;
-        this.reasonOfEmptiness = null;
-    }
-
-    private Try(Throwable reasonOfEmptiness) {
-        this.value = null;
         this.reasonOfEmptiness = reasonOfEmptiness;
     }
 
@@ -66,7 +61,7 @@ public class Try<T> implements Streaming<T> {
      */
     public static <T> Try<T> empty(Throwable reasonOfEmptiness) {
         Objects.requireNonNull(reasonOfEmptiness);
-        return new Try<>(reasonOfEmptiness);
+        return new Try<>(null, reasonOfEmptiness);
     }
 
     /**
@@ -83,7 +78,7 @@ public class Try<T> implements Streaming<T> {
     public static <T, E extends Throwable> Try<T> of(CheckedSupplier<T, E> supplier) {
         Objects.requireNonNull(supplier);
         try {
-            return new Try<>(supplier.get());
+            return new Try<>(supplier.get(), null);
         } catch (Throwable e) {
             return empty(e);
         }
@@ -132,7 +127,7 @@ public class Try<T> implements Streaming<T> {
      * @return <code>true</code> if container is empty, otherwise <code>false</code>
      */
     public boolean isEmpty() {
-        return reasonOfEmptiness == null;
+        return reasonOfEmptiness != null;
     }
 
     /**
@@ -195,7 +190,7 @@ public class Try<T> implements Streaming<T> {
         try {
             return (Try<U>) mapper.apply(value);
         } catch (Throwable e) {
-            return empty();
+            return empty(e);
         }
     }
 
@@ -209,8 +204,12 @@ public class Try<T> implements Streaming<T> {
      */
     public Try<T> filter(Predicate<? super T> predicate) {
         Objects.requireNonNull(predicate);
-        if (isEmpty() || !predicate.test(value)) {
+        if (isEmpty()) {
             return empty(reasonOfEmptiness);
+        } else if (!predicate.test(value)) {
+            return empty(new EmptyContainerException(
+                    String.format("Predicate %s has returned false", predicate.toString())
+            ));
         }
         return this;
     }
