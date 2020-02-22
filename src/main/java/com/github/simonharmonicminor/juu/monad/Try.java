@@ -20,7 +20,7 @@ import java.util.stream.Stream;
  * considered as an empty one if an exception has been thrown during calculations.
  * <br><br>
  * If container is empty, it keeps the reason of emptiness — the exception that led to it.
- * The exception can be retrieved with
+ * The exception can be retrieved with {@link Try#getReasonOfEmptiness()}
  * <p><br>
  * Class overrides {@link Object#equals(Object)} and {@link Object#hashCode()} methods.
  *
