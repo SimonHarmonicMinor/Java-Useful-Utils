@@ -17,13 +17,7 @@ public interface ImmutableSortedSet<T> extends ImmutableSet<T> {
 
     /**
      * Returns a view of the portion of this set whose elements range from {@code fromElement},
-     * inclusive, to {@code toElement}, exclusive. (If {@code fromElement} and {@code toElement} are
-     * equal, the returned set is empty.) The returned set is backed by this set, so changes in the
-     * returned set are reflected in this set, and vice-versa. The returned set supports all optional
-     * set operations that this set supports.
-     *
-     * <p>The returned set will throw an {@code IllegalArgumentException} on an attempt to insert an
-     * element outside its range.
+     * inclusive, to {@code toElement}, exclusive.
      *
      * @param fromElement low endpoint (inclusive) of the returned set
      * @param toElement   high endpoint (exclusive) of the returned set
@@ -34,12 +28,7 @@ public interface ImmutableSortedSet<T> extends ImmutableSet<T> {
 
     /**
      * Returns a view of the portion of this set whose elements are strictly less than {@code
-     * toElement}. The returned set is backed by this set, so changes in the returned set are
-     * reflected in this set, and vice-versa. The returned set supports all optional set operations
-     * that this set supports.
-     *
-     * <p>The returned set will throw an {@code IllegalArgumentException} on an attempt to insert an
-     * element outside its range.
+     * toElement}.
      *
      * @param toElement high endpoint (exclusive) of the returned set
      * @return a view of the portion of this set whose elements are strictly less than {@code
@@ -49,12 +38,7 @@ public interface ImmutableSortedSet<T> extends ImmutableSet<T> {
 
     /**
      * Returns a view of the portion of this set whose elements are greater than or equal to {@code
-     * fromElement}. The returned set is backed by this set, so changes in the returned set are
-     * reflected in this set, and vice-versa. The returned set supports all optional set operations
-     * that this set supports.
-     *
-     * <p>The returned set will throw an {@code IllegalArgumentException} on an attempt to insert an
-     * element outside its range.
+     * fromElement}.
      *
      * @param fromElement low endpoint (inclusive) of the returned set
      * @return a view of the portion of this set whose elements are greater than or equal to {@code
