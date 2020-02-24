@@ -3,8 +3,10 @@ package com.github.simonharmonicminor.juu.collection.immutable;
 import com.github.simonharmonicminor.juu.monad.Try;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 class ImmutableCollectionUtils {
@@ -81,5 +83,12 @@ class ImmutableCollectionUtils {
             checkForEquality.accept(otherMap);
             return true;
         }).orElse(false);
+    }
+
+    static <T> Optional<T> tryGetElement(Supplier<T> supplier) {
+        Objects.requireNonNull(supplier);
+        return Try.of(supplier::get)
+                .map(Optional::ofNullable)
+                .orElse(Optional.empty());
     }
 }

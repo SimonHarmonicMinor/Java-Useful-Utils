@@ -24,8 +24,6 @@ public class Immutable {
             new ImmutableHashSet<>(Collections.emptyList());
     private static final ImmutableHashMap<?, ?> EMPTY_HASH_MAP =
             new ImmutableHashMap<>(Collections.emptyMap());
-    private static final ImmutableTreeSet<?> EMPTY_TREE_SET =
-            ImmutableTreeSet.of(Collections.emptyList(), null);
 
     /**
      * Suppresses default constructor, ensuring non-instantiability.
@@ -56,16 +54,6 @@ public class Immutable {
         return (ImmutableSet<T>) EMPTY_HASH_SET;
     }
 
-    @SuppressWarnings("unchecked")
-    static <T> ImmutableTreeSet<T> emptyTreeSet() {
-        return (ImmutableTreeSet<T>) EMPTY_TREE_SET;
-    }
-
-    @SuppressWarnings("unchecked")
-    static <T> ImmutableHashSet<T> emptyHashSet() {
-        return (ImmutableHashSet<T>) EMPTY_HASH_SET;
-    }
-
     /**
      * Returns empty map. Does not create the new one, returns the same instance every time
      *
@@ -76,6 +64,13 @@ public class Immutable {
     @SuppressWarnings("unchecked")
     public static <K, V> ImmutableMap<K, V> emptyMap() {
         return (ImmutableMap<K, V>) EMPTY_HASH_MAP;
+    }
+
+
+    private static <T> ImmutableList<T> listOf(Iterable<T> elements, boolean needsCloning) {
+        Objects.requireNonNull(elements);
+        if (!elements.iterator().hasNext()) return emptyList();
+        return new ImmutableArrayList<>(elements, needsCloning);
     }
 
     /**
@@ -90,9 +85,7 @@ public class Immutable {
      */
     @SafeVarargs
     public static <T> ImmutableList<T> listOf(T... elements) {
-        Objects.requireNonNull(elements);
-        if (elements.length == 0) return emptyList();
-        return new ImmutableArrayList<>(Arrays.stream(elements).collect(Collectors.toList()));
+        return listOf(Arrays.stream(elements).collect(Collectors.toList()), false);
     }
 
     /**
@@ -106,9 +99,17 @@ public class Immutable {
      * @throws NullPointerException if {@code elements} is null
      */
     public static <T> ImmutableList<T> listOf(Iterable<T> elements) {
+        return listOf(elements, true);
+    }
+
+    static <T> ImmutableList<T> listOfWithoutCloning(Iterable<T> elements) {
+        return listOf(elements, false);
+    }
+
+    private static <T> ImmutableSet<T> setOf(Iterable<T> elements, boolean needsCloning) {
         Objects.requireNonNull(elements);
-        if (!elements.iterator().hasNext()) return emptyList();
-        return new ImmutableArrayList<>(elements);
+        if (!elements.iterator().hasNext()) return emptySet();
+        return new ImmutableHashSet<>(elements, needsCloning);
     }
 
     /**
@@ -124,8 +125,7 @@ public class Immutable {
     @SafeVarargs
     public static <T> ImmutableSet<T> setOf(T... elements) {
         Objects.requireNonNull(elements);
-        if (elements.length == 0) return emptySet();
-        return new ImmutableHashSet<>(Arrays.stream(elements).collect(Collectors.toSet()));
+        return setOf(Arrays.stream(elements).collect(Collectors.toSet()), false);
     }
 
     /**
@@ -139,9 +139,11 @@ public class Immutable {
      * @throws NullPointerException if {@code elements} is null
      */
     public static <T> ImmutableSet<T> setOf(Iterable<T> elements) {
-        Objects.requireNonNull(elements);
-        if (!elements.iterator().hasNext()) return emptySet();
-        return new ImmutableHashSet<>(elements);
+        return setOf(elements, true);
+    }
+
+    static <T> ImmutableSet<T> setOfWithoutCloning(Iterable<T> elements) {
+        return setOf(elements, false);
     }
 
     public static <K, V> ImmutableMap<K, V> mapOf(Map<K, V> map) {

@@ -197,4 +197,11 @@ public interface ImmutableNavigableMap<K, V> extends ImmutableSortedMap<K, V> {
      * (or equal to, if {@code inclusive} is true) {@code fromKey}
      */
     ImmutableNavigableMap<K, V> tailMap(K fromKey, boolean inclusive);
+
+    /**
+     * Converts immutable navigable map to mutable map.
+     *
+     * @return new mutable navigable map
+     */
+    NavigableMap<K, V> toMutableNavigableMap();
 }

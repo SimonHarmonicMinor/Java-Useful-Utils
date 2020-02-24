@@ -26,21 +26,6 @@ class ImmutableTest {
     }
 
     @Test
-    void emptyTreeSet() {
-        ImmutableTreeSet<Integer> set = Immutable.emptyTreeSet();
-        assertTrue(set.isEmpty());
-        assertFalse(set.isNotEmpty());
-        assertNull(set.comparator());
-    }
-
-    @Test
-    void emptyHashSet() {
-        ImmutableHashSet<String> set = Immutable.emptyHashSet();
-        assertTrue(set.isEmpty());
-        assertFalse(set.isNotEmpty());
-    }
-
-    @Test
     void listOf() {
         int item1 = 1312;
         int item2 = 1241312;

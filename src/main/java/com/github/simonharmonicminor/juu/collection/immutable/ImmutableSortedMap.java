@@ -77,4 +77,11 @@ public interface ImmutableSortedMap<K, V> extends ImmutableMap<K, V> {
      * @return the last (highest) key currently in this map
      */
     Optional<K> lastKey();
+
+    /**
+     * Converts immutable sorted map to mutable one.
+     *
+     * @return new mutable sorted map
+     */
+    SortedMap<K, V> toMutableSortedMap();
 }
