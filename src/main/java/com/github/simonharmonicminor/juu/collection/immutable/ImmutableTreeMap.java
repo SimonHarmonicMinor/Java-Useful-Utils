@@ -18,12 +18,18 @@ public class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V>, Seri
     private final ImmutableList<V> values;
     private final ImmutableSet<Pair<K, V>> pairs;
 
+    public static <K, V> ImmutableTreeMap<K, V> of(Map<K, V> map, Comparator<? super K> comparator) {
+        Objects.requireNonNull(map);
+        Objects.requireNonNull(comparator);
+        return new ImmutableTreeMap<>(map, comparator);
+    }
+
     public static <K extends Comparable<K>, V> ImmutableTreeMap<K, V> of(Map<K, V> map) {
         Objects.requireNonNull(map);
         return new ImmutableTreeMap<>(map, null);
     }
 
-    public static <K, V> ImmutableTreeMap<K, V> of(SortedMap<K, V> sortedMap) {
+    public static <K, V> ImmutableTreeMap<K, V> ofSortedMap(SortedMap<K, V> sortedMap) {
         Objects.requireNonNull(sortedMap);
         return new ImmutableTreeMap<>(sortedMap, true);
     }
