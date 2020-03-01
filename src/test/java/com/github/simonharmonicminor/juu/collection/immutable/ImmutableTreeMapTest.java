@@ -124,4 +124,32 @@ class ImmutableTreeMapTest {
         pair = immutableMapReversedOrdering.lowerPair("3");
         assertFalse(pair.isPresent());
     }
+
+    @Test
+    void lowerKey() {
+        Map<String, Integer> map = new TreeMap<>();
+        map.put("1", 1);
+        map.put("2", 2);
+        map.put("3", 3);
+
+        ImmutableTreeMap<String, Integer> immutableMapNaturalOrdering =
+                ImmutableTreeMap.of(map);
+
+        Optional<String> key = immutableMapNaturalOrdering.lowerKey("2");
+        assertTrue(key.isPresent());
+        assertEquals("1", key.get());
+
+        key = immutableMapNaturalOrdering.lowerKey("1");
+        assertFalse(key.isPresent());
+
+        ImmutableTreeMap<String, Integer> immutableMapReversedOrdering =
+                ImmutableTreeMap.of(map, Comparator.reverseOrder());
+
+        key = immutableMapReversedOrdering.lowerKey("2");
+        assertTrue(key.isPresent());
+        assertEquals("3", key.get());
+
+        key = immutableMapReversedOrdering.lowerKey("3");
+        assertFalse(key.isPresent());
+    }
 }
