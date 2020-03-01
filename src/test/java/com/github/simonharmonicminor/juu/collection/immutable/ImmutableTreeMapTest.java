@@ -599,5 +599,31 @@ class ImmutableTreeMapTest {
         });
     }
 
+    @Test
+    void containsPair() {
+        Map<String, Integer> map = new TreeMap<>();
+        map.put("1", 1);
+        map.put("2", 2);
+        map.put("3", 3);
 
+        ImmutableNavigableMap<String, Integer> immutableMap =
+                ImmutableTreeMap.of(map);
+
+        assertTrue(immutableMap.containsPair(Pair.of("1", 1)));
+        assertFalse(immutableMap.containsPair(Pair.of("2", 3)));
+    }
+
+    @Test
+    void notContainsPair() {
+        Map<String, Integer> map = new TreeMap<>();
+        map.put("1", 1);
+        map.put("2", 2);
+        map.put("3", 3);
+
+        ImmutableNavigableMap<String, Integer> immutableMap =
+                ImmutableTreeMap.of(map);
+
+        assertFalse(immutableMap.notContainsPair(Pair.of("1", 1)));
+        assertTrue(immutableMap.notContainsPair(Pair.of("2", 3)));
+    }
 }

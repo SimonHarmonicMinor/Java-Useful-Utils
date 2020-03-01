@@ -80,7 +80,7 @@ public interface ImmutableMap<K, V> {
      */
     default boolean notContainsPair(Pair<K, V> pair) {
         Objects.requireNonNull(pair);
-        return !containsValue(pair);
+        return !containsPair(pair);
     }
 
     /**
