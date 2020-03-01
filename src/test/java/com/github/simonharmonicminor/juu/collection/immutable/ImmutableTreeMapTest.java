@@ -20,6 +20,7 @@ class ImmutableTreeMapTest {
                 ImmutableTreeMap.of(map);
 
         assertEquals(3, immutableTreeMap.size());
+        assertFalse(immutableTreeMap.isEmpty());
         MutableInt idx1 = new MutableInt(1);
         immutableTreeMap.forEach((k, v) -> {
             assertEquals(String.valueOf(idx1.getValue()), k);
@@ -625,5 +626,318 @@ class ImmutableTreeMapTest {
 
         assertFalse(immutableMap.notContainsPair(Pair.of("1", 1)));
         assertTrue(immutableMap.notContainsPair(Pair.of("2", 3)));
+    }
+
+    @Test
+    void subMap4() {
+        Map<String, Integer> map = new TreeMap<>();
+        map.put("1", 1);
+        map.put("2", 2);
+        map.put("3", 3);
+        map.put("4", 4);
+        map.put("5", 5);
+
+        ImmutableNavigableMap<String, Integer> immutableMap =
+                ImmutableTreeMap.of(map);
+
+        ImmutableNavigableMap<String, Integer> subMap1 = immutableMap.subMap(
+                "1",
+                true,
+                "3",
+                false
+        );
+        ImmutableNavigableMap<String, Integer> subMap2 = immutableMap.subMap(
+                "2",
+                true,
+                "5",
+                true
+        );
+        ImmutableNavigableMap<String, Integer> subMap3 = immutableMap.subMap(
+                "0",
+                true,
+                "6",
+                false
+        );
+        ImmutableNavigableMap<String, Integer> subMap4 = immutableMap.subMap(
+                "5",
+                true,
+                "2",
+                false
+        );
+
+        assertEquals(2, subMap1.size());
+        assertTrue(subMap1.containsPair(Pair.of("1", 1)));
+        assertTrue(subMap1.containsPair(Pair.of("2", 2)));
+
+        assertEquals(4, subMap2.size());
+        assertTrue(subMap2.containsPair(Pair.of("2", 2)));
+        assertTrue(subMap2.containsPair(Pair.of("3", 3)));
+        assertTrue(subMap2.containsPair(Pair.of("4", 4)));
+        assertTrue(subMap2.containsPair(Pair.of("5", 5)));
+
+        assertEquals(5, subMap3.size());
+        assertTrue(subMap3.containsPair(Pair.of("1", 1)));
+        assertTrue(subMap3.containsPair(Pair.of("2", 2)));
+        assertTrue(subMap3.containsPair(Pair.of("3", 3)));
+        assertTrue(subMap3.containsPair(Pair.of("4", 4)));
+        assertTrue(subMap3.containsPair(Pair.of("5", 5)));
+
+        assertTrue(subMap4.isEmpty());
+    }
+
+    @Test
+    void headMap2() {
+        Map<String, Integer> map = new TreeMap<>();
+        map.put("1", 1);
+        map.put("2", 2);
+        map.put("3", 3);
+        map.put("4", 4);
+        map.put("5", 5);
+
+        ImmutableNavigableMap<String, Integer> immutableMap =
+                ImmutableTreeMap.of(map);
+
+        ImmutableNavigableMap<String, Integer> subMap1 =
+                immutableMap.headMap("2", true);
+
+        ImmutableNavigableMap<String, Integer> subMap2 =
+                immutableMap.headMap("4", false);
+
+        ImmutableNavigableMap<String, Integer> subMap3 =
+                immutableMap.headMap("5", true);
+
+        ImmutableNavigableMap<String, Integer> subMap4 =
+                immutableMap.headMap("0", true);
+
+        assertEquals(2, subMap1.size());
+        assertTrue(subMap1.containsPair(Pair.of("1", 1)));
+        assertTrue(subMap1.containsPair(Pair.of("2", 2)));
+
+        assertEquals(3, subMap2.size());
+        assertTrue(subMap2.containsPair(Pair.of("1", 1)));
+        assertTrue(subMap2.containsPair(Pair.of("2", 2)));
+        assertTrue(subMap2.containsPair(Pair.of("3", 3)));
+
+        assertEquals(5, subMap3.size());
+        assertTrue(subMap3.containsPair(Pair.of("1", 1)));
+        assertTrue(subMap3.containsPair(Pair.of("2", 2)));
+        assertTrue(subMap3.containsPair(Pair.of("3", 3)));
+        assertTrue(subMap3.containsPair(Pair.of("4", 4)));
+        assertTrue(subMap3.containsPair(Pair.of("5", 5)));
+
+        assertTrue(subMap4.isEmpty());
+    }
+
+    @Test
+    void tailMap2() {
+        Map<String, Integer> map = new TreeMap<>();
+        map.put("1", 1);
+        map.put("2", 2);
+        map.put("3", 3);
+        map.put("4", 4);
+        map.put("5", 5);
+
+        ImmutableNavigableMap<String, Integer> immutableMap =
+                ImmutableTreeMap.of(map);
+
+        ImmutableNavigableMap<String, Integer> subMap1 =
+                immutableMap.tailMap("3", true);
+
+        ImmutableNavigableMap<String, Integer> subMap2 =
+                immutableMap.tailMap("1", false);
+
+        ImmutableNavigableMap<String, Integer> subMap3 =
+                immutableMap.tailMap("0", true);
+
+        ImmutableNavigableMap<String, Integer> subMap4 =
+                immutableMap.tailMap("5", false);
+
+        assertEquals(3, subMap1.size());
+        assertTrue(subMap1.containsPair(Pair.of("3", 3)));
+        assertTrue(subMap1.containsPair(Pair.of("4", 4)));
+        assertTrue(subMap1.containsPair(Pair.of("5", 5)));
+
+        assertEquals(4, subMap2.size());
+        assertTrue(subMap2.containsPair(Pair.of("2", 2)));
+        assertTrue(subMap2.containsPair(Pair.of("3", 3)));
+        assertTrue(subMap2.containsPair(Pair.of("4", 4)));
+        assertTrue(subMap2.containsPair(Pair.of("5", 5)));
+
+        assertEquals(5, subMap3.size());
+        assertTrue(subMap3.containsPair(Pair.of("1", 1)));
+        assertTrue(subMap3.containsPair(Pair.of("2", 2)));
+        assertTrue(subMap3.containsPair(Pair.of("3", 3)));
+        assertTrue(subMap3.containsPair(Pair.of("4", 4)));
+        assertTrue(subMap3.containsPair(Pair.of("5", 5)));
+
+        assertTrue(subMap4.isEmpty());
+    }
+
+    @Test
+    void toMutableNavigableMap() {
+        Map<String, Integer> map = new TreeMap<>();
+        map.put("1", 1);
+        map.put("2", 2);
+        map.put("3", 3);
+        map.put("4", 4);
+        map.put("5", 5);
+
+        ImmutableNavigableMap<String, Integer> immutableMap =
+                ImmutableTreeMap.of(map);
+
+        NavigableMap<String, Integer> mutableMap =
+                immutableMap.toMutableNavigableMap();
+
+        assertEquals(5, mutableMap.size());
+        assertEquals(5, immutableMap.size());
+        mutableMap.clear();
+        assertEquals(5, immutableMap.size());
+    }
+
+    @Test
+    void comparator() {
+        Map<String, Integer> map = new TreeMap<>();
+        map.put("1", 1);
+        map.put("2", 2);
+        map.put("3", 3);
+        map.put("4", 4);
+        map.put("5", 5);
+
+        ImmutableNavigableMap<String, Integer> immutableMapNaturalOrdering =
+                ImmutableTreeMap.of(map);
+
+        assertNull(immutableMapNaturalOrdering.comparator());
+
+        Comparator<String> customComparator = Comparator.comparingInt(String::length);
+
+        ImmutableNavigableMap<String, Integer> immutableMapCustomOrdering =
+                ImmutableTreeMap.of(map, customComparator);
+
+        assertSame(customComparator, immutableMapCustomOrdering.comparator());
+    }
+
+    @Test
+    void subMap2() {
+        Map<String, Integer> map = new TreeMap<>();
+        map.put("1", 1);
+        map.put("2", 2);
+        map.put("3", 3);
+        map.put("4", 4);
+        map.put("5", 5);
+
+        ImmutableNavigableMap<String, Integer> immutableMap =
+                ImmutableTreeMap.of(map);
+
+        ImmutableSortedMap<String, Integer> subMap1 =
+                immutableMap.subMap("1", "3");
+        ImmutableSortedMap<String, Integer> subMap2 =
+                immutableMap.subMap("2", "5");
+        ImmutableSortedMap<String, Integer> subMap3 =
+                immutableMap.subMap("1", "6");
+        ImmutableSortedMap<String, Integer> subMap4 =
+                immutableMap.subMap("5", "2");
+
+        assertEquals(2, subMap1.size());
+        assertTrue(subMap1.containsPair(Pair.of("1", 1)));
+        assertTrue(subMap1.containsPair(Pair.of("2", 2)));
+
+        assertEquals(3, subMap2.size());
+        assertTrue(subMap2.containsPair(Pair.of("2", 2)));
+        assertTrue(subMap2.containsPair(Pair.of("3", 3)));
+        assertTrue(subMap2.containsPair(Pair.of("4", 4)));
+
+        assertEquals(5, subMap3.size());
+        assertTrue(subMap3.containsPair(Pair.of("1", 1)));
+        assertTrue(subMap3.containsPair(Pair.of("2", 2)));
+        assertTrue(subMap3.containsPair(Pair.of("3", 3)));
+        assertTrue(subMap3.containsPair(Pair.of("4", 4)));
+        assertTrue(subMap3.containsPair(Pair.of("5", 5)));
+
+        assertTrue(subMap4.isEmpty());
+    }
+
+    @Test
+    void headMap1() {
+        Map<String, Integer> map = new TreeMap<>();
+        map.put("1", 1);
+        map.put("2", 2);
+        map.put("3", 3);
+        map.put("4", 4);
+        map.put("5", 5);
+
+        ImmutableNavigableMap<String, Integer> immutableMap =
+                ImmutableTreeMap.of(map);
+
+        ImmutableSortedMap<String, Integer> subMap1 =
+                immutableMap.headMap("2");
+
+        ImmutableSortedMap<String, Integer> subMap2 =
+                immutableMap.headMap("3");
+
+        ImmutableSortedMap<String, Integer> subMap3 =
+                immutableMap.headMap("6");
+
+        ImmutableSortedMap<String, Integer> subMap4 =
+                immutableMap.headMap("1");
+
+        assertEquals(1, subMap1.size());
+        assertTrue(subMap1.containsPair(Pair.of("1", 1)));
+
+        assertEquals(2, subMap2.size());
+        assertTrue(subMap2.containsPair(Pair.of("1", 1)));
+        assertTrue(subMap2.containsPair(Pair.of("2", 2)));
+
+        assertEquals(5, subMap3.size());
+        assertTrue(subMap3.containsPair(Pair.of("1", 1)));
+        assertTrue(subMap3.containsPair(Pair.of("2", 2)));
+        assertTrue(subMap3.containsPair(Pair.of("3", 3)));
+        assertTrue(subMap3.containsPair(Pair.of("4", 4)));
+        assertTrue(subMap3.containsPair(Pair.of("5", 5)));
+
+        assertTrue(subMap4.isEmpty());
+    }
+
+    @Test
+    void tailMap1() {
+        Map<String, Integer> map = new TreeMap<>();
+        map.put("1", 1);
+        map.put("2", 2);
+        map.put("3", 3);
+        map.put("4", 4);
+        map.put("5", 5);
+
+        ImmutableNavigableMap<String, Integer> immutableMap =
+                ImmutableTreeMap.of(map);
+
+        ImmutableSortedMap<String, Integer> subMap1 =
+                immutableMap.tailMap("2");
+
+        ImmutableSortedMap<String, Integer> subMap2 =
+                immutableMap.tailMap("4");
+
+        ImmutableSortedMap<String, Integer> subMap3 =
+                immutableMap.tailMap("0");
+
+        ImmutableSortedMap<String, Integer> subMap4 =
+                immutableMap.tailMap("6");
+
+        assertEquals(4, subMap1.size());
+        assertTrue(subMap1.containsPair(Pair.of("2", 2)));
+        assertTrue(subMap1.containsPair(Pair.of("3", 3)));
+        assertTrue(subMap1.containsPair(Pair.of("4", 4)));
+        assertTrue(subMap1.containsPair(Pair.of("5", 5)));
+
+        assertEquals(2, subMap2.size());
+        assertTrue(subMap2.containsPair(Pair.of("4", 4)));
+        assertTrue(subMap2.containsPair(Pair.of("5", 5)));
+
+        assertEquals(5, subMap3.size());
+        assertTrue(subMap3.containsPair(Pair.of("1", 1)));
+        assertTrue(subMap3.containsPair(Pair.of("2", 2)));
+        assertTrue(subMap3.containsPair(Pair.of("3", 3)));
+        assertTrue(subMap3.containsPair(Pair.of("4", 4)));
+        assertTrue(subMap3.containsPair(Pair.of("5", 5)));
+
+        assertTrue(subMap4.isEmpty());
     }
 }
