@@ -66,7 +66,7 @@ public class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V>, Seri
     }
 
     @Override
-    public Optional<Pair<K, V>> floorEntry(K key) {
+    public Optional<Pair<K, V>> floorPair(K key) {
         return tryGetElement(() -> treeMap.floorEntry(key))
                 .map(Pair::of);
     }
@@ -77,7 +77,7 @@ public class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V>, Seri
     }
 
     @Override
-    public Optional<Pair<K, V>> ceilingEntry(K key) {
+    public Optional<Pair<K, V>> ceilingPair(K key) {
         return tryGetElement(() -> treeMap.ceilingEntry(key))
                 .map(Pair::of);
     }
@@ -88,7 +88,7 @@ public class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V>, Seri
     }
 
     @Override
-    public Optional<Pair<K, V>> higherEntry(K key) {
+    public Optional<Pair<K, V>> higherPair(K key) {
         return tryGetElement(() -> treeMap.higherEntry(key))
                 .map(Pair::of);
     }
@@ -99,26 +99,14 @@ public class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V>, Seri
     }
 
     @Override
-    public Optional<Pair<K, V>> firstEntry() {
+    public Optional<Pair<K, V>> firstPair() {
         return tryGetElement(treeMap::firstEntry)
                 .map(Pair::of);
     }
 
     @Override
-    public Optional<Pair<K, V>> lastEntry() {
+    public Optional<Pair<K, V>> lastPair() {
         return tryGetElement(treeMap::lastEntry)
-                .map(Pair::of);
-    }
-
-    @Override
-    public Optional<Pair<K, V>> pollFirstEntry() {
-        return tryGetElement(treeMap::pollFirstEntry)
-                .map(Pair::of);
-    }
-
-    @Override
-    public Optional<Pair<K, V>> pollLastEntry() {
-        return tryGetElement(treeMap::pollLastEntry)
                 .map(Pair::of);
     }
 

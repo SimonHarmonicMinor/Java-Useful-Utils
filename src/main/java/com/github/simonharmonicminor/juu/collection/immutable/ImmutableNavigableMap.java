@@ -38,7 +38,7 @@ public interface ImmutableNavigableMap<K, V> extends ImmutableSortedMap<K, V> {
      * @return an entry with the greatest key less than or equal to
      * {@code key}, or {@link Optional#empty()} if there is no such key
      */
-    Optional<Pair<K, V>> floorEntry(K key);
+    Optional<Pair<K, V>> floorPair(K key);
 
     /**
      * Returns the greatest key less than or equal to the given key,
@@ -59,7 +59,7 @@ public interface ImmutableNavigableMap<K, V> extends ImmutableSortedMap<K, V> {
      * @return an entry with the least key greater than or equal to
      * {@code key}, or {@link Optional#empty()} if there is no such key
      */
-    Optional<Pair<K, V>> ceilingEntry(K key);
+    Optional<Pair<K, V>> ceilingPair(K key);
 
     /**
      * Returns the least key greater than or equal to the given key,
@@ -80,7 +80,7 @@ public interface ImmutableNavigableMap<K, V> extends ImmutableSortedMap<K, V> {
      * @return an entry with the least key greater than {@code key},
      * or {@link Optional#empty()} if there is no such key
      */
-    Optional<Pair<K, V>> higherEntry(K key);
+    Optional<Pair<K, V>> higherPair(K key);
 
     /**
      * Returns the least key strictly greater than the given key, or
@@ -99,7 +99,7 @@ public interface ImmutableNavigableMap<K, V> extends ImmutableSortedMap<K, V> {
      * @return an entry with the least key,
      * or {@link Optional#empty()} if this map is empty
      */
-    Optional<Pair<K, V>> firstEntry();
+    Optional<Pair<K, V>> firstPair();
 
     /**
      * Returns a key-value mapping associated with the greatest
@@ -108,25 +108,7 @@ public interface ImmutableNavigableMap<K, V> extends ImmutableSortedMap<K, V> {
      * @return an entry with the greatest key,
      * or {@link Optional#empty()} if this map is empty
      */
-    Optional<Pair<K, V>> lastEntry();
-
-    /**
-     * Removes and returns a key-value mapping associated with
-     * the least key in this map, or {@link Optional#empty()} if the map is empty.
-     *
-     * @return the removed first entry of this map,
-     * or {@link Optional#empty()} if this map is empty
-     */
-    Optional<Pair<K, V>> pollFirstEntry();
-
-    /**
-     * Removes and returns a key-value mapping associated with
-     * the greatest key in this map, or {@link Optional#empty()}if the map is empty.
-     *
-     * @return the removed last entry of this map,
-     * or {@link Optional#empty()} if this map is empty
-     */
-    Optional<Pair<K, V>> pollLastEntry();
+    Optional<Pair<K, V>> lastPair();
 
     /**
      * Returns a reverse order view of the mappings contained in this map.
