@@ -243,6 +243,12 @@ public class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V>, Seri
     }
 
     @Override
+    public boolean containsPair(Pair<K, V> pair) {
+        Objects.requireNonNull(pair);
+        return false;
+    }
+
+    @Override
     public ImmutableMap<K, V> concatWithOverride(ImmutableMap<K, V> map) {
         Objects.requireNonNull(map);
         return concatenationWithOverride(this.treeMap, map);

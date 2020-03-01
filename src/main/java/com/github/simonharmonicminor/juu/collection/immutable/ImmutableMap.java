@@ -67,6 +67,23 @@ public interface ImmutableMap<K, V> {
     }
 
     /**
+     * @param pair the pair whose presence is to be tested
+     * @return true if map contains pair, otherwise false
+     * @throws NullPointerException if {@code pair} is null
+     */
+    boolean containsPair(Pair<K, V> pair);
+
+    /**
+     * @param pair the value whose presence is to be tested
+     * @return true if map does not contain pair, otherwise false
+     * @throws NullPointerException if {@code pair} is null
+     */
+    default boolean notContainsPair(Pair<K, V> pair) {
+        Objects.requireNonNull(pair);
+        return !containsValue(pair);
+    }
+
+    /**
      * In case of occurring the same keys in two maps the value from the given map will be added to
      * final result.
      *

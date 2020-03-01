@@ -61,6 +61,12 @@ public class ImmutableHashMap<K, V> implements ImmutableMap<K, V>, Serializable 
     }
 
     @Override
+    public boolean containsPair(Pair<K, V> pair) {
+        Objects.requireNonNull(pair);
+        return keySet().contains(pair);
+    }
+
+    @Override
     public ImmutableMap<K, V> concatWithOverride(ImmutableMap<K, V> map) {
         Objects.requireNonNull(map);
         return concatenationWithOverride(this.hashMap, map);
