@@ -12,6 +12,17 @@ import static com.github.simonharmonicminor.juu.collection.immutable.Immutable.s
 import static com.github.simonharmonicminor.juu.collection.immutable.ImmutableCollectionUtils.tryGetElement;
 import static com.github.simonharmonicminor.juu.collection.immutable.ImmutableMapUtils.*;
 
+/**
+ * An immutable implementation of java native {@link TreeMap}
+ *
+ * @param <K> the type of the key
+ * @param <V> the type of the value
+ * @see ImmutableNavigableMap
+ * @see ImmutableMap
+ * @see Serializable
+ * @see TreeMap
+ * @since 1.1
+ */
 public class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V>, Serializable {
     private final TreeMap<K, V> treeMap;
     private final ImmutableSet<K> keys;
