@@ -27,7 +27,7 @@ implementation 'com.github.simonharmonicminor:java-useful-utils:1.0'
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=SimonHarmonicMinor_Java-Useful-Utils&metric=coverage)](https://sonarcloud.io/dashboard?id=SimonHarmonicMinor_Java-Useful-Utils)
 
 ### Usage
-The library contains of three big parts.
+The library consists of three big parts.
 * [Measurement](#measurement)
 * [Monads](#monads) (functional style programming)
 * [Collections](#collections)
@@ -210,7 +210,7 @@ on every `add` call.
 
 JUU library provides new collections, which interfaces
 do not inherits from java native Collections. 
-Here is the schema ![schema](./juu1.0.png)
+Here is the scheme ![scheme](./juu1.1.png)
 
 The recommended way to instantiate immutable collections is to use `Immutable` class.
 ```java
@@ -264,8 +264,8 @@ ImmutableMap<String, Integer> map =
 
 You can user Stream API with immutable collections as well,
 but `ImmutableList` and `ImmutableSet` provides kotlin-like methods:
-`map`, `flatMap`, `filter`, `sorted`, `min`, `max` and `zip` (for lists).
-`ImmutableList` also has indexed methods: 
+`map`, `flatMap`, `filter`, `min`, `max` and `zip` (for lists).
+`ImmutableList` also has `sorted`, `zipWith`, `zipWithNext` and indexed methods 
 `mapIndexed`, `flatMapIndexed`, `filterIndexed`.
 
 ```java
