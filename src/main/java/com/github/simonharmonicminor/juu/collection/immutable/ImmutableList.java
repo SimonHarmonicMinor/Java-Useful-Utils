@@ -58,6 +58,8 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
     /**
      * Proxy method for {@code this.slice(fromIndex, size(), 1)}.
      *
+     * @param fromIndex start index (inclusively)
+     * @return sublist
      * @see ImmutableList#slice(int, int, int)
      */
     ImmutableList<T> slice(int fromIndex);
@@ -66,6 +68,9 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
      * Proxy method for {@code this.slice(fromIndex, toIndex, 1)} if {@code fromIndex} is before
      * {@code toIndex} and {@code this.slice(fromIndex, toIndex, -1)} otherwise
      *
+     * @param fromIndex start index (inclusively)
+     * @param toIndex   end index (exclusively)
+     * @return sublist
      * @see ImmutableList#slice(int, int, int)
      */
     ImmutableList<T> slice(int fromIndex, int toIndex);
@@ -97,6 +102,7 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
      * Proxy method for {@code this.step(0, stepSize)} if stepSize is bigger than zero, otherwise
      * {@code this.step(-1, stepSize)}
      *
+     * @param stepSize the size of step traversing
      * @see ImmutableList#step(int, int)
      */
     ImmutableList<T> step(int stepSize);
@@ -118,7 +124,7 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
      * }</pre>
      *
      * @param fromIndex start index (might be negative)
-     * @param stepSize  size of the step
+     * @param stepSize  the size of the step traversing
      * @return stepped list
      * @throws IndexOutOfBoundsException if fromIndex is out of bounds
      * @throws IllegalArgumentException  if stepSize is zero

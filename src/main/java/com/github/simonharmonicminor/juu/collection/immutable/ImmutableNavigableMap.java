@@ -88,7 +88,7 @@ public interface ImmutableNavigableMap<K, V> extends ImmutableSortedMap<K, V> {
      *
      * @param key the key
      * @return the least key greater than {@code key},
-     * or {@link null} if there is no such key
+     * or {@link Optional#empty()} if there is no such key
      */
     Optional<K> higherKey(K key);
 
