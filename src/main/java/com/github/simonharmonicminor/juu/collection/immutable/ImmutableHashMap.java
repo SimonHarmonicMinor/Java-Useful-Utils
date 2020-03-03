@@ -6,11 +6,11 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import static com.github.simonharmonicminor.juu.collection.immutable.Immutable.listOf;
 import static com.github.simonharmonicminor.juu.collection.immutable.Immutable.setOf;
 import static com.github.simonharmonicminor.juu.collection.immutable.ImmutableCollectionUtils.mapEquals;
+import static com.github.simonharmonicminor.juu.collection.immutable.ImmutableMapUtils.*;
 
 /**
  * An immutable implementation of java native {@link HashMap}
@@ -23,9 +23,6 @@ import static com.github.simonharmonicminor.juu.collection.immutable.ImmutableCo
  * @since 1.0
  */
 public class ImmutableHashMap<K, V> implements ImmutableMap<K, V>, Serializable {
-    private static final TriFunction<?, ?, ?, ?> KEEP_OLD = (key, oldVal, newVal) -> oldVal;
-    private static final TriFunction<?, ?, ?, ?> KEEP_NEW = (key, oldVal, newVal) -> newVal;
-
     private final HashMap<K, V> hashMap;
     private final ImmutableSet<K> keys;
     private final ImmutableList<V> values;
@@ -40,10 +37,7 @@ public class ImmutableHashMap<K, V> implements ImmutableMap<K, V>, Serializable 
         else this.hashMap = (HashMap<K, V>) map;
         this.keys = setOf(hashMap.keySet());
         this.values = listOf(hashMap.values());
-        this.pairs =
-                setOf(hashMap.entrySet().stream()
-                        .map(e -> Pair.of(e.getKey(), e.getValue()))
-                        .collect(Collectors.toList()));
+        this.pairs = toPairSet(hashMap.entrySet());
     }
 
     @Override
@@ -66,34 +60,22 @@ public class ImmutableHashMap<K, V> implements ImmutableMap<K, V>, Serializable 
         return hashMap.containsValue(value);
     }
 
-    private static <K, V> ImmutableMap<K, V> concatenation(
-            ImmutableMap<K, V> immutableMap,
-            HashMap<K, V> oldHashMap,
-            TriFunction<K, V, V, V> overrideBehaviour) {
-        HashMap<K, V> newHashMap = new HashMap<>(oldHashMap);
-        immutableMap.forEach(
-                (k, v) -> {
-                    if (oldHashMap.containsKey(k)) {
-                        newHashMap.put(k, overrideBehaviour.apply(k, oldHashMap.get(k), v));
-                    } else {
-                        newHashMap.put(k, v);
-                    }
-                });
-        return new ImmutableHashMap<>(newHashMap, false);
+    @Override
+    public boolean containsPair(Pair<K, V> pair) {
+        Objects.requireNonNull(pair);
+        return pairSet().contains(pair);
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public ImmutableMap<K, V> concatWithOverride(ImmutableMap<K, V> map) {
         Objects.requireNonNull(map);
-        return concatenation(map, this.hashMap, (TriFunction<K, V, V, V>) KEEP_NEW);
+        return concatenationWithOverride(this.hashMap, map);
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public ImmutableMap<K, V> concatWithoutOverride(ImmutableMap<K, V> map) {
         Objects.requireNonNull(map);
-        return concatenation(map, this.hashMap, (TriFunction<K, V, V, V>) KEEP_OLD);
+        return concatenationWithoutOverride(this.hashMap, map);
     }
 
     @Override
@@ -101,7 +83,7 @@ public class ImmutableHashMap<K, V> implements ImmutableMap<K, V>, Serializable 
             ImmutableMap<K, V> map, TriFunction<K, V, V, V> overrideBehaviour) {
         Objects.requireNonNull(map);
         Objects.requireNonNull(overrideBehaviour);
-        return concatenation(map, this.hashMap, overrideBehaviour);
+        return concatenation(this.hashMap, map, overrideBehaviour);
     }
 
     @Override

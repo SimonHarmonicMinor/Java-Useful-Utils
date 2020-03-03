@@ -1,5 +1,8 @@
 package com.github.simonharmonicminor.juu.collection.immutable;
 
+import java.util.Map;
+import java.util.Objects;
+
 /**
  * Immutable pair that keeps key and value. Used by {@link ImmutableMap}
  *
@@ -33,5 +36,19 @@ public interface Pair<K, V> {
      */
     static <K, V> Pair<K, V> of(K key, V value) {
         return new PairImpl<>(key, value);
+    }
+
+    /**
+     * Instantiates new pair
+     *
+     * @param entry entry which key and value will be used
+     * @param <K>   the type of the key
+     * @param <V>   the type of the value
+     * @return new pair
+     * @throws NullPointerException if {@code entry} is null
+     */
+    static <K, V> Pair<K, V> of(Map.Entry<K, V> entry) {
+        Objects.requireNonNull(entry);
+        return new PairImpl<>(entry.getKey(), entry.getValue());
     }
 }

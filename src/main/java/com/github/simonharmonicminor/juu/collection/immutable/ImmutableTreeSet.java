@@ -10,8 +10,7 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static com.github.simonharmonicminor.juu.collection.immutable.Immutable.*;
-import static com.github.simonharmonicminor.juu.collection.immutable.ImmutableCollectionUtils.setEquals;
-import static com.github.simonharmonicminor.juu.collection.immutable.ImmutableCollectionUtils.setToString;
+import static com.github.simonharmonicminor.juu.collection.immutable.ImmutableCollectionUtils.*;
 
 public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializable {
     private final TreeSet<T> treeSet;
@@ -31,7 +30,7 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializab
         return new ImmutableTreeSet<>(iterable, comparator);
     }
 
-    ImmutableTreeSet(Iterable<T> iterable, Comparator<T> comparator) {
+    ImmutableTreeSet(Iterable<T> iterable, Comparator<? super T> comparator) {
         Objects.requireNonNull(iterable);
         treeSet = new TreeSet<>(comparator);
         for (T t : iterable) {
@@ -45,23 +44,6 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializab
         } else {
             this.treeSet = new TreeSet<>(sortedSet);
         }
-    }
-
-    private static <T> ImmutableTreeSet<T> newImmutableTreeSet(
-            SortedSet<T> treeSet, boolean needsCloning) {
-        if (treeSet.isEmpty()) return emptyTreeSet();
-        return new ImmutableTreeSet<>(treeSet, needsCloning);
-    }
-
-    private static <T> ImmutableHashSet<T> newImmutableHashSetWithoutCloning(HashSet<T> hashSet) {
-        if (hashSet.isEmpty()) return emptyHashSet();
-        return new ImmutableHashSet<>(hashSet, false);
-    }
-
-    private Optional<T> tryGetElement(Supplier<T> supplier) {
-        return Try.of(supplier::get)
-                .map(Optional::ofNullable)
-                .orElse(Optional.empty());
     }
 
     @Override
@@ -86,7 +68,7 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializab
 
     @Override
     public ImmutableNavigableSet<T> reversedOrderSet() {
-        return newImmutableTreeSet(treeSet.descendingSet(), true);
+        return new ImmutableTreeSet<>(treeSet.descendingSet(), false);
     }
 
     @Override
@@ -96,31 +78,31 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializab
 
     private ImmutableNavigableSet<T> tryGetSubSet(Supplier<ImmutableNavigableSet<T>> supplier) {
         return Try.of(supplier::get)
-                .orElse(emptyTreeSet());
+                .orElse(new ImmutableTreeSet<>(emptyList(), treeSet.comparator()));
     }
 
     @Override
     public ImmutableNavigableSet<T> subSet(T fromElement, boolean fromInclusive, T toElement, boolean toInclusive) {
         return tryGetSubSet(() ->
-                newImmutableTreeSet(
+                new ImmutableTreeSet<>(
                         treeSet.subSet(fromElement, fromInclusive, toElement, toInclusive),
-                        true));
+                        false));
     }
 
     @Override
     public ImmutableNavigableSet<T> headSet(T toElement, boolean inclusive) {
         return tryGetSubSet(() ->
-                newImmutableTreeSet(
+                new ImmutableTreeSet<>(
                         treeSet.headSet(toElement, inclusive),
-                        true));
+                        false));
     }
 
     @Override
     public ImmutableNavigableSet<T> tailSet(T fromElement, boolean inclusive) {
         return tryGetSubSet(() ->
-                newImmutableTreeSet(
+                new ImmutableTreeSet<>(
                         treeSet.tailSet(fromElement, inclusive),
-                        true));
+                        false));
     }
 
     @Override
@@ -136,25 +118,25 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializab
     @Override
     public ImmutableSortedSet<T> subSet(T fromElement, T toElement) {
         return tryGetSubSet(() ->
-                newImmutableTreeSet(
+                new ImmutableTreeSet<>(
                         treeSet.subSet(fromElement, toElement),
-                        true));
+                        false));
     }
 
     @Override
     public ImmutableSortedSet<T> headSet(T toElement) {
         return tryGetSubSet(() ->
-                newImmutableTreeSet(
+                new ImmutableTreeSet<>(
                         treeSet.headSet(toElement),
-                        true));
+                        false));
     }
 
     @Override
     public ImmutableSortedSet<T> tailSet(T fromElement) {
         return tryGetSubSet(() ->
-                newImmutableTreeSet(
+                new ImmutableTreeSet<>(
                         treeSet.tailSet(fromElement),
-                        true));
+                        false));
     }
 
     @Override
@@ -178,7 +160,7 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializab
         for (T t : iterable) {
             newTreeSet.add(t);
         }
-        return newImmutableTreeSet(newTreeSet, false);
+        return new ImmutableTreeSet<>(newTreeSet, false);
     }
 
     @Override
@@ -188,7 +170,7 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializab
         for (T t : this) {
             hashSet.add(mapper.apply(t));
         }
-        return newImmutableHashSetWithoutCloning(hashSet);
+        return setOfWithoutCloning(hashSet);
     }
 
     @Override
@@ -200,7 +182,7 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializab
                 hashSet.add(r);
             }
         }
-        return newImmutableHashSetWithoutCloning(hashSet);
+        return setOfWithoutCloning(hashSet);
     }
 
     @Override
@@ -210,7 +192,7 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializab
         for (T t : this) {
             if (predicate.test(t)) newTreeSet.add(t);
         }
-        return newImmutableTreeSet(newTreeSet, false);
+        return new ImmutableTreeSet<>(newTreeSet, false);
     }
 
     @Override
@@ -220,7 +202,8 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializab
 
     @Override
     public boolean contains(Object element) {
-        return treeSet.contains(element);
+        return Try.of(() -> treeSet.contains(element))
+                .orElse(false);
     }
 
     @Override

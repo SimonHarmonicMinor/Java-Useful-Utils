@@ -293,4 +293,30 @@ class ImmutableHashMapTest {
         assertEquals(1, map.getOrDefault("1", Integer.MAX_VALUE));
         assertEquals(Integer.MAX_VALUE, map.getOrDefault("11", Integer.MAX_VALUE));
     }
+
+    @Test
+    void containsPair() {
+        Map<String, Integer> mutable = new HashMap<>();
+        mutable.put("1", 1);
+        mutable.put("2", 2);
+        mutable.put("3", 3);
+        mutable.put("4", 4);
+
+        ImmutableMap<String, Integer> map = new ImmutableHashMap<>(mutable);
+        assertTrue(map.containsPair(Pair.of("1", 1)));
+        assertFalse(map.containsPair(Pair.of("2", 1)));
+    }
+
+    @Test
+    void notContainsPair() {
+        Map<String, Integer> mutable = new HashMap<>();
+        mutable.put("1", 1);
+        mutable.put("2", 2);
+        mutable.put("3", 3);
+        mutable.put("4", 4);
+
+        ImmutableMap<String, Integer> map = new ImmutableHashMap<>(mutable);
+        assertFalse(map.notContainsPair(Pair.of("1", 1)));
+        assertTrue(map.notContainsPair(Pair.of("2", 1)));
+    }
 }

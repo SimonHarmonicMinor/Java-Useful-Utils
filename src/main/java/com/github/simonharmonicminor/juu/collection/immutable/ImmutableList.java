@@ -58,6 +58,8 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
     /**
      * Proxy method for {@code this.slice(fromIndex, size(), 1)}.
      *
+     * @param fromIndex start index (inclusively)
+     * @return sublist
      * @see ImmutableList#slice(int, int, int)
      */
     ImmutableList<T> slice(int fromIndex);
@@ -66,6 +68,9 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
      * Proxy method for {@code this.slice(fromIndex, toIndex, 1)} if {@code fromIndex} is before
      * {@code toIndex} and {@code this.slice(fromIndex, toIndex, -1)} otherwise
      *
+     * @param fromIndex start index (inclusively)
+     * @param toIndex   end index (exclusively)
+     * @return sublist
      * @see ImmutableList#slice(int, int, int)
      */
     ImmutableList<T> slice(int fromIndex, int toIndex);
@@ -86,6 +91,7 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
      *
      * @param fromIndex start index (inclusively)
      * @param toIndex   end index (exclusively)
+     * @param stepSize  the size of the step traversing
      * @return result sublist
      * @throws IndexOutOfBoundsException if fromIndex is out of bounds
      * @throws IllegalArgumentException  if stepSize is zero
@@ -97,6 +103,8 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
      * Proxy method for {@code this.step(0, stepSize)} if stepSize is bigger than zero, otherwise
      * {@code this.step(-1, stepSize)}
      *
+     * @param stepSize the size of step traversing
+     * @return stepped list
      * @see ImmutableList#step(int, int)
      */
     ImmutableList<T> step(int stepSize);
@@ -118,7 +126,7 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
      * }</pre>
      *
      * @param fromIndex start index (might be negative)
-     * @param stepSize  size of the step
+     * @param stepSize  the size of the step traversing
      * @return stepped list
      * @throws IndexOutOfBoundsException if fromIndex is out of bounds
      * @throws IllegalArgumentException  if stepSize is zero
@@ -200,7 +208,7 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
      *      jobs.flatMap(j -&gt; j.getPeople());
      * }</pre>
      *
-     * @param mapper mapping function, that returns {@link Iterable}&lt;{@code R}&gt;
+     * @param mapper mapping function, that returns {@link Iterable}
      * @param <R>    the type of the return list
      * @return new list
      * @throws NullPointerException if {@code mapper} is null
@@ -212,6 +220,9 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
      * mapper accepts two arguments. The first is the current index and the second is the current
      * value.
      *
+     * @param mapper mapping function, that returns {@link Iterable}
+     * @param <R>    the type of the return list
+     * @return new list
      * @throws NullPointerException if {@code mapper} is null
      * @see ImmutableList#flatMap(Function)
      */

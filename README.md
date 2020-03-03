@@ -27,7 +27,7 @@ implementation 'com.github.simonharmonicminor:java-useful-utils:1.0'
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=SimonHarmonicMinor_Java-Useful-Utils&metric=coverage)](https://sonarcloud.io/dashboard?id=SimonHarmonicMinor_Java-Useful-Utils)
 
 ### Usage
-The library contains of three big parts.
+The library consists of three big parts.
 * [Measurement](#measurement)
 * [Monads](#monads) (functional style programming)
 * [Collections](#collections)
@@ -150,6 +150,25 @@ catch (Exception e) {
 }
 ```
 
+If you need the exception that led to the error, you can use
+`orElseGet` variation.
+
+```java
+Try.of(() -> Integer.parseInt(getStringValue))
+   .map(x -> 2 % x)
+   .orElseGet(reason -> {
+       log.error("Something went wrong", reason);
+       return 0;
+   })
+```
+
+`reason` has the type of `Throwable` and it's the instance of that very
+exception that broke the chain. 
+For instance, if `Integer.parseInt` threw an exception, 
+the `reason` would be the type of `NumberFormatException`.
+On the other hand, if `x == 0` in the `map` callback,
+the reason would be the type of `ArithmeticException`. 
+
 ###### Lazy
 
 The name of the monad defines its purpose.
@@ -210,7 +229,7 @@ on every `add` call.
 
 JUU library provides new collections, which interfaces
 do not inherits from java native Collections. 
-Here is the schema ![schema](./juu1.0.png)
+Here is the scheme ![scheme](./juu1.1.png)
 
 The recommended way to instantiate immutable collections is to use `Immutable` class.
 ```java
@@ -264,8 +283,8 @@ ImmutableMap<String, Integer> map =
 
 You can user Stream API with immutable collections as well,
 but `ImmutableList` and `ImmutableSet` provides kotlin-like methods:
-`map`, `flatMap`, `filter`, `sorted`, `min`, `max` and `zip` (for lists).
-`ImmutableList` also has indexed methods: 
+`map`, `flatMap`, `filter`, `min`, `max` and `zip` (for lists).
+`ImmutableList` also has `sorted`, `zipWith`, `zipWithNext` and indexed methods 
 `mapIndexed`, `flatMapIndexed`, `filterIndexed`.
 
 ```java
