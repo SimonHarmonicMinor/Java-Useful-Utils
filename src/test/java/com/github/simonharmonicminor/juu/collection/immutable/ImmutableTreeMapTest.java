@@ -25,6 +25,9 @@ class ImmutableTreeMapTest {
         immutableTreeMap.forEach((k, v) -> {
             assertEquals(String.valueOf(idx1.getValue()), k);
             assertEquals(idx1.getValue(), v);
+            immutableTreeMap.containsKey(k);
+            immutableTreeMap.containsValue(v);
+            assertEquals(v, immutableTreeMap.get(k));
             idx1.setValue(idx1.getValue() + 1);
         });
 
@@ -35,8 +38,23 @@ class ImmutableTreeMapTest {
         immutableTreeMap.forEach((k, v) -> {
             assertEquals(String.valueOf(idx2.getValue()), k);
             assertEquals(idx2.getValue(), v);
+            immutableTreeMap.containsKey(k);
+            immutableTreeMap.containsValue(v);
+            assertEquals(v, immutableTreeMap.get(k));
             idx2.setValue(idx2.getValue() + 1);
         });
+
+        ImmutableSet<String> keySet = immutableTreeMap.keySet();
+        assertEquals(3, keySet.size());
+        assertTrue(keySet.contains("1"));
+        assertTrue(keySet.contains("2"));
+        assertTrue(keySet.contains("3"));
+
+        ImmutableList<Integer> values = immutableTreeMap.values();
+        assertEquals(3, values.size());
+        for (int i = 0; i < 3; i++) {
+            assertEquals(i + 1, values.get(i));
+        }
     }
 
     @Test
@@ -939,5 +957,159 @@ class ImmutableTreeMapTest {
         assertTrue(subMap3.containsPair(Pair.of("5", 5)));
 
         assertTrue(subMap4.isEmpty());
+    }
+
+    @Test
+    void firstKeyAndLastKey() {
+        Map<String, Integer> map = new TreeMap<>();
+        map.put("1", 1);
+        map.put("2", 2);
+        map.put("3", 3);
+        map.put("4", 4);
+        map.put("5", 5);
+
+        ImmutableNavigableMap<String, Integer> immutableMap =
+                ImmutableTreeMap.of(map);
+
+        Optional<String> firstKey = immutableMap.firstKey();
+        assertTrue(firstKey.isPresent());
+        assertEquals("1", firstKey.get());
+
+        Optional<String> lastKey = immutableMap.lastKey();
+        assertTrue(lastKey.isPresent());
+        assertEquals("5", lastKey.get());
+
+        ImmutableNavigableMap<String, Integer> immutableMapReversed =
+                ImmutableTreeMap.of(map, Collections.reverseOrder());
+
+        firstKey = immutableMapReversed.firstKey();
+        assertTrue(firstKey.isPresent());
+        assertEquals("5", firstKey.get());
+
+        lastKey = immutableMapReversed.lastKey();
+        assertTrue(lastKey.isPresent());
+        assertEquals("1", lastKey.get());
+
+        ImmutableNavigableMap<String, Integer> emptyMap =
+                ImmutableTreeMap.ofSortedMap(new TreeMap<>());
+
+        firstKey = emptyMap.firstKey();
+        assertFalse(firstKey.isPresent());
+
+        lastKey = emptyMap.lastKey();
+        assertFalse(lastKey.isPresent());
+    }
+
+    @Test
+    void concatWithOverride() {
+        Map<String, Integer> map1 = new HashMap<>();
+        map1.put("1", 1);
+        map1.put("2", 2);
+        map1.put("3", 3);
+
+        Map<String, Integer> map2 = new HashMap<>();
+        map2.put("3", 33);
+        map2.put("4", 4);
+
+        ImmutableTreeMap<String, Integer> immutableMap1 =
+                ImmutableTreeMap.of(map1);
+
+        ImmutableTreeMap<String, Integer> immutableMap2 =
+                ImmutableTreeMap.of(map2);
+
+        ImmutableMap<String, Integer> concat =
+                immutableMap1.concatWithOverride(immutableMap2);
+
+        assertEquals(4, concat.size());
+        assertTrue(concat.containsPair(Pair.of("1", 1)));
+        assertTrue(concat.containsPair(Pair.of("2", 2)));
+        assertTrue(concat.containsPair(Pair.of("3", 33)));
+        assertTrue(concat.containsPair(Pair.of("4", 4)));
+    }
+
+    @Test
+    void concatWithoutOverride() {
+        Map<String, Integer> map1 = new HashMap<>();
+        map1.put("1", 1);
+        map1.put("2", 2);
+        map1.put("3", 3);
+
+        Map<String, Integer> map2 = new HashMap<>();
+        map2.put("3", 33);
+        map2.put("4", 4);
+
+        ImmutableTreeMap<String, Integer> immutableMap1 =
+                ImmutableTreeMap.of(map1);
+
+        ImmutableTreeMap<String, Integer> immutableMap2 =
+                ImmutableTreeMap.of(map2);
+
+        ImmutableMap<String, Integer> concat =
+                immutableMap1.concatWithoutOverride(immutableMap2);
+
+        assertEquals(4, concat.size());
+        assertTrue(concat.containsPair(Pair.of("1", 1)));
+        assertTrue(concat.containsPair(Pair.of("2", 2)));
+        assertTrue(concat.containsPair(Pair.of("3", 3)));
+        assertTrue(concat.containsPair(Pair.of("4", 4)));
+    }
+
+    @Test
+    void concatWith() {
+        Map<String, Integer> map1 = new HashMap<>();
+        map1.put("1", 1);
+        map1.put("2", 2);
+        map1.put("3", 3);
+
+        Map<String, Integer> map2 = new HashMap<>();
+        map2.put("1", 11);
+        map2.put("2", 22);
+        map2.put("3", 33);
+
+
+        ImmutableTreeMap<String, Integer> immutableMap1 =
+                ImmutableTreeMap.of(map1);
+
+        ImmutableTreeMap<String, Integer> immutableMap2 =
+                ImmutableTreeMap.of(map2);
+
+        ImmutableMap<String, Integer> concat =
+                immutableMap1.concatWith(
+                        immutableMap2,
+                        (key, oldVal, newVal) -> {
+                            if (Integer.parseInt(key) % 2 == 0)
+                                return oldVal;
+                            else
+                                return newVal;
+                        }
+                );
+
+        assertEquals(3, concat.size());
+        assertTrue(concat.containsPair(Pair.of("1", 11)));
+        assertTrue(concat.containsPair(Pair.of("2", 2)));
+        assertTrue(concat.containsPair(Pair.of("3", 33)));
+    }
+
+    @Test
+    void toMutableMap() {
+        Map<String, Integer> map1 = new HashMap<>();
+        map1.put("1", 1);
+        map1.put("2", 2);
+        map1.put("3", 3);
+
+        ImmutableTreeMap<String, Integer> immutableMap =
+                ImmutableTreeMap.of(map1);
+
+        Map<String, Integer> mutableMap = immutableMap.toMutableMap();
+
+        assertEquals(3, mutableMap.size());
+        for (int i = 1; i <= 3; i++) {
+            assertTrue(mutableMap.containsKey(String.valueOf(i)));
+            assertTrue(mutableMap.containsValue(i));
+        }
+
+        mutableMap.clear();
+
+        assertEquals(3, immutableMap.size());
     }
 }
