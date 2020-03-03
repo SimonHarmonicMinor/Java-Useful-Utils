@@ -150,6 +150,25 @@ catch (Exception e) {
 }
 ```
 
+If you need the exception that led to the error, you can use
+`orElseGet` variation.
+
+```java
+Try.of(() -> Integer.parseInt(getStringValue))
+   .map(x -> 2 % x)
+   .orElseGet(reason -> {
+       log.error("Something went wrong", reason);
+       return 0;
+   })
+```
+
+`reason` has the type of `Throwable` and it's the instance of that very
+exception that broke the chain. 
+For instance, if `Integer.parseInt` threw an exception, 
+the `reason` would be the type of `NumberFormatException`.
+On the other hand, if `x == 0` in the `map` callback,
+the reason would be the type of `ArithmeticException`. 
+
 ###### Lazy
 
 The name of the monad defines its purpose.
