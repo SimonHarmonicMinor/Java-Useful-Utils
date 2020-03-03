@@ -91,6 +91,7 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
      *
      * @param fromIndex start index (inclusively)
      * @param toIndex   end index (exclusively)
+     * @param stepSize  the size of the step traversing
      * @return result sublist
      * @throws IndexOutOfBoundsException if fromIndex is out of bounds
      * @throws IllegalArgumentException  if stepSize is zero
@@ -103,6 +104,7 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
      * {@code this.step(-1, stepSize)}
      *
      * @param stepSize the size of step traversing
+     * @return stepped list
      * @see ImmutableList#step(int, int)
      */
     ImmutableList<T> step(int stepSize);
@@ -206,7 +208,7 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
      *      jobs.flatMap(j -&gt; j.getPeople());
      * }</pre>
      *
-     * @param mapper mapping function, that returns {@link Iterable}&lt;{@code R}&gt;
+     * @param mapper mapping function, that returns {@link Iterable}
      * @param <R>    the type of the return list
      * @return new list
      * @throws NullPointerException if {@code mapper} is null
@@ -218,6 +220,9 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
      * mapper accepts two arguments. The first is the current index and the second is the current
      * value.
      *
+     * @param mapper mapping function, that returns {@link Iterable}
+     * @param <R>    the type of the return list
+     * @return new list
      * @throws NullPointerException if {@code mapper} is null
      * @see ImmutableList#flatMap(Function)
      */
