@@ -7,5 +7,9 @@ package com.github.simonharmonicminor.juu.measure;
  */
 public enum MeasureUnit {
     MILLIS,
-    NANOS
+    NANOS,
+    /**
+     * @since 1.1
+     */
+    SECONDS
 }
