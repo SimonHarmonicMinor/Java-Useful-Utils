@@ -73,7 +73,7 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializab
 
     @Override
     public Iterator<T> reversedOrderIterator() {
-        return treeSet.descendingIterator();
+        return new UnmodifiableIterator<>(treeSet.descendingIterator());
     }
 
     private ImmutableNavigableSet<T> tryGetSubSet(Supplier<ImmutableNavigableSet<T>> supplier) {
@@ -228,7 +228,7 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializab
 
     @Override
     public Iterator<T> iterator() {
-        return treeSet.iterator();
+        return new UnmodifiableIterator<>(treeSet.iterator());
     }
 
     @Override

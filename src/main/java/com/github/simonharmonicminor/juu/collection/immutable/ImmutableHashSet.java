@@ -119,7 +119,7 @@ public class ImmutableHashSet<T> implements ImmutableSet<T>, Serializable {
 
     @Override
     public Iterator<T> iterator() {
-        return hashSet.iterator();
+        return new UnmodifiableIterator<>(hashSet.iterator());
     }
 
     @Override
