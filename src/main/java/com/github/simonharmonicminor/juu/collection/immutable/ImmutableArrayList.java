@@ -301,7 +301,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
 
     @Override
     public Iterator<T> iterator() {
-        return arrayList.iterator();
+        return new UnmodifiableIterator<>(arrayList.iterator());
     }
 
     @Override
