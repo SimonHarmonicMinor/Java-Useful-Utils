@@ -1,19 +1,21 @@
 package com.github.simonharmonicminor.juu.measure;
 
+import java.util.function.Supplier;
+
+import static com.github.simonharmonicminor.juu.measure.MeasureConverter.millisToSeconds;
+
 /**
  * Measures time between object instantiating and stopping measuring
  *
  * @since 0.1
  */
 public class Profiler {
-    /**
-     * A special constant that defines that measuring has not been stopped yet
-     */
-    public static final long STILL_MEASURING = -1L;
+    private static final long STILL_MEASURING = -1L;
 
-    private final long startPoint;
+    private final Supplier<Long> stopMeasuringSupplier;
     private final MeasureUnit measureUnit;
-    private long endPoint = STILL_MEASURING;
+
+    private long measuringResult = STILL_MEASURING;
 
     /**
      * Instantiates new {@link Profiler} object and starts measuring in millis
@@ -21,7 +23,11 @@ public class Profiler {
      * @return new object with millis measuring
      */
     public static Profiler startMeasuringInMillis() {
-        return new Profiler(System.currentTimeMillis(), MeasureUnit.MILLIS);
+        final long startPoint = System.currentTimeMillis();
+        return new Profiler(
+                () -> System.currentTimeMillis() - startPoint,
+                MeasureUnit.MILLIS
+        );
     }
 
     /**
@@ -30,42 +36,48 @@ public class Profiler {
      * @return new object with nanos measuring
      */
     public static Profiler startMeasuringInNanos() {
-        return new Profiler(System.nanoTime(), MeasureUnit.NANOS);
+        final long startPoint = System.nanoTime();
+        return new Profiler(
+                () -> System.nanoTime() - startPoint,
+                MeasureUnit.NANOS
+        );
     }
 
-    private Profiler(long startPoint, MeasureUnit measureUnit) {
-        this.startPoint = startPoint;
+    /**
+     * Instantiates new {@link Profiler} object and starts measuring in seconds
+     *
+     * @return new object with seconds measuring
+     * @since 1.1
+     */
+    public static Profiler startMeasuringInSeconds() {
+        final long startPoint = System.currentTimeMillis();
+        return new Profiler(
+                () -> millisToSeconds(System.currentTimeMillis() - startPoint),
+                MeasureUnit.SECONDS
+        );
+    }
+
+    private Profiler(Supplier<Long> stopMeasuringSupplier, MeasureUnit measureUnit) {
+        this.stopMeasuringSupplier = stopMeasuringSupplier;
         this.measureUnit = measureUnit;
     }
 
+    /**
+     * @return units of measuring
+     */
     public MeasureUnit getMeasureUnit() {
         return measureUnit;
     }
 
     /**
-     * Returns measured time, calculated after {@link Profiler#stopMeasuring()} call. If measure is
-     * not calculated, returns {@link Profiler#STILL_MEASURING}
-     *
-     * @return measured time or {@link Profiler#STILL_MEASURING}
-     */
-    public long getTime() {
-        if (endPoint == STILL_MEASURING) return STILL_MEASURING;
-        return endPoint - startPoint;
-    }
-
-    /**
-     * Stops measuring and returns time. Multiple calls don't affect the result
+     * Stops measuring and returns time. Multiple calls don't affect the result.
      *
      * @return measured time
      */
     public long stopMeasuring() {
-        if (endPoint == STILL_MEASURING) {
-            if (measureUnit == MeasureUnit.MILLIS) {
-                endPoint = System.currentTimeMillis();
-            } else {
-                endPoint = System.nanoTime();
-            }
+        if (measuringResult == STILL_MEASURING) {
+            measuringResult = stopMeasuringSupplier.get();
         }
-        return getTime();
+        return measuringResult;
     }
 }

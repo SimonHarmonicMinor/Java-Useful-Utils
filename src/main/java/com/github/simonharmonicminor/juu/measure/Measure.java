@@ -5,6 +5,8 @@ import com.github.simonharmonicminor.juu.lambda.Action;
 import java.util.Objects;
 import java.util.function.Supplier;
 
+import static com.github.simonharmonicminor.juu.measure.MeasureConverter.millisToSeconds;
+
 /**
  * A class for measuring time of function execution with retrieving result.
  *
@@ -68,5 +70,16 @@ public class Measure<T> {
         long time = System.nanoTime();
         T result = supplier.get();
         return new ExecutionResult<>(result, System.nanoTime() - time, MeasureUnit.NANOS);
+    }
+
+    /**
+     * @return execution result measured in seconds
+     * @since 1.1
+     */
+    public ExecutionResult<T> inSeconds() {
+        long start = System.currentTimeMillis();
+        T result = supplier.get();
+        long finish = System.currentTimeMillis();
+        return new ExecutionResult<>(result, millisToSeconds(finish - start), MeasureUnit.SECONDS);
     }
 }
