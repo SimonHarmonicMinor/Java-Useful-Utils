@@ -1,3 +1,5 @@
+`master` branch shows the last relevant release. If you want to see the newest changes, check out `develop` branch. 
+
 # Java Useful Utils
 Just some useful classes for everyday coding that might make your code shorter and cleaner
 
