@@ -46,14 +46,11 @@ public interface ImmutableNavigableSet<T> extends ImmutableSortedSet<T> {
     Optional<T> higher(T t);
 
     /**
-     * Returns a reverse order view of the elements contained in this set. The descending set is
-     * backed by this set, so changes to the set are reflected in the descending set, and vice-versa.
-     * If either set is modified while an iteration over either set is in progress (except through the
-     * iterator's own {@code remove} operation), the results of the iteration are undefined.
+     * Returns a reverse order view of the elements contained in this set.
      *
      * <p>The returned set has an ordering equivalent to {@link Collections#reverseOrder(Comparator)
      * Collections.reverseOrder}{@code (comparator())}. The expression {@code
-     * s.descendingSet().descendingSet()} returns a view of {@code s} essentially equivalent to {@code
+     * s.reversedOrderSet().reversedOrderSet()} returns a view of {@code s} essentially equivalent to {@code
      * s}.
      *
      * @return a reverse order view of this set
@@ -71,12 +68,7 @@ public interface ImmutableNavigableSet<T> extends ImmutableSortedSet<T> {
     /**
      * Returns a view of the portion of this set whose elements range from {@code fromElement} to
      * {@code toElement}. If {@code fromElement} and {@code toElement} are equal, the returned set is
-     * empty unless {@code fromInclusive} and {@code toInclusive} are both true. The returned set is
-     * backed by this set, so changes in the returned set are reflected in this set, and vice-versa.
-     * The returned set supports all optional set operations that this set supports.
-     *
-     * <p>The returned set will throw an {@code IllegalArgumentException} on an attempt to insert an
-     * element outside its range.
+     * empty unless {@code fromInclusive} and {@code toInclusive} are both true.
      *
      * @param fromElement   low endpoint of the returned set
      * @param fromInclusive {@code true} if the low endpoint is to be included in the returned view
@@ -90,12 +82,7 @@ public interface ImmutableNavigableSet<T> extends ImmutableSortedSet<T> {
 
     /**
      * Returns a view of the portion of this set whose elements are less than (or equal to, if {@code
-     * inclusive} is true) {@code toElement}. The returned set is backed by this set, so changes in
-     * the returned set are reflected in this set, and vice-versa. The returned set supports all
-     * optional set operations that this set supports.
-     *
-     * <p>The returned set will throw an {@code IllegalArgumentException} on an attempt to insert an
-     * element outside its range.
+     * inclusive} is true) {@code toElement}.
      *
      * @param toElement high endpoint of the returned set
      * @param inclusive {@code true} if the high endpoint is to be included in the returned view
@@ -106,12 +93,7 @@ public interface ImmutableNavigableSet<T> extends ImmutableSortedSet<T> {
 
     /**
      * Returns a view of the portion of this set whose elements are greater than (or equal to, if
-     * {@code inclusive} is true) {@code fromElement}. The returned set is backed by this set, so
-     * changes in the returned set are reflected in this set, and vice-versa. The returned set
-     * supports all optional set operations that this set supports.
-     *
-     * <p>The returned set will throw an {@code IllegalArgumentException} on an attempt to insert an
-     * element outside its range.
+     * {@code inclusive} is true) {@code fromElement}.
      *
      * @param fromElement low endpoint of the returned set
      * @param inclusive   {@code true} if the low endpoint is to be included in the returned view

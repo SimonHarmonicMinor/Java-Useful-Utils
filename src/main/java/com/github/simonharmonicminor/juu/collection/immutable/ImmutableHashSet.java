@@ -10,6 +10,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static com.github.simonharmonicminor.juu.collection.immutable.Immutable.listOf;
+import static com.github.simonharmonicminor.juu.collection.immutable.Immutable.setOfWithoutCloning;
 import static com.github.simonharmonicminor.juu.collection.immutable.ImmutableCollectionUtils.setEquals;
 import static com.github.simonharmonicminor.juu.collection.immutable.ImmutableCollectionUtils.setToString;
 
@@ -45,11 +46,6 @@ public class ImmutableHashSet<T> implements ImmutableSet<T>, Serializable {
         }
     }
 
-    private static <R> ImmutableSet<R> newImmutableHashSetWithoutCloning(Set<R> set) {
-        if (set.isEmpty()) return Immutable.emptySet();
-        return new ImmutableHashSet<>(set, false);
-    }
-
     @Override
     public ImmutableSet<T> concatWith(Iterable<T> iterable) {
         Objects.requireNonNull(iterable);
@@ -57,7 +53,7 @@ public class ImmutableHashSet<T> implements ImmutableSet<T>, Serializable {
         for (T t : iterable) {
             newHashSet.add(t);
         }
-        return newImmutableHashSetWithoutCloning(newHashSet);
+        return setOfWithoutCloning(newHashSet);
     }
 
     @Override
@@ -67,7 +63,7 @@ public class ImmutableHashSet<T> implements ImmutableSet<T>, Serializable {
         for (T t : this) {
             newHashSet.add(mapper.apply(t));
         }
-        return newImmutableHashSetWithoutCloning(newHashSet);
+        return setOfWithoutCloning(newHashSet);
     }
 
     @Override
@@ -78,7 +74,7 @@ public class ImmutableHashSet<T> implements ImmutableSet<T>, Serializable {
             ImmutableHashSet<R> immutableHashSet = new ImmutableHashSet<>(mapper.apply(t));
             newHashSet.addAll(immutableHashSet.hashSet);
         }
-        return newImmutableHashSetWithoutCloning(newHashSet);
+        return setOfWithoutCloning(newHashSet);
     }
 
     @Override
@@ -88,7 +84,7 @@ public class ImmutableHashSet<T> implements ImmutableSet<T>, Serializable {
         for (T t : this) {
             if (predicate.test(t)) newHashSet.add(t);
         }
-        return newImmutableHashSetWithoutCloning(newHashSet);
+        return setOfWithoutCloning(newHashSet);
     }
 
     @Override
@@ -123,7 +119,7 @@ public class ImmutableHashSet<T> implements ImmutableSet<T>, Serializable {
 
     @Override
     public Iterator<T> iterator() {
-        return hashSet.iterator();
+        return new UnmodifiableIterator<>(hashSet.iterator());
     }
 
     @Override

@@ -1,15 +1,13 @@
 package com.github.simonharmonicminor.juu.monad;
 
-import com.github.simonharmonicminor.juu.lambda.Action;
+import com.github.simonharmonicminor.juu.exception.EmptyContainerException;
+import com.github.simonharmonicminor.juu.lambda.CheckedFunction;
 import com.github.simonharmonicminor.juu.lambda.CheckedSupplier;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -24,6 +22,7 @@ class TryTest {
         Try<Integer> t = Try.of(() -> 1);
         assertTrue(t.isPresent());
         assertEquals(1, t.get());
+        assertFalse(t.getReasonOfEmptiness().isPresent());
     }
 
     @Test
@@ -68,7 +67,7 @@ class TryTest {
     @Test
     void getThrowsNoSuchElementException() {
         Try<Integer> t = Try.empty();
-        assertThrows(NoSuchElementException.class, t::get);
+        assertThrows(EmptyContainerException.class, t::get);
     }
 
     @Test
@@ -90,6 +89,20 @@ class TryTest {
     }
 
     @Test
+    void mapOnEmptyContainerReturnsEmptyContainer() {
+        Exception exception = new Exception("AZAZA");
+        Try<String> t = Try.of(() -> 1)
+                .map(String::valueOf)
+                .map((CheckedFunction<String, String, Exception>) v -> {
+                    throw exception;
+                })
+                .map(str -> str + "1");
+        assertTrue(t.isEmpty());
+        assertTrue(t.getReasonOfEmptiness().isPresent());
+        assertEquals(exception, t.getReasonOfEmptiness().get());
+    }
+
+    @Test
     void flatMapReturnsNewContainer() {
         Try<String> t = Try.of(() -> 1)
                 .flatMap(v -> Try.of(() -> String.valueOf(v + 1)));
@@ -105,6 +118,22 @@ class TryTest {
                     throw new Exception();
                 });
         assertTrue(t.isEmpty());
+    }
+
+    @Test
+    void flatMapOnEmptyContainerReturnsEmptyContainer() {
+        Exception exception = new Exception("my exception");
+
+        Try<String> t = Try.of(() -> 1)
+                .flatMap(v -> Try.of(() -> String.valueOf(v + 1)))
+                .flatMap((CheckedFunction<String, Try<String>, Exception>) v -> {
+                    throw exception;
+                })
+                .flatMap(str -> Try.of(() -> str + "1"));
+
+        assertTrue(t.isEmpty());
+        assertTrue(t.getReasonOfEmptiness().isPresent());
+        assertEquals(exception, t.getReasonOfEmptiness().get());
     }
 
     @Test
@@ -166,7 +195,7 @@ class TryTest {
     }
 
     @Test
-    void orElseGetReturnsValueOfContainer() {
+    void orElseGet0ReturnsValueOfContainer() {
         final int val = 555;
         Try<Integer> t = Try.of(() -> val);
         int res = t.orElseGet(() -> val + 1);
@@ -174,7 +203,7 @@ class TryTest {
     }
 
     @Test
-    void orElseGetReturnsDefaultValue() {
+    void orElseGet0ReturnsDefaultValue() {
         final int val = 555;
         Try<Integer> t = Try.of(() -> {
             throw new Exception();
@@ -192,8 +221,41 @@ class TryTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
+    void orElseGet1ReturnsValueOfContainer() {
+        final int val = 555;
+        final Consumer<Throwable> consumer = mock(Consumer.class);
+
+        Try<Integer> t = Try.of(() -> val);
+        int res = t.orElseGet(reason -> {
+            consumer.accept(reason);
+            return val + 1;
+        });
+        assertEquals(val, res);
+        verify(consumer, times(0)).accept(any(Throwable.class));
+    }
+
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void orElseGet1ReturnsDefaultValue() {
+        final int val = 555;
+        final Consumer<Throwable> consumer = mock(Consumer.class);
+        final Exception exception = new Exception();
+
+        Try<Integer> t = Try.of(() -> {
+            throw exception;
+        });
+        int res = t.orElseGet(reason -> {
+            consumer.accept(reason);
+            return val + 1;
+        });
+        assertEquals(val + 1, res);
+        verify(consumer, times(1)).accept(exception);
+    }
+
+    @Test
     void orElseThrowThrowsException() {
-        final String val = "@@casd";
         Try<String> t = Try.of(() -> {
             throw new Exception();
         });
@@ -203,8 +265,7 @@ class TryTest {
     @Test
     void ifPresentCallsConsumer() {
         final String val = "dasdasdgdfg";
-        @SuppressWarnings("unchecked")
-        final Collection<Object> collection = mock(Collection.class);
+        @SuppressWarnings("unchecked") final Collection<Object> collection = mock(Collection.class);
         final Consumer<String> consumer = collection::add;
 
         Try<String> t = Try.of(() -> val);
@@ -215,8 +276,7 @@ class TryTest {
     @Test
     void ifPresentDoesNotCallConsumer() {
         final String val = "dasdasdgdfg";
-        @SuppressWarnings("unchecked")
-        final Collection<Object> collection = mock(Collection.class);
+        @SuppressWarnings("unchecked") final Collection<Object> collection = mock(Collection.class);
         final Consumer<String> consumer = collection::add;
 
         Try<String> t = Try.empty();
@@ -225,27 +285,24 @@ class TryTest {
     }
 
     @Test
-    void ifPresentDoesNotCallAction() {
+    void ifEmptyDoesNotCallConsumer() {
         final int val = 123141;
-        @SuppressWarnings("unchecked")
-        final Collection<Object> collection = mock(Collection.class);
-        final Action action = () -> collection.add(val);
+        @SuppressWarnings("unchecked") final Collection<Object> collection = mock(Collection.class);
+        final Consumer<Throwable> consumer = collection::add;
 
         Try<String> t = Try.of(() -> "I'm Mr. Meeseeks! Look at me!");
-        t.ifEmpty(action);
-        verify(collection, times(0)).add(val);
+        t.ifEmpty(consumer);
+        verify(collection, times(0)).add(any());
     }
 
     @Test
-    void ifPresentCallsAction() {
-        final int val = 123141;
-        @SuppressWarnings("unchecked")
-        final Collection<Object> collection = mock(Collection.class);
-        final Action action = () -> collection.add(val);
+    void ifEmptyCallsConsumer() {
+        @SuppressWarnings("unchecked") final Collection<Object> collection = mock(Collection.class);
+        final Consumer<Throwable> consumer = collection::add;
 
         Try<String> t = Try.empty();
-        t.ifEmpty(action);
-        verify(collection, times(1)).add(val);
+        t.ifEmpty(consumer);
+        verify(collection, times(1)).add(any(Throwable.class));
     }
 
     @Test
@@ -282,5 +339,13 @@ class TryTest {
         Try<String> t1 = Try.of(() -> val);
         Try<String> t2 = Try.of(() -> val + "2");
         assertNotEquals(t1, t2);
+    }
+
+    @Test
+    void hashCodeTest() {
+        Try<String> t1 = Try.of(() -> "aa");
+        Try<String> t2 = Try.of(() -> "a")
+                .map(s -> s + "a");
+        assertEquals(t1.hashCode(), t2.hashCode());
     }
 }
