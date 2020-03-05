@@ -15,12 +15,12 @@ Maven:
 <dependency>
     <groupId>com.github.simonharmonicminor</groupId>
     <artifactId>java-useful-utils</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
 </dependency>
 ```
 Gradle:
 ```groovy
-implementation 'com.github.simonharmonicminor:java-useful-utils:1.0' 
+implementation 'com.github.simonharmonicminor:java-useful-utils:1.1' 
 ```
 
 ### Status
@@ -60,7 +60,8 @@ assert exec.getMeasureUnit() == MeasureUnit.MILLIS;
 ```
 
 Simple, right? If you need to measure something in different
-units, just call the appropriate method (`inMillis()` in this case).
+units, just call the appropriate method 
+(`inMillis()`, `inNanos()` or `inSeconds()`).
 
 And what if you need to measure code block from one point to another? 
 Well, `Profiler` is what you need.
