@@ -1,3 +1,5 @@
+`master` branch shows the last relevant release. If you want to see the newest changes, check out `develop` branch. 
+
 # Java Useful Utils
 Truly immutable collections, functional errors handling, laziness and measurement utilities.
 
@@ -60,7 +62,8 @@ assert exec.getMeasureUnit() == MeasureUnit.MILLIS;
 ```
 
 Simple, right? If you need to measure something in different
-units, just call the appropriate method (`inMillis()` in this case).
+units, just call the appropriate method 
+(`inMillis()`, `inNanos()` or `inSeconds()`).
 
 And what if you need to measure code block from one point to another? 
 Well, `Profiler` is what you need.
