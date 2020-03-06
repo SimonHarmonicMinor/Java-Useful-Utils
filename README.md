@@ -1,5 +1,7 @@
 # Java Useful Utils
-Just some useful classes for everyday coding that might make your code shorter and cleaner
+Truly immutable collections, functional errors handling, laziness and measurement utilities.
+
+This library has no dependencies (except the test scope).
 
 ### Table of contents
 * [Quick start](#quick-start)
@@ -13,12 +15,12 @@ Maven:
 <dependency>
     <groupId>com.github.simonharmonicminor</groupId>
     <artifactId>java-useful-utils</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
 </dependency>
 ```
 Gradle:
 ```groovy
-implementation 'com.github.simonharmonicminor:java-useful-utils:1.0' 
+implementation 'com.github.simonharmonicminor:java-useful-utils:1.1' 
 ```
 
 ### Status
