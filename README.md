@@ -1,7 +1,9 @@
 `master` branch shows the last relevant release. If you want to see the newest changes, check out `develop` branch. 
 
 # Java Useful Utils
-Just some useful classes for everyday coding that might make your code shorter and cleaner
+Truly immutable collections, functional errors handling, laziness and measurement utilities.
+
+This library has no dependencies (except the test scope).
 
 ### Table of contents
 * [Quick start](#quick-start)
