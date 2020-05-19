@@ -18,7 +18,7 @@ class CachedResultCheckedSupplierTest {
                     }
                 };
 
-        CheckedSupplier<Number, RuntimeException> cachedResultCheckedSupplier =
+        CheckedSupplier<Integer, IllegalArgumentException> cachedResultCheckedSupplier =
                 new CachedResultCheckedSupplier<>(checkedSupplier);
 
         assertEquals(1, cachedResultCheckedSupplier.get());

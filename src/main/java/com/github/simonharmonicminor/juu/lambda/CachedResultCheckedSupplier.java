@@ -13,9 +13,9 @@ import java.util.List;
 public class CachedResultCheckedSupplier<T, E extends Throwable> implements CheckedSupplier<T, E> {
     private final List<T> result = new ArrayList<>(1);
 
-    private final CheckedSupplier<? extends T, ? extends E> checkedSupplier;
+    private final CheckedSupplier<T, E> checkedSupplier;
 
-    public CachedResultCheckedSupplier(CheckedSupplier<? extends T, ? extends E> checkedSupplier) {
+    public CachedResultCheckedSupplier(CheckedSupplier<T, E> checkedSupplier) {
         this.checkedSupplier = checkedSupplier;
     }
 
