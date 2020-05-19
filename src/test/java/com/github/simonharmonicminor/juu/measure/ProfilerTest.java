@@ -4,11 +4,12 @@ import org.awaitility.Duration;
 import org.junit.jupiter.api.Test;
 
 import static com.github.simonharmonicminor.juu.measure.MeasureConverter.millisToNanos;
+import static com.github.simonharmonicminor.juu.measure.MeasureConverter.secondsToMillis;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ProfilerTest {
-    private static final int DELTA_MILLIS = 100;
 
     @Test
     void ifDefinedMeasureUnitIsCorrect() {
@@ -45,7 +46,7 @@ class ProfilerTest {
         Profiler profilerMillis = Profiler.startMeasuringInMillis();
         await().pollDelay(Duration.ONE_SECOND).until(() -> true);
         long res = profilerMillis.stopMeasuring();
-        assertEquals(1000, res, DELTA_MILLIS);
+        assertTrue(res >= 1000);
     }
 
     @Test
@@ -53,7 +54,7 @@ class ProfilerTest {
         Profiler profilerMillis = Profiler.startMeasuringInNanos();
         await().pollDelay(Duration.ONE_SECOND).until(() -> true);
         long res = profilerMillis.stopMeasuring();
-        assertEquals(millisToNanos(1000), res, millisToNanos(DELTA_MILLIS));
+        assertTrue(millisToNanos(res) >= 1000);
     }
 
     @Test
@@ -61,7 +62,7 @@ class ProfilerTest {
         Profiler profilerSeconds = Profiler.startMeasuringInSeconds();
         await().pollDelay(Duration.ONE_SECOND).until(() -> true);
         long res = profilerSeconds.stopMeasuring();
-        assertEquals(1, res);
+        assertTrue(secondsToMillis(res) >= 1000);
     }
 
 }

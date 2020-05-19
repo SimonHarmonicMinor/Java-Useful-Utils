@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
-import static com.github.simonharmonicminor.juu.measure.MeasureConverter.nanosToSeconds;
+import static com.github.simonharmonicminor.juu.measure.MeasureConverter.*;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.*;
  * @see Measure
  */
 class MeasureTest {
-    private static final int DELTA_MILLIS = 100;
     private static Duration ONE_SECOND_AND_A_HALF = new Duration(1500, TimeUnit.MILLISECONDS);
 
     @Test
@@ -39,58 +38,41 @@ class MeasureTest {
 
     @Test
     void inMillisMeasuresCorrectSupplier() {
-        await().atLeast(Duration.ONE_SECOND)
-                .atMost(ONE_SECOND_AND_A_HALF)
-                .until(() -> Measure.executionTime(() -> {
-                    await().pollDelay(Duration.ONE_SECOND).until(() -> true);
-                    return true;
-                }).inMillis().getResult());
+        long millis = Measure.executionTime(() -> {
+            await().pollDelay(Duration.ONE_SECOND).until(() -> true);
+            return true;
+        }).inMillis().getTime();
+        assertTrue(millis >= 1000);
     }
 
     @Test
     void inNanosMeasuresCorrectSupplier() {
-        await().atLeast(Duration.ONE_SECOND)
-                .atMost(ONE_SECOND_AND_A_HALF)
-                .until(() -> Measure.executionTime(() -> {
-                    await().pollDelay(Duration.ONE_SECOND).until(() -> true);
-                    return true;
-                }).inNanos().getResult());
+        long nanos = Measure.executionTime(() -> {
+            await().pollDelay(Duration.ONE_SECOND).until(() -> true);
+            return true;
+        }).inNanos().getTime();
+        assertTrue(nanosToMillis(nanos) >= 1000);
     }
 
     @Test
     void inSecondsMeasureCorrectSupplier() {
-        await().atLeast(Duration.ONE_SECOND)
-                .atMost(ONE_SECOND_AND_A_HALF)
-                .until(() -> Measure.executionTime(() -> {
-                    await().pollDelay(Duration.ONE_SECOND).until(() -> true);
-                    return true;
-                }).inSeconds().getResult());
+        long seconds = Measure.executionTime(() -> {
+            await().pollDelay(Duration.ONE_SECOND).until(() -> true);
+            return true;
+        }).inSeconds().getTime();
+        assertTrue(secondsToMillis(seconds) >= 1000);
     }
 
     @Test
     void inMillisMeasuresCorrectAction() {
-        await().atLeast(Duration.ONE_SECOND)
-                .atMost(ONE_SECOND_AND_A_HALF)
-                .until(() -> {
-                    long time = Measure.executionTime(
-                            () -> await().pollDelay(Duration.ONE_SECOND).until(() -> true)
-                    ).inSeconds().getTime();
-                    assertEquals(time, 1);
-                    return true;
-                });
+        long millis = Measure.executionTime(() -> await().pollDelay(Duration.ONE_SECOND).until(() -> true)).inMillis().getTime();
+        assertTrue(millis >= 1000);
     }
 
     @Test
     void inNanosMeasuresCorrectAction() {
-        await().atLeast(Duration.ONE_SECOND)
-                .atMost(ONE_SECOND_AND_A_HALF)
-                .until(() -> {
-                    long time = Measure.executionTime(
-                            () -> await().pollDelay(Duration.ONE_SECOND).until(() -> true)
-                    ).inNanos().getTime();
-                    assertEquals(nanosToSeconds(time), 1);
-                    return true;
-                });
+        long nanos = Measure.executionTime(() -> await().pollDelay(Duration.ONE_SECOND).until(() -> true)).inNanos().getTime();
+        assertTrue(nanosToMillis(nanos) >= 1000);
     }
 
     @Test
