@@ -1,5 +1,3 @@
-`master` branch shows the last relevant release. If you want to see the newest changes, check out `develop` branch. 
-
 # Java Useful Utils
 Truly immutable collections, functional errors handling, laziness and measurement utilities.
 
