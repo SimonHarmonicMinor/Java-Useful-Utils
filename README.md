@@ -15,12 +15,12 @@ Maven:
 <dependency>
     <groupId>com.github.simonharmonicminor</groupId>
     <artifactId>java-useful-utils</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
 </dependency>
 ```
 Gradle:
 ```groovy
-implementation 'com.github.simonharmonicminor:java-useful-utils:1.1' 
+implementation 'com.github.simonharmonicminor:java-useful-utils:1.2' 
 ```
 
 ### Status
