@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.simonharmonicminor</groupId>
+    <groupId>com.kirekov</groupId>
     <artifactId>java-useful-utils</artifactId>
     <version>1.2</version>
     <packaging>jar</packaging>
@@ -16,7 +16,7 @@
     <developers>
         <developer>
             <name>Semyon Kirekov</name>
-            <email>kirekov@gmail.com</email>
+            <email>semyon@kirekov.com</email>
             <organization>Github</organization>
             <organizationUrl>https://github.com/SimonHarmonicMinor</organizationUrl>
         </developer>
