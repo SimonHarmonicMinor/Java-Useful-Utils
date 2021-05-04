@@ -14,3 +14,4 @@ buildNumber.properties
 .idea/**
 .idea/workspace.xml
 /java-useful-utils.iml
+.gradle/**
