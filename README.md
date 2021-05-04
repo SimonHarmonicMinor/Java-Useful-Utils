@@ -23,10 +23,11 @@ implementation 'com.kirekov:java-useful-utils'
 ```
 
 ### Status
-[![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/com.kirekov/java-useful-utils?server=https%3A%2F%2Foss.sonatype.org%2F)](https://repo1.maven.org/maven2/com/kirekov/java-useful-utils/)
+![Maven Central](https://img.shields.io/maven-central/v/com.kirekov/java-useful-utils)
 [![Build Status](https://travis-ci.com/SimonHarmonicMinor/Java-Useful-Utils.svg?branch=master)](https://travis-ci.com/SimonHarmonicMinor/Java-Useful-Utils)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=SimonHarmonicMinor_Java-Useful-Utils&metric=alert_status)](https://sonarcloud.io/dashboard?id=SimonHarmonicMinor_Java-Useful-Utils)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=SimonHarmonicMinor_Java-Useful-Utils&metric=coverage)](https://sonarcloud.io/dashboard?id=SimonHarmonicMinor_Java-Useful-Utils)
+[![Hits-of-Code](https://hitsofcode.com/github/SimonHarmonicMinor/Java-Useful-Utils)](https://hitsofcode.com/github/SimonHarmonicMinor/Java-Useful-Utils/view)
 
 ### Usage
 The library consists of three big parts.
