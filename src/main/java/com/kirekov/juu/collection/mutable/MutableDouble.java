@@ -6,17 +6,18 @@ package com.kirekov.juu.collection.mutable;
  * @see MutableValue
  */
 public class MutableDouble {
-    private double value;
 
-    public MutableDouble(double value) {
-        this.value = value;
-    }
+  private double value;
 
-    public double getValue() {
-        return value;
-    }
+  public MutableDouble(double value) {
+    this.value = value;
+  }
 
-    public void setValue(double value) {
-        this.value = value;
-    }
+  public double getValue() {
+    return value;
+  }
+
+  public void setValue(double value) {
+    this.value = value;
+  }
 }

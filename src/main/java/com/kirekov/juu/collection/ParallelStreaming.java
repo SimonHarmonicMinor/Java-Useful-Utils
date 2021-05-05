@@ -9,8 +9,9 @@ import java.util.stream.Stream;
  * @since 1.0
  */
 public interface ParallelStreaming<T> extends Streaming<T> {
-    /**
-     * @return parallel stream of object content
-     */
-    Stream<T> parallelStream();
+
+  /**
+   * @return parallel stream of object content
+   */
+  Stream<T> parallelStream();
 }

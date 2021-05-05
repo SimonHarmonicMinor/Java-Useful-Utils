@@ -7,5 +7,6 @@ package com.kirekov.juu.lambda;
  */
 @FunctionalInterface
 public interface Action {
-    void execute();
+
+  void execute();
 }

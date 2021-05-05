@@ -10,5 +10,6 @@ package com.kirekov.juu.lambda;
  */
 @FunctionalInterface
 public interface CheckedFunction<T, R, E extends Throwable> {
-    R apply(T t) throws E;
+
+  R apply(T t) throws E;
 }

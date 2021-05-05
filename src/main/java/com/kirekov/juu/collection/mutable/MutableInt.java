@@ -6,17 +6,18 @@ package com.kirekov.juu.collection.mutable;
  * @see MutableValue
  */
 public class MutableInt {
-    private int value;
 
-    public MutableInt(int value) {
-        this.value = value;
-    }
+  private int value;
 
-    public int getValue() {
-        return value;
-    }
+  public MutableInt(int value) {
+    this.value = value;
+  }
 
-    public void setValue(int value) {
-        this.value = value;
-    }
+  public int getValue() {
+    return value;
+  }
+
+  public void setValue(int value) {
+    this.value = value;
+  }
 }

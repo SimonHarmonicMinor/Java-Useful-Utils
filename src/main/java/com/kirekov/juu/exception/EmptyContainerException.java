@@ -9,11 +9,12 @@ import com.kirekov.juu.monad.Try;
  * @since 1.1
  */
 public class EmptyContainerException extends RuntimeException {
-    public EmptyContainerException(String message, Throwable cause) {
-        super(message, cause);
-    }
 
-    public EmptyContainerException(String message) {
-        super(message);
-    }
+  public EmptyContainerException(String message, Throwable cause) {
+    super(message, cause);
+  }
+
+  public EmptyContainerException(String message) {
+    super(message);
+  }
 }

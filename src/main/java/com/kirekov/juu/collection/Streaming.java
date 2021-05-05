@@ -10,8 +10,9 @@ import java.util.stream.Stream;
  */
 @FunctionalInterface
 public interface Streaming<T> {
-    /**
-     * @return stream of object content
-     */
-    Stream<T> stream();
+
+  /**
+   * @return stream of object content
+   */
+  Stream<T> stream();
 }

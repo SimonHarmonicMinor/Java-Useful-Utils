@@ -6,10 +6,10 @@ package com.kirekov.juu.measure;
  * @since 0.1
  */
 public enum MeasureUnit {
-    MILLIS,
-    NANOS,
-    /**
-     * @since 1.1
-     */
-    SECONDS
+  MILLIS,
+  NANOS,
+  /**
+   * @since 1.1
+   */
+  SECONDS
 }

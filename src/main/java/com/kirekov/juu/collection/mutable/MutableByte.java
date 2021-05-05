@@ -6,17 +6,18 @@ package com.kirekov.juu.collection.mutable;
  * @see MutableValue
  */
 public class MutableByte {
-    private byte value;
 
-    public MutableByte(byte value) {
-        this.value = value;
-    }
+  private byte value;
 
-    public byte getValue() {
-        return value;
-    }
+  public MutableByte(byte value) {
+    this.value = value;
+  }
 
-    public void setValue(byte value) {
-        this.value = value;
-    }
+  public byte getValue() {
+    return value;
+  }
+
+  public void setValue(byte value) {
+    this.value = value;
+  }
 }

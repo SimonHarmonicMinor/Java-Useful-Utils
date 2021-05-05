@@ -6,17 +6,18 @@ package com.kirekov.juu.collection.mutable;
  * @see MutableValue
  */
 public class MutableFloat {
-    private float value;
 
-    public MutableFloat(float value) {
-        this.value = value;
-    }
+  private float value;
 
-    public float getValue() {
-        return value;
-    }
+  public MutableFloat(float value) {
+    this.value = value;
+  }
 
-    public void setValue(float value) {
-        this.value = value;
-    }
+  public float getValue() {
+    return value;
+  }
+
+  public void setValue(float value) {
+    this.value = value;
+  }
 }
