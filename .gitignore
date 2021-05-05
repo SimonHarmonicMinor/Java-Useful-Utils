@@ -16,3 +16,4 @@ buildNumber.properties
 /java-useful-utils.iml
 .gradle/**
 gradle.properties
+build/**
