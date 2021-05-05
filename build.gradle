@@ -1,0 +1,97 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'signing'
+    id 'jacoco'
+    id "org.sonarqube" version "2.7.1"
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+group 'com.kirekov'
+version 'DEV-SNAPSHOT'
+description 'Just some useful utils for everyday coding'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.1'
+    testImplementation 'org.awaitility:awaitility:3.1.6'
+    testImplementation 'org.mockito:mockito-core:2.28.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.1'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+publishing {
+    publications {
+        javaUsefulUtils(MavenPublication) {
+            pom {
+                name = 'Java Useful Utils'
+                description = 'Just some useful utils for everyday coding'
+                url = 'https://github.com/SimonHarmonicMinor/Java-Useful-Utils'
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://www.mit.edu/~amini/LICENSE.md'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'kirekov'
+                        name = 'Semyon Kirekov'
+                        email = 'semyon@kirekov.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:https://github.com/SimonHarmonicMinor/Java-Useful-Utils.git'
+                    developerConnection = 'scm:git://github.com/SimonHarmonicMinor/Java-Useful-Utils.git'
+                    url = 'https://github.com/SimonHarmonicMinor/Java-Useful-Utils'
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+            def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots'
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                username findProperty('ossSonatypeUsername')
+                password findProperty('ossSonatypePassword')
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.javaUsefulUtils
+}
+
+javadoc {
+    if (JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "SimonHarmonicMinor_Java-Useful-Utils"
+        property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
+    }
+}
