@@ -1,4 +1,5 @@
 language: java
+
 install: true
 
 git:
@@ -11,18 +12,12 @@ addons:
       secure: WeqLn+kxvsbuN6yLGqu1U9r7aZvBkOKv7W/1Pf2dvgrTPcPvLHThrKsAbK8qfWkuoG3Y9FbmzPGH3KfiN+yszIN6OxQl6B85FrlZ/sVGUNrW9idCpohX+WncI4zT32oObZTPcQ2kq1AQQfrI0dmZ5ihqltlV/GbBEhYenXwWmNAPNJXlzR2TaF2ApOzLXjdiX/z6jmU/hZCdxxHkPyxjW0Nm1AzwNWq7s+vsI+plOJDaF9skj+7exKKJ0lxFq/hiyBEazt3HZy87OsxJ/9DhYCKwV4FmQu3cBjkWXXl3334bdF5tELyeHMxJzrpX8XXIKZke2Bu+7uES+vCkVyceavnKBEoPeiBC4CdTyuHordrg11dsrSuS63XLFap0gdbWzVi9gacjdmjoqHnjO69AJ0F4yZvHJGwPlLn5zpq4Qa41aWa5BiU7R8hOzRfqSR4xgeiDemhPJhWYsIfLQ1c4id7kYJUfX/3olq9ffDCXVKXe4UHm5cqaq91u865WdNnn1FQP4coy3D4z3thsmBnRn/Z9bH/IaP4cscOxZsXffSHHjOyLzkkYIOIMW08Bwq5WhrTk4+hHnONcSAkXPt0JYQnG1Tw7nUOQ3borNFqGxw4AUEHisnofBfYpW7ggRyj8xx7JZQI7teLPbhuvaXeFfjL9xvsI+LdOaWclZsN5Qeg=
 
 script:
-  - ./gradlew clean build jacocoTestReport sonarqube
+  - "./gradlew clean build jacocoTestReport sonarqube"
 
 branches:
   only:
     - master
     - releases
-
-before_deploy:
-  - openssl aes-256-cbc -K $encrypted_2afbb999f001_key -iv $encrypted_2afbb999f001_iv
-    -in gradle.properties.enc -out gradle.properties -d
-  - openssl aes-256-cbc -K $encrypted_56078099ba94_key -iv $encrypted_56078099ba94_iv
-    -in private_key.gpg.enc -out private_key.gpg -d
 
 deploy:
   - provider: script
@@ -30,8 +25,7 @@ deploy:
     script: bash ./deploy.sh
     on:
       all_branches: true
-      condition: $TRAVIS_BRANCH =~ ^(master|releases)$
-
+      condition: "$TRAVIS_BRANCH =~ ^(master|releases)$"
 
 cache:
   directories:
@@ -39,3 +33,9 @@ cache:
     - "$HOME/.sonar/cache"
     - "$HOME/.gradle"
     - ".gradle"
+
+before_install:
+  - openssl aes-256-cbc -K $encrypted_56078099ba94_key -iv $encrypted_56078099ba94_iv
+    -in private_key.gpg.enc -out private_key.gpg -d
+  - openssl aes-256-cbc -K $encrypted_2afbb999f001_key -iv $encrypted_2afbb999f001_iv
+    -in gradle.properties.enc -out gradle.properties -d
