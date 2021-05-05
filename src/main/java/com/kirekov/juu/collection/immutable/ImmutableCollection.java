@@ -16,7 +16,7 @@ import java.util.function.Predicate;
  * Defines an immutable collection. Unlike native {@link java.util.Collection} this interface does
  * not have any methods that can mutate its content. So it can be safely injected to any methods or
  * objects. <br> It is strongly recommended to put only immutable objects to this class. For
- * instance,
+ * instance.
  *
  * <pre>{@code
  * ImmutableCollection<Person> collection = getSome();
@@ -24,9 +24,9 @@ import java.util.function.Predicate;
  *     p.setName("David");
  * }
  * }</pre>
- * <p>
- * Although the collection itself does not have any methods to remove or add new elements, its
- * content has been changed. So, pay attention to this.
+ *
+ * <p>Although the collection itself does not have any methods to remove or add new elements, its
+ * content has been changed. So, pay attention to this.</p>
  *
  * @param <T> the type of the object, that collection contains
  * @see java.util.Collection
@@ -35,11 +35,15 @@ import java.util.function.Predicate;
 public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T> {
 
   /**
+   * Get size of the collection.
+   *
    * @return the size of the collection
    */
   int size();
 
   /**
+   * Whether the collection is empty.
+   *
    * @return true if collection size is zero, otherwise false
    */
   default boolean isEmpty() {
@@ -47,6 +51,8 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
   }
 
   /**
+   * Whether the collection is NOT empty.
+   *
    * @return true if collection size is not zero, otherwise false
    */
   default boolean isNotEmpty() {
@@ -54,12 +60,16 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
   }
 
   /**
+   * Whether the collection contains the element.
+   *
    * @param element the element whose presence in this collection is to be tested
    * @return true if collection contains the element, otherwise false
    */
   boolean contains(Object element);
 
   /**
+   * Whether the collection NOT contains the element.
+   *
    * @param element the element whose presence in this collection is to be tested
    * @return true if collection NOT contains the element, otherwise false
    */
@@ -68,6 +78,8 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
   }
 
   /**
+   * Whether the collection contains all elements.
+   *
    * @param elements the elements whose presence in this collection is to be tested
    * @return true if collection contains all given elements, otherwise false
    * @throws NullPointerException if "elements" is null
@@ -83,6 +95,8 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
   }
 
   /**
+   * Whether the collection contains any of elements.
+   *
    * @param elements the elements whose presence in this collection is to be tested
    * @return true if collection contains any of given elements, otherwise false
    * @throws NullPointerException if "elements" is null
@@ -98,7 +112,7 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
   }
 
   /**
-   * Returns whether all elements of this collection match the provided predicate.
+   * Whether all elements of this collection match the provided predicate.
    *
    * @param predicate predicate to apply to elements of this collection
    * @return true if predicate matches all elements, otherwise false
@@ -115,7 +129,7 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
   }
 
   /**
-   * Returns whether any element of this collection match the provided predicate.
+   * Whether any element of this collection match the provided predicate.
    *
    * @param predicate predicate to apply to elements of this collection
    * @return true if predicate matches any element, otherwise false
@@ -132,7 +146,7 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
   }
 
   /**
-   * Returns whether all elements of this collection does NOT match the provided predicate.
+   * Whether all elements of this collection does NOT match the provided predicate.
    *
    * @param predicate predicate to apply to elements of this collection
    * @return true if predicate does NOT match all elements, otherwise false
@@ -150,7 +164,7 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
 
   /**
    * Performs a reduction on the elements of this collection, using the provided identity value and
-   * an associative accumulation function, and returns the reduced value. This is equivalent to:
+   * an associative accumulation function, and returns the reduced value.
    *
    * <pre>{@code
    * T result = identity;
@@ -172,7 +186,7 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
   /**
    * Performs a reduction on the elements of this collection, using the provided identity value and
    * an associative accumulation function, and returns the reduced value. If collection is empty,
-   * returns {@link Optional#empty()}
+   * returns {@link Optional#empty()}.
    *
    * @param accumulator accumulation function
    * @return reduction result
@@ -185,7 +199,7 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
 
   /**
    * Returns min value of the collection calculated with provided comparator. If collection is
-   * empty, returns {@link Optional#empty()}
+   * empty, returns {@link Optional#empty()}.
    *
    * @param comparator comparator, which determines min value
    * @return min value
@@ -199,7 +213,7 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
 
   /**
    * Returns max value of the collection calculated with provided comparator. If collection is
-   * empty, returns {@link Optional#empty()}
+   * empty, returns {@link Optional#empty()}.
    *
    * @param comparator comparator, which determines max value
    * @return max value
@@ -241,11 +255,15 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
   }
 
   /**
+   * Transform the collection to {@linkplain ImmutableList}.
+   *
    * @return collection converted to immutable list
    */
   ImmutableList<T> toList();
 
   /**
+   * Transform the collection to {@linkplain ImmutableSet}.
+   *
    * @return collection converted to immutable set
    */
   ImmutableSet<T> toSet();
