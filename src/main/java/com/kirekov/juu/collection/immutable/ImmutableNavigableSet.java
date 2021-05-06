@@ -7,7 +7,14 @@ import java.util.NavigableSet;
 import java.util.Optional;
 
 /**
- * @param <T>
+ * Defines an immutable navigable set. Unlike native {@linkplain NavigableSet} this interface does
+ * not provide any methods that can mutate its state. So, it is safe to use it in concurrent
+ * environments.
+ *
+ * <p>It is strongly recommended to instantiate this map with only immutable keys and values in
+ * order not to face with some unexpected mutations.</p>
+ *
+ * @param <T> the type of the value
  * @see NavigableSet
  */
 public interface ImmutableNavigableSet<T> extends ImmutableSortedSet<T> {
