@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 /**
  * Monad for lazy calculations. Allows to build a chain of operations with deferred execution.
- * Operations will NOT be executed until {@link Lazy#calculate()} method will be called
+ * Operations will NOT be executed until {@link Lazy#calculate()} method will be called.
  *
  * @param <T> the type of the return parameter
  * @since 1.0
@@ -22,12 +22,12 @@ public class Lazy<T> implements Streaming<T> {
   }
 
   /**
-   * Instantiates new Lazy object
+   * Instantiates new Lazy object.
    *
    * @param supplier supplier which will be called by {@link Lazy#calculate()} method
    * @param <T>      the type of the return parameter
    * @return lazy object
-   * @throws NullPointerException if supplier is <code>null</code>
+   * @throws NullPointerException if supplier is null
    */
   public static <T> Lazy<T> of(Supplier<T> supplier) {
     return new Lazy<>(Objects.requireNonNull(supplier));
@@ -40,7 +40,7 @@ public class Lazy<T> implements Streaming<T> {
    * @param mapper mapping function
    * @param <U>    the return type
    * @return lazy object
-   * @throws NullPointerException if mapper is <code>null</code>
+   * @throws NullPointerException if mapper is null
    */
   public <U> Lazy<U> map(Function<? super T, ? extends U> mapper) {
     Objects.requireNonNull(mapper);
@@ -48,17 +48,17 @@ public class Lazy<T> implements Streaming<T> {
   }
 
   /**
-   * <div>Makes the chain with input parameter of previous execution <br>
-   * <b>NB:</b> flatMap does not trigger the execution</div> <br>
-   * <div> After triggering the execution flatMap returns not the lazy object, but the result of its
-   * inner calculation </div> <br>
-   * For instance, this equation <br>
+   * Makes the chain with input parameter of previous execution.
    * <br>
-   * <div> <code>
-   * Lazy.of(() -&gt; 1) <br>
-   * &nbsp;&nbsp;&nbsp;.flatMap(v -&gt; Lazy.of(() -&gt; v + 1)) <br>
-   * &nbsp;&nbsp;&nbsp;.calculate()
-   * </code> </div> <br>
+   * <b>NB:</b> flatMap does not trigger the execution.
+   * <br>
+   * After triggering the execution flatMap returns not the lazy object, but the result of its inner
+   * calculation.
+   * <pre> {@code
+   * Lazy.of(() -> 1)
+   *     .flatMap(v -> Lazy.of(() -> v + 1))
+   *     .calculate()
+   * }</pre>
    * returns 2
    *
    * @param mapper mapping function
@@ -72,7 +72,7 @@ public class Lazy<T> implements Streaming<T> {
   }
 
   /**
-   * Triggers calculation and returns the result
+   * Triggers calculation and returns the result.
    *
    * @return the result of calculation
    */
@@ -81,7 +81,7 @@ public class Lazy<T> implements Streaming<T> {
   }
 
   /**
-   * Triggers calculation and returns the result as {@link Stream}
+   * Triggers calculation and returns the result as {@link Stream}.
    *
    * @return the stream of calculation result
    * @see Lazy#calculate()
