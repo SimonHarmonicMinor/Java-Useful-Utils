@@ -1,6 +1,7 @@
 package com.kirekov.juu.collection.immutable;
 
 import java.util.Comparator;
+import java.util.List;
 import java.util.OptionalInt;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -10,18 +11,18 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * Defines an immutable list. Unlike native {@link java.util.List} this interface does not have any
- * methods that can mutate its content. So it can be safely injected to any methods or objects.
+ * Defines an immutable list. Unlike native {@link List} this interface does not have any methods
+ * that can mutate its content. So it can be safely injected to any methods or objects.
  *
  * @param <T> the type of the object, that list contains
  * @see ImmutableCollection
- * @see java.util.List
+ * @see List
  * @since 1.0
  */
 public interface ImmutableList<T> extends ImmutableCollection<T> {
 
   /**
-   * Returns the element by its index. Supports negative indices in "python-way". For instance,
+   * Returns the element by its index. Supports negative indices in "python-way".
    *
    * <pre>{@code
    * ImmutableList<Integer> list = getList(); // [1, 2, 3, 4, 5]
@@ -32,9 +33,9 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
    * list.get(-5);    // 1;
    * list.get(0);     // 1;
    * }</pre>
-   * <p>
-   * If a is less than zero, then {@code list.get(a)} equals to {@code list.get(list.size() -
-   * Math.abs(a))}
+   *
+   * <p>If {@code index} is less than zero, then {@code list.get(index)} equals to {@code
+   * list.get(list.size() - Math.abs(index))}</p>
    *
    * @param index index of the element to return
    * @return the element at the specified position
@@ -46,7 +47,7 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
 
   /**
    * Returns the first index of the specified element or {@link OptionalInt#empty()}, if element is
-   * not found
+   * not found.
    *
    * @param element the searching element
    * @return the first index of the {@link OptionalInt#empty()}
@@ -73,7 +74,7 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
 
   /**
    * Proxy method for {@code this.slice(fromIndex, toIndex, 1)} if {@code fromIndex} is before
-   * {@code toIndex} and {@code this.slice(fromIndex, toIndex, -1)} otherwise
+   * {@code toIndex} and {@code this.slice(fromIndex, toIndex, -1)} otherwise.
    *
    * @param fromIndex start index (inclusively)
    * @param toIndex   end index (exclusively)
@@ -83,11 +84,9 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
   ImmutableList<T> slice(int fromIndex, int toIndex);
 
   /**
-   * Returns sublist from {@code fromIndex} inclusively to {@code toIndex} exclusively with given
-   * step size.<br> Supports negative indices. If step size is negative, then the list will be
-   * traversed backwards.
-   * <br>
-   * For instance,
+   * Returns sublist from {@code fromIndex} inclusively to {@code toIndex} exclusively with the
+   * given step size.<br> Supports negative indices. If {@code stepSize} is negative, then the list
+   * will be traversed backwards.
    *
    * <pre>{@code
    * ImmutableList<Integer> list = getList(); // [1, 2, 3, 4, 5, 6]
@@ -107,8 +106,8 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
   ImmutableList<T> slice(int fromIndex, int toIndex, int stepSize);
 
   /**
-   * Proxy method for {@code this.step(0, stepSize)} if stepSize is bigger than zero, otherwise
-   * {@code this.step(-1, stepSize)}
+   * Proxy method for {@code this.step(0, stepSize)} if {@code stepSize} is bigger than zero,
+   * otherwise {@code this.step(-1, stepSize)} shall be used.
    *
    * @param stepSize the size of step traversing
    * @return stepped list
@@ -117,15 +116,15 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
   ImmutableList<T> step(int stepSize);
 
   /**
-   * Returns sublist traversed with given step starting from the given index. For instance,
+   * Returns sublist traversed with given step starting from the given index.
    *
    * <pre>{@code
    * ImmutableList<Integer> list = createList(); // [1, 2, 3, 4, 5, 6, 7]
    * ImmutableList<Integer> newOne = list.step(0, 2) // [1, 3, 5, 7]
    * ImmutableList<Integer> newTwo = list.step(1, 3) // [2, 5]
    * }</pre>
-   * <p>
-   * Step size might be negative as well. It means backwards traversing.
+   *
+   * <p>Step size might be negative as well. It means backwards traversing.</p>
    *
    * <pre>{@code
    * ImmutableList<Integer> list = createList(); [1, 2, 3, 4, 5, 6, 7]
@@ -142,7 +141,7 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
   ImmutableList<T> step(int fromIndex, int stepSize);
 
   /**
-   * Joins current list with provided iterable object and returns new list
+   * Concatenates current list with provided iterable object and returns new list.
    *
    * @param iterable iterable object to join with
    * @return new list that contains current elements and elements provided with {@code iterable}
@@ -152,7 +151,7 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
 
   /**
    * Zips current list with provided list and returns pairs, where key contains the element from the
-   * current list and value contains the element from the provided list. For instance,
+   * current list and value contains the element from the provided list.
    *
    * <pre>{@code
    * ImmutableList<Person> people = getPeople();
@@ -161,8 +160,8 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
    * ImmutableList<Pair<Person, Job>> zipped =
    *      people.zipWith(jobs);
    * }</pre>
-   * <p>
-   * If lists have different length, then at some position the key or the value will become null.
+   * <p>If lists have different length, then at some position the key or the value will become
+   * null.</p>
    *
    * @param list provided list
    * @param <R>  the type of the content of the provided list
@@ -180,7 +179,7 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
   ImmutableList<Pair<T, T>> zipWithNext();
 
   /**
-   * Maps the content of the list from one type to another
+   * Maps the content of the list from one type to another.
    *
    * @param mapper mapping function
    * @param <R>    the result type
@@ -236,7 +235,7 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
   <R> ImmutableList<R> flatMapIndexed(BiFunction<Integer, ? super T, ? extends Iterable<R>> mapper);
 
   /**
-   * Returns new list, which values match provided predicate
+   * Returns new list which values match provided predicate.
    *
    * @param predicate predicate to apply to each element to determine if it should be included
    * @return new list
@@ -245,7 +244,7 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
   ImmutableList<T> filter(Predicate<? super T> predicate);
 
   /**
-   * Returns new list, which values match provided predicate
+   * Returns new list which values match provided predicate.
    *
    * @param predicate predicate to apply to each element to determine if it should be included. The
    *                  first argument is the current index and the second one is the current value
@@ -256,7 +255,7 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
 
   /**
    * Traverses each element like {@link Iterable#forEach(Consumer)}, but consumer accepts two
-   * arguments. The first arg is the current index and the second one is the current value
+   * arguments. The first arg is the current index and the second one is the current value.
    *
    * @param action consumer
    * @throws NullPointerException if {@code action} is null
@@ -264,7 +263,7 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
   void forEachIndexed(BiConsumer<Integer, ? super T> action);
 
   /**
-   * Sorts the list and returns the new one
+   * Sorts the list and returns the new one.
    *
    * @param comparator comparator, which defines the sort order
    * @return new sorted list
@@ -294,7 +293,7 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
   ImmutableList<T> skip(int size);
 
   /**
-   * Reverses the list and returns its copy
+   * Reverses the list and returns its copy.
    *
    * @return reversed list
    */
