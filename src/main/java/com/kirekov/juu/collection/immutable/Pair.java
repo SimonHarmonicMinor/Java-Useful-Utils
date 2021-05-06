@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Immutable pair that keeps key and value. Used by {@link ImmutableMap}
+ * Immutable pair that keeps key and value. Used by {@link ImmutableMap}.
  *
  * @param <K> the type of the key
  * @param <V> the type of the value
@@ -40,7 +40,7 @@ public interface Pair<K, V> {
   }
 
   /**
-   * Instantiates new pair
+   * Instantiates new pair.
    *
    * @param entry entry which key and value will be used
    * @param <K>   the type of the key
