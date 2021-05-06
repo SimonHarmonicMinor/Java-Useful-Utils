@@ -10,11 +10,11 @@ class CachedResultSupplierTest {
   @Test
   void testGetCalculatesValueOnlyOnce() {
     Supplier<Integer> supplier = new Supplier<Integer>() {
-      private int i = 1;
+      private int value = 1;
 
       @Override
       public Integer get() {
-        return i++;
+        return value++;
       }
     };
 
