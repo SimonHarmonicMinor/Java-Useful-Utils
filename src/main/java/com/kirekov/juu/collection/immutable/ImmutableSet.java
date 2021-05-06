@@ -15,7 +15,7 @@ import java.util.function.Predicate;
 public interface ImmutableSet<T> extends ImmutableCollection<T> {
 
   /**
-   * Joins current set with provided iterable object and returns new set
+   * Concatenates current set with provided iterable object and returns new set.
    *
    * @param iterable iterable object to join with
    * @return new set that contains current elements and elements provided with {@code iterable}
@@ -24,7 +24,7 @@ public interface ImmutableSet<T> extends ImmutableCollection<T> {
   ImmutableSet<T> concatWith(Iterable<T> iterable);
 
   /**
-   * Maps the content of the set from one type to another
+   * Maps the content of the set from one type to another.
    *
    * @param mapper mapping function
    * @param <R>    the result type
@@ -34,7 +34,7 @@ public interface ImmutableSet<T> extends ImmutableCollection<T> {
   <R> ImmutableSet<R> map(Function<? super T, ? extends R> mapper);
 
   /**
-   * Joins {@link Iterable} objects that mapper returns. For instance,
+   * Joins {@link Iterable} objects that mapper returns.
    *
    * <pre>{@code
    * class Job {
@@ -56,7 +56,7 @@ public interface ImmutableSet<T> extends ImmutableCollection<T> {
   <R> ImmutableSet<R> flatMap(Function<? super T, ? extends Iterable<R>> mapper);
 
   /**
-   * Returns new Set, which values match provided predicate
+   * Returns new set which values match provided predicate.
    *
    * @param predicate predicate to apply to each element to determine if it should be included
    * @return new set
