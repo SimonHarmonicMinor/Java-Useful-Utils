@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * Simple implementation of {@link Pair}
+ * Simple implementation of {@link Pair}.
  *
  * @param <K> the type of the key
  * @param <V> the type of the value
