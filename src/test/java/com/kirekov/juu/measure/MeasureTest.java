@@ -9,17 +9,16 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.kirekov.juu.lambda.Action;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 import org.awaitility.Duration;
 import org.junit.jupiter.api.Test;
 
 /**
+ * Test cases for {@linkplain Measure}.
+ *
  * @see Measure
  */
 class MeasureTest {
-
-  private static Duration ONE_SECOND_AND_A_HALF = new Duration(1500, TimeUnit.MILLISECONDS);
 
   @Test
   void throwsNullPointerIfActionIsNull() {
@@ -85,20 +84,20 @@ class MeasureTest {
 
   @Test
   void inNanosReturnsCorrectResult() {
-    final int RESULT = 1103123;
+    final int result = 1103123;
     ExecutionResult<Integer> executionResult =
-        Measure.executionTime(() -> RESULT)
+        Measure.executionTime(() -> result)
             .inNanos();
-    assertEquals(RESULT, executionResult.getResult());
+    assertEquals(result, executionResult.getResult());
   }
 
   @Test
   void inMillisReturnsCorrectResult() {
-    final String RESULT = "SOME STRING RESULT";
+    final String result = "SOME STRING RESULT";
     ExecutionResult<String> executionResult =
-        Measure.executionTime(() -> RESULT)
+        Measure.executionTime(() -> result)
             .inMillis();
-    assertEquals(RESULT, executionResult.getResult());
+    assertEquals(result, executionResult.getResult());
   }
 
   @Test
