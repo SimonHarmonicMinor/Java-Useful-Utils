@@ -5,6 +5,10 @@ import java.util.Optional;
 import java.util.SortedMap;
 
 /**
+ * Defines immutable sorted map. Unlike native {@linkplain SortedMap} this interface does not
+ * provide any methods that can mutate its state. So, it is safe to use it in concurrent
+ * environments.
+ *
  * @param <K> the type of the key
  * @param <V> the type of the value
  * @see SortedMap
@@ -23,10 +27,10 @@ public interface ImmutableSortedMap<K, V> extends ImmutableMap<K, V> {
 
   /**
    * Returns a view of the portion of this map whose keys range from {@code fromKey}, inclusive, to
-   * {@code toKey}, exclusive.  (If {@code fromKey} and {@code toKey} are equal, the returned map is
-   * empty.)  The returned map is backed by this map, so changes in the returned map are reflected
-   * in this map, and vice-versa. The returned map supports all optional map operations that this
-   * map supports.
+   * {@code toKey}, exclusive. If {@code fromKey} and {@code toKey} are equal, the returned map is
+   * empty. The returned map is backed by this map, so changes in the returned map are reflected in
+   * this map, and vice-versa. The returned map supports all optional map operations that this map
+   * supports.
    *
    * @param fromKey low endpoint (inclusive) of the keys in the returned map
    * @param toKey   high endpoint (exclusive) of the keys in the returned map
@@ -36,9 +40,9 @@ public interface ImmutableSortedMap<K, V> extends ImmutableMap<K, V> {
   ImmutableSortedMap<K, V> subMap(K fromKey, K toKey);
 
   /**
-   * Returns a view of the portion of this map whose keys are strictly less than {@code toKey}.  The
+   * Returns a view of the portion of this map whose keys are strictly less than {@code toKey}. The
    * returned map is backed by this map, so changes in the returned map are reflected in this map,
-   * and vice-versa.  The returned map supports all optional map operations that this map supports.
+   * and vice-versa. The returned map supports all optional map operations that this map supports.
    *
    * @param toKey high endpoint (exclusive) of the keys in the returned map
    * @return a view of the portion of this map whose keys are strictly less than {@code toKey}
@@ -47,8 +51,8 @@ public interface ImmutableSortedMap<K, V> extends ImmutableMap<K, V> {
 
   /**
    * Returns a view of the portion of this map whose keys are greater than or equal to {@code
-   * fromKey}.  The returned map is backed by this map, so changes in the returned map are reflected
-   * in this map, and vice-versa.  The returned map supports all optional map operations that this
+   * fromKey}. The returned map is backed by this map, so changes in the returned map are reflected
+   * in this map, and vice-versa. The returned map supports all optional map operations that this
    * map supports.
    *
    * @param fromKey low endpoint (inclusive) of the keys in the returned map
