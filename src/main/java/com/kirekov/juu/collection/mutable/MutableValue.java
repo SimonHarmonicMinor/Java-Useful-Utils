@@ -1,7 +1,7 @@
 package com.kirekov.juu.collection.mutable;
 
 /**
- * Container which allows to hold a value and change it if necessary
+ * Container which allows to hold a value and change it if necessary.
  *
  * @param <T> the type of the value
  * @see MutableBoolean
