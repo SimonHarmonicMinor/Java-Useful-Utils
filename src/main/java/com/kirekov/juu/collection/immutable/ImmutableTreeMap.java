@@ -15,7 +15,7 @@ import java.util.TreeMap;
 import java.util.function.Supplier;
 
 /**
- * An immutable implementation of java native {@link TreeMap}
+ * An immutable implementation of java native {@link TreeMap}.
  *
  * @param <K> the type of the key
  * @param <V> the type of the value
@@ -32,6 +32,17 @@ public class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V>, Seri
   private final ImmutableList<V> values;
   private final ImmutableSet<Pair<K, V>> pairs;
 
+  /**
+   * Creates new {@linkplain ImmutableTreeMap} from the given {@linkplain Map} and {@linkplain
+   * Comparator}.
+   *
+   * @param map        the source map
+   * @param comparator the comparator
+   * @param <K>        the type of the key
+   * @param <V>        the type of the value
+   * @return immutable tree map
+   * @throws NullPointerException if {@code map} or {@code comparator} is null
+   */
   public static <K, V> ImmutableTreeMap<K, V> of(Map<K, V> map, Comparator<? super K> comparator) {
     Objects.requireNonNull(map);
     Objects.requireNonNull(comparator);
@@ -145,6 +156,15 @@ public class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V>, Seri
   }
 
   @Override
+  public ImmutableSortedMap<K, V> subMap(K fromKey, K toKey) {
+    return tryGetSubMap(() ->
+        new ImmutableTreeMap<>(
+            treeMap.subMap(fromKey, toKey),
+            false
+        ));
+  }
+
+  @Override
   public ImmutableNavigableMap<K, V> subMap(K fromKey, boolean fromInclusive, K toKey,
       boolean toInclusive) {
     return tryGetSubMap(() ->
@@ -155,10 +175,28 @@ public class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V>, Seri
   }
 
   @Override
+  public ImmutableSortedMap<K, V> headMap(K toKey) {
+    return tryGetSubMap(() ->
+        new ImmutableTreeMap<>(
+            treeMap.headMap(toKey),
+            false
+        ));
+  }
+
+  @Override
   public ImmutableNavigableMap<K, V> headMap(K toKey, boolean inclusive) {
     return tryGetSubMap(() ->
         new ImmutableTreeMap<>(
             treeMap.headMap(toKey, inclusive),
+            false
+        ));
+  }
+
+  @Override
+  public ImmutableSortedMap<K, V> tailMap(K fromKey) {
+    return tryGetSubMap(() ->
+        new ImmutableTreeMap<>(
+            treeMap.tailMap(fromKey),
             false
         ));
   }
@@ -180,33 +218,6 @@ public class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V>, Seri
   @Override
   public Comparator<? super K> comparator() {
     return treeMap.comparator();
-  }
-
-  @Override
-  public ImmutableSortedMap<K, V> subMap(K fromKey, K toKey) {
-    return tryGetSubMap(() ->
-        new ImmutableTreeMap<>(
-            treeMap.subMap(fromKey, toKey),
-            false
-        ));
-  }
-
-  @Override
-  public ImmutableSortedMap<K, V> headMap(K toKey) {
-    return tryGetSubMap(() ->
-        new ImmutableTreeMap<>(
-            treeMap.headMap(toKey),
-            false
-        ));
-  }
-
-  @Override
-  public ImmutableSortedMap<K, V> tailMap(K fromKey) {
-    return tryGetSubMap(() ->
-        new ImmutableTreeMap<>(
-            treeMap.tailMap(fromKey),
-            false
-        ));
   }
 
   @Override
