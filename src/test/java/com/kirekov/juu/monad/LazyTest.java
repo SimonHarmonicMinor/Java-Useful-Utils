@@ -12,6 +12,8 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
 /**
+ * Test cases for {@linkplain Lazy}.
+ *
  * @see Lazy
  */
 class LazyTest {
