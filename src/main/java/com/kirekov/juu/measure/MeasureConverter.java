@@ -1,7 +1,7 @@
 package com.kirekov.juu.measure;
 
 /**
- * A class which converts one measure unit to another
+ * A class which converts one measure unit to another.
  *
  * @since 0.1
  */
@@ -11,7 +11,7 @@ public class MeasureConverter {
   private static final long KILO_COEFFICIENT = 1000L;
 
   /**
-   * Convert millis to nanos
+   * Convert millis to nanos.
    *
    * @param millis time in millis
    * @return time in nanos
@@ -21,7 +21,7 @@ public class MeasureConverter {
   }
 
   /**
-   * Convert nanos to millis
+   * Convert nanos to millis.
    *
    * @param nanos time in nanos
    * @return time in millis
@@ -31,7 +31,7 @@ public class MeasureConverter {
   }
 
   /**
-   * Converts millis to seconds
+   * Converts millis to seconds.
    *
    * @param millis time in millis
    * @return time in seconds
@@ -41,7 +41,7 @@ public class MeasureConverter {
   }
 
   /**
-   * Converts nanos to seconds
+   * Converts nanos to seconds.
    *
    * @param nanos time in nanos
    * @return time in seconds
@@ -51,7 +51,7 @@ public class MeasureConverter {
   }
 
   /**
-   * Converts seconds to millis
+   * Converts seconds to millis.
    *
    * @param seconds time in seconds
    * @return time in millis
@@ -61,7 +61,7 @@ public class MeasureConverter {
   }
 
   /**
-   * Converts seconds to nanos
+   * Converts seconds to nanos.
    *
    * @param seconds time in seconds
    * @return time in nanos
