@@ -35,13 +35,14 @@ public class ImmutableCollectors {
   }
 
   /**
-   * Provides collector to {@link ImmutableCollection}
+   * Provides collector to {@link ImmutableCollection}.
    *
    * @param collectionFactory function that accepts {@link Iterable} and returns {@link
    *                          ImmutableCollection}
    * @param <T>               the type of the content
    * @param <C>               the type of the return collection
    * @return collector
+   * @throws NullPointerException if {@code collectionFactory} is null
    */
   public static <T, C extends ImmutableCollection<T>> Collector<T, List<T>, C> toCollection(
       Function<List<T>, C> collectionFactory) {
@@ -58,7 +59,7 @@ public class ImmutableCollectors {
   }
 
   /**
-   * Provides collector to {@link ImmutableList}
+   * Provides collector to {@link ImmutableList}.
    *
    * @param <T> the type of the content
    * @return collector
@@ -69,7 +70,7 @@ public class ImmutableCollectors {
   }
 
   /**
-   * Provides collector to {@link ImmutableSet}
+   * Provides collector to {@link ImmutableSet}.
    *
    * @param <T> the type of the content
    * @return collector
@@ -80,7 +81,7 @@ public class ImmutableCollectors {
   }
 
   /**
-   * Provides collector to {@link ImmutableMap}
+   * Provides collector to {@link ImmutableMap}.
    *
    * @param keyMapper   function that accepts value and produces map key
    * @param valueMapper function that accepts value and produces map value
@@ -89,6 +90,7 @@ public class ImmutableCollectors {
    * @param <V>         the type of the map value
    * @return collector
    * @throws IllegalStateException if keys were duplicated
+   * @throws NullPointerException  if {@code keyMapper} of {@code valueMapper} is null
    */
   public static <T, K, V> Collector<T, Map<K, V>, ImmutableMap<K, V>> toMap(
       Function<? super T, ? extends K> keyMapper, Function<? super T, ? extends V> valueMapper) {
@@ -130,6 +132,7 @@ public class ImmutableCollectors {
 
   private static IllegalStateException duplicateKeyException(Object k, Object u, Object v) {
     return new IllegalStateException(
-        String.format("Duplicate key %s (attempted merging values %s and %s)", k, u, v));
+        String.format("Duplicate key %s (attempted merging values %s and %s)", k, u, v)
+    );
   }
 }
