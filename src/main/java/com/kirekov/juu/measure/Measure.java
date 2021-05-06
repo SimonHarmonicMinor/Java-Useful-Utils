@@ -23,7 +23,7 @@ public class Measure<T> {
 
   /**
    * Creates an instance of {@link Measure} class with function that will be executed Function will
-   * not be executed until {@link Measure#inMillis()} or {@link Measure#inNanos()} will be called
+   * not be executed until {@link Measure#inMillis()} or {@link Measure#inNanos()} will be called.
    *
    * @param supplier lambda function which needs to be executed. Cannot be null
    * @param <T>      function return type
@@ -38,7 +38,7 @@ public class Measure<T> {
   /**
    * Creates an instance of {@link Measure} class with procedure that will be executed. Procedure
    * will not be executed until {@link Measure#inMillis()} or {@link Measure#inNanos()} will be
-   * called
+   * called.
    *
    * @param action lambda procedure which needs to be executed. Cannot be {@code null}
    * @return an instance of class with given procedure
@@ -54,6 +54,8 @@ public class Measure<T> {
   }
 
   /**
+   * Gets execution result measured in {@linkplain MeasureUnit#MILLIS}.
+   *
    * @return execution result measured in millis.
    */
   public ExecutionResult<T> inMillis() {
@@ -63,6 +65,8 @@ public class Measure<T> {
   }
 
   /**
+   * Gets execution result measured in {@linkplain MeasureUnit#NANOS}.
+   *
    * @return execution result measured in nanos.
    */
   public ExecutionResult<T> inNanos() {
@@ -72,6 +76,8 @@ public class Measure<T> {
   }
 
   /**
+   * Gets execution result measure in {@linkplain MeasureUnit#SECONDS}.
+   *
    * @return execution result measured in seconds
    * @since 1.1
    */
