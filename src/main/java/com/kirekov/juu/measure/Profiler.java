@@ -5,7 +5,7 @@ import static com.kirekov.juu.measure.MeasureConverter.millisToSeconds;
 import java.util.function.Supplier;
 
 /**
- * Measures time between object instantiating and stopping measuring
+ * Measures time between object instantiating and stopping measuring. The class is not thread-safe.
  *
  * @since 0.1
  */
@@ -19,7 +19,7 @@ public class Profiler {
   private long measuringResult = STILL_MEASURING;
 
   /**
-   * Instantiates new {@link Profiler} object and starts measuring in millis
+   * Instantiates new {@link Profiler} object and starts measuring in millis.
    *
    * @return new object with millis measuring
    */
@@ -32,7 +32,7 @@ public class Profiler {
   }
 
   /**
-   * Instantiates new {@link Profiler} object and starts measuring in nanos
+   * Instantiates new {@link Profiler} object and starts measuring in nanos.
    *
    * @return new object with nanos measuring
    */
@@ -45,7 +45,7 @@ public class Profiler {
   }
 
   /**
-   * Instantiates new {@link Profiler} object and starts measuring in seconds
+   * Instantiates new {@link Profiler} object and starts measuring in seconds.
    *
    * @return new object with seconds measuring
    * @since 1.1
@@ -64,6 +64,8 @@ public class Profiler {
   }
 
   /**
+   * Gets {@linkplain MeasureUnit}.
+   *
    * @return units of measuring
    */
   public MeasureUnit getMeasureUnit() {
