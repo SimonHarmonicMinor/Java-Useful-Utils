@@ -156,11 +156,30 @@ public class Immutable {
     return setOf(elements, false);
   }
 
+  /**
+   * Creates {@linkplain ImmutableMap} from regular java {@linkplain Map}. The values are copied
+   * from the source. So, {@code map} modifying does not affect the resulted immutable one.
+   *
+   * @param map source to build {@linkplain ImmutableMap}
+   * @param <K> type of key
+   * @param <V> type of value
+   * @return immutable map
+   * @throws NullPointerException if {@code map} is null
+   */
   public static <K, V> ImmutableMap<K, V> mapOf(Map<K, V> map) {
     Objects.requireNonNull(map);
     return new ImmutableHashMap<>(map);
   }
 
+  /**
+   * Creates {@linkplain ImmutableMap} from {@linkplain Iterable} of {@linkplain Pair}.
+   *
+   * @param pairs {@linkplain Iterable} of {@linkplain Pair} that are used as map entries
+   * @param <K>   the type of key
+   * @param <V>   the type of value
+   * @return immutable map
+   * @throws NullPointerException if {@code map} is null
+   */
   public static <K, V> ImmutableMap<K, V> mapOf(Iterable<Pair<K, V>> pairs) {
     Objects.requireNonNull(pairs);
     if (!pairs.iterator().hasNext()) {
@@ -173,24 +192,95 @@ public class Immutable {
     return new ImmutableHashMap<>(hashMap, false);
   }
 
+  /**
+   * Creates {@linkplain ImmutableMap} from one key and value.
+   *
+   * @param k   the key
+   * @param v   the value
+   * @param <K> the type of key
+   * @param <V> the type of value
+   * @return immutable map
+   * @see Immutable#mapOf(Iterable)
+   */
   public static <K, V> ImmutableMap<K, V> mapOf(K k, V v) {
     return mapOf(Collections.singletonList(Pair.of(k, v)));
   }
 
+  /**
+   * Creates {@linkplain ImmutableMap} from two keys and values.
+   *
+   * @param k1  the first key
+   * @param v1  the first value
+   * @param k2  the second key
+   * @param v2  the second value
+   * @param <K> the type of the key
+   * @param <V> the type of the value
+   * @return immutable map
+   * @see Immutable#mapOf(Iterable)
+   */
   public static <K, V> ImmutableMap<K, V> mapOf(K k1, V v1, K k2, V v2) {
     return mapOf(Arrays.asList(Pair.of(k1, v1), Pair.of(k2, v2)));
   }
 
+  /**
+   * Creates {@linkplain ImmutableMap} from three keys and values.
+   *
+   * @param k1  the first key
+   * @param v1  the first value
+   * @param k2  the second key
+   * @param v2  the second value
+   * @param k3  the third key
+   * @param v3  the third value
+   * @param <K> the type of the key
+   * @param <V> the type of the value
+   * @return immutable map
+   * @see Immutable#mapOf(Iterable)
+   */
   public static <K, V> ImmutableMap<K, V> mapOf(K k1, V v1, K k2, V v2, K k3, V v3) {
     return mapOf(Arrays.asList(Pair.of(k1, v1), Pair.of(k2, v2), Pair.of(k3, v3)));
   }
 
+  /**
+   * Creates {@linkplain ImmutableMap} from four keys and values.
+   *
+   * @param k1  the first key
+   * @param v1  the first value
+   * @param k2  the second key
+   * @param v2  the second value
+   * @param k3  the third key
+   * @param v3  the third value
+   * @param k4  the fourth key
+   * @param v4  the fourth value
+   * @param <K> the type of the key
+   * @param <V> the type of the value
+   * @return immutable map
+   * @see Immutable#mapOf(Iterable)
+   */
   public static <K, V> ImmutableMap<K, V> mapOf(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
     return mapOf(Arrays.asList(Pair.of(k1, v1), Pair.of(k2, v2), Pair.of(k3, v3), Pair.of(k4, v4)));
   }
 
+  /**
+   * Creates {@linkplain ImmutableMap} from five keys and values.
+   *
+   * @param k1  the first key
+   * @param v1  the first value
+   * @param k2  the second key
+   * @param v2  the second value
+   * @param k3  the third key
+   * @param v3  the third value
+   * @param k4  the fourth key
+   * @param v4  the fourth value
+   * @param k5  the fifth key
+   * @param v5  the fifth value
+   * @param <K> the type of the key
+   * @param <V> the type of the value
+   * @return immutable map
+   * @see Immutable#mapOf(Iterable)
+   */
   public static <K, V> ImmutableMap<K, V> mapOf(
-      K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5) {
+      K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5
+  ) {
     return mapOf(
         Arrays.asList(
             Pair.of(k1, v1),
