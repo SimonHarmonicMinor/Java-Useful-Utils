@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * An immutable implementation of java native {@link HashMap}
+ * An immutable implementation of java native {@link HashMap}.
  *
  * @param <K> the type of the key
  * @param <V> the type of the value
@@ -23,6 +23,12 @@ public class ImmutableHashMap<K, V> implements ImmutableMap<K, V>, Serializable 
   private final ImmutableList<V> values;
   private final ImmutableSet<Pair<K, V>> pairs;
 
+  /**
+   * Creates new {@linkplain ImmutableHashMap} instance from regular java {@linkplain Map}. The
+   * entries are being copied from the source.
+   *
+   * @param map source map
+   */
   public ImmutableHashMap(Map<K, V> map) {
     this(map, true);
   }
