@@ -138,27 +138,27 @@ class ImmutableArrayListTest {
     List<Integer> mutable = Arrays.asList(item1, item2, item3);
 
     ImmutableList<Integer> list = new ImmutableArrayList<>(mutable);
-    ImmutableList<Integer> subList1 = list.slice(2);
-    ImmutableList<Integer> subList2 = list.slice(0);
-    ImmutableList<Integer> subList3 = list.slice(-1);
-    ImmutableList<Integer> subList4 = list.slice(-2);
-    ImmutableList<Integer> subList5 = list.slice(-3);
 
+    ImmutableList<Integer> subList1 = list.slice(2);
     assertEquals(1, subList1.size());
     assertEquals(item3, subList1.get(0));
 
+    ImmutableList<Integer> subList2 = list.slice(0);
     assertEquals(3, subList2.size());
     assertEquals(item1, subList2.get(0));
     assertEquals(item2, subList2.get(1));
     assertEquals(item3, subList2.get(2));
 
+    ImmutableList<Integer> subList3 = list.slice(-1);
     assertEquals(1, subList3.size());
     assertEquals(item3, subList3.get(0));
 
+    ImmutableList<Integer> subList4 = list.slice(-2);
     assertEquals(2, subList4.size());
     assertEquals(item2, subList4.get(0));
     assertEquals(item3, subList4.get(1));
 
+    ImmutableList<Integer> subList5 = list.slice(-3);
     assertEquals(3, subList5.size());
     assertEquals(item1, subList5.get(0));
     assertEquals(item2, subList5.get(1));
@@ -173,17 +173,14 @@ class ImmutableArrayListTest {
     List<String> mutable = Arrays.asList(item1, item1, item2, item2, item3, item3);
 
     ImmutableList<String> list = new ImmutableArrayList<>(mutable);
-    ImmutableList<String> subList1 = list.slice(2, 5);
-    ImmutableList<String> subList2 = list.slice(0, 6);
-    ImmutableList<String> subList3 = list.slice(1, 3);
-    ImmutableList<String> subList4 = list.slice(-1, 204);
-    ImmutableList<String> subList5 = list.slice(5, 2);
 
+    ImmutableList<String> subList1 = list.slice(2, 5);
     assertEquals(3, subList1.size());
     assertEquals(item2, subList1.get(0));
     assertEquals(item2, subList1.get(1));
     assertEquals(item3, subList1.get(2));
 
+    ImmutableList<String> subList2 = list.slice(0, 6);
     assertEquals(6, subList2.size());
     assertEquals(item1, subList2.get(0));
     assertEquals(item1, subList2.get(1));
@@ -192,13 +189,16 @@ class ImmutableArrayListTest {
     assertEquals(item3, subList2.get(4));
     assertEquals(item3, subList2.get(5));
 
+    ImmutableList<String> subList3 = list.slice(1, 3);
     assertEquals(2, subList3.size());
     assertEquals(item1, subList3.get(0));
     assertEquals(item2, subList3.get(1));
 
+    ImmutableList<String> subList4 = list.slice(-1, 204);
     assertEquals(1, subList4.size());
     assertEquals(item3, subList4.get(0));
 
+    ImmutableList<String> subList5 = list.slice(5, 2);
     assertEquals(3, subList5.size());
     assertEquals(item3, subList5.get(0));
     assertEquals(item3, subList5.get(1));
@@ -216,14 +216,10 @@ class ImmutableArrayListTest {
     List<String> mutable = Arrays.asList(item1, item2, item3, item4, item5, item6);
     ImmutableList<String> list = new ImmutableArrayList<>(mutable);
 
-    ImmutableList<String> subList1 = list.slice(0, 6, 1);
-    ImmutableList<String> subList2 = list.slice(2, 5, 2);
-    ImmutableList<String> subList3 = list.slice(-5, -1, 3);
-    ImmutableList<String> subList4 = list.slice(-1, -6, -2);
-    ImmutableList<String> subList5 = list.slice(-1, -7, -3);
     assertThrows(IllegalArgumentException.class,
         () -> list.slice(0, 1, 0));
 
+    ImmutableList<String> subList1 = list.slice(0, 6, 1);
     assertEquals(6, subList1.size());
     assertEquals(item1, subList1.get(0));
     assertEquals(item2, subList1.get(1));
@@ -232,19 +228,23 @@ class ImmutableArrayListTest {
     assertEquals(item5, subList1.get(4));
     assertEquals(item6, subList1.get(5));
 
+    ImmutableList<String> subList2 = list.slice(2, 5, 2);
     assertEquals(2, subList2.size());
     assertEquals(item3, subList2.get(0));
     assertEquals(item5, subList2.get(1));
 
+    ImmutableList<String> subList3 = list.slice(-5, -1, 3);
     assertEquals(2, subList3.size());
     assertEquals(item2, subList3.get(0));
     assertEquals(item5, subList3.get(1));
 
+    ImmutableList<String> subList4 = list.slice(-1, -6, -2);
     assertEquals(3, subList4.size());
     assertEquals(item6, subList4.get(0));
     assertEquals(item4, subList4.get(1));
     assertEquals(item2, subList4.get(2));
 
+    ImmutableList<String> subList5 = list.slice(-1, -7, -3);
     assertEquals(2, subList5.size());
     assertEquals(item6, subList5.get(0));
     assertEquals(item3, subList5.get(1));
@@ -261,15 +261,9 @@ class ImmutableArrayListTest {
     List<String> mutable = Arrays.asList(item1, item2, item3, item4, item5, item6);
     ImmutableList<String> list = new ImmutableArrayList<>(mutable);
 
-    ImmutableList<String> subList1 = list.step(1);
-    ImmutableList<String> subList2 = list.step(2);
-    ImmutableList<String> subList3 = list.step(3);
-    ImmutableList<String> subList4 = list.step(4);
-    ImmutableList<String> subList5 = list.step(-1);
-    ImmutableList<String> subList6 = list.step(-2);
-    ImmutableList<String> subList7 = list.step(-3);
     assertThrows(IllegalArgumentException.class, () -> list.step(0));
 
+    ImmutableList<String> subList1 = list.step(1);
     assertEquals(6, subList1.size());
     assertEquals(item1, subList1.get(0));
     assertEquals(item2, subList1.get(1));
@@ -278,19 +272,23 @@ class ImmutableArrayListTest {
     assertEquals(item5, subList1.get(4));
     assertEquals(item6, subList1.get(5));
 
+    ImmutableList<String> subList2 = list.step(2);
     assertEquals(3, subList2.size());
     assertEquals(item1, subList2.get(0));
     assertEquals(item3, subList2.get(1));
     assertEquals(item5, subList2.get(2));
 
+    ImmutableList<String> subList3 = list.step(3);
     assertEquals(2, subList3.size());
     assertEquals(item1, subList3.get(0));
     assertEquals(item4, subList3.get(1));
 
+    ImmutableList<String> subList4 = list.step(4);
     assertEquals(2, subList4.size());
     assertEquals(item1, subList4.get(0));
     assertEquals(item5, subList4.get(1));
 
+    ImmutableList<String> subList5 = list.step(-1);
     assertEquals(6, subList5.size());
     assertEquals(item6, subList5.get(0));
     assertEquals(item5, subList5.get(1));
@@ -299,11 +297,13 @@ class ImmutableArrayListTest {
     assertEquals(item2, subList5.get(4));
     assertEquals(item1, subList5.get(5));
 
+    ImmutableList<String> subList6 = list.step(-2);
     assertEquals(3, subList6.size());
     assertEquals(item6, subList6.get(0));
     assertEquals(item4, subList6.get(1));
     assertEquals(item2, subList6.get(2));
 
+    ImmutableList<String> subList7 = list.step(-3);
     assertEquals(2, subList7.size());
     assertEquals(item6, subList7.get(0));
     assertEquals(item3, subList7.get(1));
@@ -321,10 +321,6 @@ class ImmutableArrayListTest {
     ImmutableList<String> list = new ImmutableArrayList<>(mutable);
 
     ImmutableList<String> subList1 = list.step(0, 1);
-    ImmutableList<String> subList2 = list.step(1, 2);
-    ImmutableList<String> subList3 = list.step(-2, -2);
-    ImmutableList<String> subList4 = list.step(-3, -3);
-
     assertEquals(6, subList1.size());
     assertEquals(item1, subList1.get(0));
     assertEquals(item2, subList1.get(1));
@@ -333,16 +329,19 @@ class ImmutableArrayListTest {
     assertEquals(item5, subList1.get(4));
     assertEquals(item6, subList1.get(5));
 
+    ImmutableList<String> subList2 = list.step(1, 2);
     assertEquals(3, subList2.size());
     assertEquals(item2, subList2.get(0));
     assertEquals(item4, subList2.get(1));
     assertEquals(item6, subList2.get(2));
 
+    ImmutableList<String> subList3 = list.step(-2, -2);
     assertEquals(3, subList3.size());
     assertEquals(item5, subList3.get(0));
     assertEquals(item3, subList3.get(1));
     assertEquals(item1, subList3.get(2));
 
+    ImmutableList<String> subList4 = list.step(-3, -3);
     assertEquals(2, subList4.size());
     assertEquals(item4, subList4.get(0));
     assertEquals(item1, subList4.get(1));
@@ -360,9 +359,8 @@ class ImmutableArrayListTest {
     ImmutableList<String> list = new ImmutableArrayList<>(mutable);
 
     assertThrows(NullPointerException.class, () -> list.concatWith(null));
-    ImmutableList<String> concat1 = list.concatWith(Arrays.asList(item4, item5));
-    ImmutableList<String> concat2 = list.concatWith(Immutable.emptyList());
 
+    ImmutableList<String> concat1 = list.concatWith(Arrays.asList(item4, item5));
     assertEquals(8, concat1.size());
     assertEquals(item1, concat1.get(0));
     assertEquals(item2, concat1.get(1));
@@ -373,6 +371,7 @@ class ImmutableArrayListTest {
     assertEquals(item4, concat1.get(6));
     assertEquals(item5, concat1.get(7));
 
+    ImmutableList<String> concat2 = list.concatWith(Immutable.emptyList());
     assertEquals(6, concat2.size());
     assertEquals(item1, concat2.get(0));
     assertEquals(item2, concat2.get(1));
@@ -545,14 +544,9 @@ class ImmutableArrayListTest {
     );
 
     ImmutableList<String> filtered1 = list.filter(val -> false);
-    ImmutableList<String> filtered2 = list.filter(val -> true);
-    ImmutableList<String> filtered3 = list.filter(
-        Predicate.isEqual(item1)
-            .or(Predicate.isEqual(item4))
-    );
-
     assertTrue(filtered1.isEmpty());
 
+    ImmutableList<String> filtered2 = list.filter(val -> true);
     assertEquals(6, filtered2.size());
     assertEquals(item1, filtered2.get(0));
     assertEquals(item2, filtered2.get(1));
@@ -561,6 +555,10 @@ class ImmutableArrayListTest {
     assertEquals(item5, filtered2.get(4));
     assertEquals(item6, filtered2.get(5));
 
+    ImmutableList<String> filtered3 = list.filter(
+        Predicate.isEqual(item1)
+            .or(Predicate.isEqual(item4))
+    );
     assertEquals(2, filtered3.size());
     assertEquals(item1, filtered3.get(0));
     assertEquals(item4, filtered3.get(1));
@@ -579,13 +577,9 @@ class ImmutableArrayListTest {
     );
 
     ImmutableList<String> filtered1 = list.filterIndexed((index, val) -> false);
-    ImmutableList<String> filtered2 = list.filterIndexed((index, val) -> true);
-    ImmutableList<String> filtered3 = list.filterIndexed(
-        (index, val) -> val.startsWith("6") || index % 2 == 0
-    );
-
     assertTrue(filtered1.isEmpty());
 
+    ImmutableList<String> filtered2 = list.filterIndexed((index, val) -> true);
     assertEquals(6, filtered2.size());
     assertEquals(item1, filtered2.get(0));
     assertEquals(item2, filtered2.get(1));
@@ -594,6 +588,9 @@ class ImmutableArrayListTest {
     assertEquals(item5, filtered2.get(4));
     assertEquals(item6, filtered2.get(5));
 
+    ImmutableList<String> filtered3 = list.filterIndexed(
+        (index, val) -> val.startsWith("6") || index % 2 == 0
+    );
     assertEquals(4, filtered3.size());
     assertEquals(item1, filtered3.get(0));
     assertEquals(item3, filtered3.get(1));
@@ -639,16 +636,15 @@ class ImmutableArrayListTest {
     ImmutableList<Integer> naturalSort = list.sorted(
         Comparator.comparingInt(x -> x)
     );
-    ImmutableList<Integer> reversedSort = list.sorted(
-        (x1, x2) -> x2 - x1
-    );
-
     assertEquals(4, naturalSort.size());
     assertEquals(item2, naturalSort.get(0));
     assertEquals(item3, naturalSort.get(1));
     assertEquals(item1, naturalSort.get(2));
     assertEquals(item4, naturalSort.get(3));
 
+    ImmutableList<Integer> reversedSort = list.sorted(
+        (x1, x2) -> x2 - x1
+    );
     assertEquals(4, reversedSort.size());
     assertEquals(item4, reversedSort.get(0));
     assertEquals(item1, reversedSort.get(1));
@@ -669,22 +665,21 @@ class ImmutableArrayListTest {
     );
 
     assertThrows(IllegalArgumentException.class, () -> list.limit(-1));
-    ImmutableList<Integer> limit1 = list.limit(0);
-    ImmutableList<Integer> limit2 = list.limit(1);
-    ImmutableList<Integer> limit3 = list.limit(3);
-    ImmutableList<Integer> limit4 = list.limit(6);
-    ImmutableList<Integer> limit5 = list.limit(16);
 
+    ImmutableList<Integer> limit1 = list.limit(0);
     assertTrue(limit1.isEmpty());
 
+    ImmutableList<Integer> limit2 = list.limit(1);
     assertEquals(1, limit2.size());
     assertEquals(item1, limit2.get(0));
 
+    ImmutableList<Integer> limit3 = list.limit(3);
     assertEquals(3, limit3.size());
     assertEquals(item1, limit3.get(0));
     assertEquals(item2, limit3.get(1));
     assertEquals(item3, limit3.get(2));
 
+    ImmutableList<Integer> limit4 = list.limit(6);
     assertEquals(6, limit4.size());
     assertEquals(item1, limit4.get(0));
     assertEquals(item2, limit4.get(1));
@@ -693,6 +688,7 @@ class ImmutableArrayListTest {
     assertEquals(item5, limit4.get(4));
     assertEquals(item6, limit4.get(5));
 
+    ImmutableList<Integer> limit5 = list.limit(16);
     assertEquals(6, limit5.size());
     assertEquals(item1, limit5.get(0));
     assertEquals(item2, limit5.get(1));
@@ -715,12 +711,8 @@ class ImmutableArrayListTest {
     );
 
     assertThrows(IllegalArgumentException.class, () -> list.skip(-1));
-    ImmutableList<Integer> skip1 = list.skip(0);
-    ImmutableList<Integer> skip2 = list.skip(1);
-    ImmutableList<Integer> skip3 = list.skip(3);
-    ImmutableList<Integer> skip4 = list.skip(6);
-    ImmutableList<Integer> skip5 = list.skip(16);
 
+    ImmutableList<Integer> skip1 = list.skip(0);
     assertEquals(6, skip1.size());
     assertEquals(item1, skip1.get(0));
     assertEquals(item2, skip1.get(1));
@@ -729,6 +721,7 @@ class ImmutableArrayListTest {
     assertEquals(item5, skip1.get(4));
     assertEquals(item6, skip1.get(5));
 
+    ImmutableList<Integer> skip2 = list.skip(1);
     assertEquals(5, skip2.size());
     assertEquals(item2, skip2.get(0));
     assertEquals(item3, skip2.get(1));
@@ -736,13 +729,16 @@ class ImmutableArrayListTest {
     assertEquals(item5, skip2.get(3));
     assertEquals(item6, skip2.get(4));
 
+    ImmutableList<Integer> skip3 = list.skip(3);
     assertEquals(3, skip3.size());
     assertEquals(item4, skip3.get(0));
     assertEquals(item5, skip3.get(1));
     assertEquals(item6, skip3.get(2));
 
+    ImmutableList<Integer> skip4 = list.skip(6);
     assertTrue(skip4.isEmpty());
 
+    ImmutableList<Integer> skip5 = list.skip(16);
     assertTrue(skip5.isEmpty());
   }
 
