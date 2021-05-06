@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 /**
+ * Test cases for {@linkplain MeasureConverter}.
+ *
  * @see MeasureConverter
  */
 class MeasureConverterTest {
