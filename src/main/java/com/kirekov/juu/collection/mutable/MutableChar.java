@@ -6,17 +6,18 @@ package com.kirekov.juu.collection.mutable;
  * @see MutableValue
  */
 public class MutableChar {
-    private char value;
 
-    public MutableChar(char value) {
-        this.value = value;
-    }
+  private char value;
 
-    public char getValue() {
-        return value;
-    }
+  public MutableChar(char value) {
+    this.value = value;
+  }
 
-    public void setValue(char value) {
-        this.value = value;
-    }
+  public char getValue() {
+    return value;
+  }
+
+  public void setValue(char value) {
+    this.value = value;
+  }
 }

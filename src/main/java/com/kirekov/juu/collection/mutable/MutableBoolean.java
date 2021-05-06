@@ -6,17 +6,18 @@ package com.kirekov.juu.collection.mutable;
  * @see MutableValue
  */
 public class MutableBoolean {
-    private boolean value;
 
-    public MutableBoolean(boolean value) {
-        this.value = value;
-    }
+  private boolean value;
 
-    public boolean isValue() {
-        return value;
-    }
+  public MutableBoolean(boolean value) {
+    this.value = value;
+  }
 
-    public void setValue(boolean value) {
-        this.value = value;
-    }
+  public boolean isValue() {
+    return value;
+  }
+
+  public void setValue(boolean value) {
+    this.value = value;
+  }
 }

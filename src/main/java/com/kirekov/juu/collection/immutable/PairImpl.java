@@ -1,12 +1,12 @@
 package com.kirekov.juu.collection.immutable;
 
+import static com.kirekov.juu.collection.immutable.ImmutableCollectionUtils.pairEquals;
+
 import java.io.Serializable;
 import java.util.Objects;
 
-import static com.kirekov.juu.collection.immutable.ImmutableCollectionUtils.pairEquals;
-
 /**
- * Simple implementation of {@link Pair}
+ * Simple implementation of {@link Pair}.
  *
  * @param <K> the type of the key
  * @param <V> the type of the value
@@ -14,36 +14,37 @@ import static com.kirekov.juu.collection.immutable.ImmutableCollectionUtils.pair
  * @since 1.0
  */
 class PairImpl<K, V> implements Pair<K, V>, Serializable {
-    private final K key;
-    private final V value;
 
-    PairImpl(K key, V value) {
-        this.key = key;
-        this.value = value;
-    }
+  private final K key;
+  private final V value;
 
-    @Override
-    public K getKey() {
-        return key;
-    }
+  PairImpl(K key, V value) {
+    this.key = key;
+    this.value = value;
+  }
 
-    @Override
-    public V getValue() {
-        return value;
-    }
+  @Override
+  public K getKey() {
+    return key;
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        return pairEquals(this, o);
-    }
+  @Override
+  public V getValue() {
+    return value;
+  }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(key, value);
-    }
+  @Override
+  public boolean equals(Object o) {
+    return pairEquals(this, o);
+  }
 
-    @Override
-    public String toString() {
-        return String.format("(key=%s; value=%s)", key, value);
-    }
+  @Override
+  public int hashCode() {
+    return Objects.hash(key, value);
+  }
+
+  @Override
+  public String toString() {
+    return String.format("(key=%s; value=%s)", key, value);
+  }
 }

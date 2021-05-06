@@ -4,6 +4,7 @@ plugins {
     id 'signing'
     id 'jacoco'
     id "org.sonarqube" version "2.7.1"
+    id 'checkstyle'
 }
 
 java {
@@ -16,6 +17,15 @@ java {
 group 'com.kirekov'
 version 'DEV-SNAPSHOT'
 description 'Just some useful utils for everyday coding'
+
+checkstyle {
+    configFile = file('codestyle/checkstyle.xml')
+    ignoreFailures = false
+    maxWarnings = 0
+    showViolations = true
+    toolVersion = '8.42'
+    checkstyleTest.enabled = false
+}
 
 repositories {
     mavenCentral()
