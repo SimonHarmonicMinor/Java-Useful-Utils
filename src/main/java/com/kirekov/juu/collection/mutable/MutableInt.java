@@ -1,7 +1,7 @@
 package com.kirekov.juu.collection.mutable;
 
 /**
- * Container which allows to hold int value and change it if necessary
+ * Container which allows to hold int value and change it if necessary.
  *
  * @see MutableValue
  */
