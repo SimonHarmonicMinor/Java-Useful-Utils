@@ -14,6 +14,8 @@ public class UnmodifiableIterator<T> implements Iterator<T> {
   private final Iterator<T> iterator;
 
   /**
+   * Instantiates new instance of {@linkplain UnmodifiableIterator}.
+   *
    * @param iterator the actual iterator that is going to be traversed
    * @throws NullPointerException if {@code iterator} is null
    */
