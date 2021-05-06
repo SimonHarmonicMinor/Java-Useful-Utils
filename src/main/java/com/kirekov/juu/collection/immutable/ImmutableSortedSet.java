@@ -5,12 +5,17 @@ import java.util.Optional;
 import java.util.SortedSet;
 
 /**
+ * Defines immutable sorted set. Unlike native {@linkplain SortedSet} this interface does not
+ * provide any methods that can mutate its state. So, it safe to use it in concurrent environments.
+ *
  * @param <T> the type of the objects that set contains
  * @see SortedSet
  */
 public interface ImmutableSortedSet<T> extends ImmutableSet<T> {
 
   /**
+   * Gets {@linkplain Comparator} that is used to sort values in the set.
+   *
    * @return the comparator used to order the keys in this map, or {@code null} if this map uses the
    * {@linkplain Comparable natural ordering} of its keys.
    */
