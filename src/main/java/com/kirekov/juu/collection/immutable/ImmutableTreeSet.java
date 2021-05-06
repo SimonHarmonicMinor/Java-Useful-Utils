@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.NavigableSet;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.function.Function;
@@ -15,6 +16,14 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+/**
+ * An immutable implementation of java native {@linkplain TreeSet}.
+ *
+ * @param <T> the type of the value
+ * @see ImmutableNavigableSet
+ * @see Set
+ * @see TreeSet
+ */
 public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializable {
 
   private final TreeSet<T> treeSet;
@@ -24,14 +33,14 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializab
     return new ImmutableTreeSet<>(iterable, null);
   }
 
-  public static <R> ImmutableTreeSet<R> ofSortedSet(SortedSet<R> sortedSet) {
-    Objects.requireNonNull(sortedSet);
-    return new ImmutableTreeSet<>(sortedSet, true);
-  }
-
   public static <R> ImmutableTreeSet<R> of(Iterable<R> iterable, Comparator<R> comparator) {
     Objects.requireNonNull(iterable);
     return new ImmutableTreeSet<>(iterable, comparator);
+  }
+
+  public static <R> ImmutableTreeSet<R> ofSortedSet(SortedSet<R> sortedSet) {
+    Objects.requireNonNull(sortedSet);
+    return new ImmutableTreeSet<>(sortedSet, true);
   }
 
   ImmutableTreeSet(Iterable<T> iterable, Comparator<? super T> comparator) {
@@ -80,9 +89,12 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializab
     return new UnmodifiableIterator<>(treeSet.descendingIterator());
   }
 
-  private ImmutableNavigableSet<T> tryGetSubSet(Supplier<ImmutableNavigableSet<T>> supplier) {
-    return Try.of(supplier::get)
-        .orElse(new ImmutableTreeSet<>(Immutable.emptyList(), treeSet.comparator()));
+  @Override
+  public ImmutableSortedSet<T> subSet(T fromElement, T toElement) {
+    return tryGetSubSet(() ->
+        new ImmutableTreeSet<>(
+            treeSet.subSet(fromElement, toElement),
+            false));
   }
 
   @Override
@@ -95,10 +107,26 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializab
   }
 
   @Override
+  public ImmutableSortedSet<T> headSet(T toElement) {
+    return tryGetSubSet(() ->
+        new ImmutableTreeSet<>(
+            treeSet.headSet(toElement),
+            false));
+  }
+
+  @Override
   public ImmutableNavigableSet<T> headSet(T toElement, boolean inclusive) {
     return tryGetSubSet(() ->
         new ImmutableTreeSet<>(
             treeSet.headSet(toElement, inclusive),
+            false));
+  }
+
+  @Override
+  public ImmutableSortedSet<T> tailSet(T fromElement) {
+    return tryGetSubSet(() ->
+        new ImmutableTreeSet<>(
+            treeSet.tailSet(fromElement),
             false));
   }
 
@@ -118,30 +146,6 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializab
   @Override
   public Comparator<? super T> comparator() {
     return treeSet.comparator();
-  }
-
-  @Override
-  public ImmutableSortedSet<T> subSet(T fromElement, T toElement) {
-    return tryGetSubSet(() ->
-        new ImmutableTreeSet<>(
-            treeSet.subSet(fromElement, toElement),
-            false));
-  }
-
-  @Override
-  public ImmutableSortedSet<T> headSet(T toElement) {
-    return tryGetSubSet(() ->
-        new ImmutableTreeSet<>(
-            treeSet.headSet(toElement),
-            false));
-  }
-
-  @Override
-  public ImmutableSortedSet<T> tailSet(T fromElement) {
-    return tryGetSubSet(() ->
-        new ImmutableTreeSet<>(
-            treeSet.tailSet(fromElement),
-            false));
   }
 
   @Override
@@ -251,5 +255,10 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializab
   @Override
   public String toString() {
     return ImmutableCollectionUtils.setToString(this);
+  }
+
+  private ImmutableNavigableSet<T> tryGetSubSet(Supplier<ImmutableNavigableSet<T>> supplier) {
+    return Try.of(supplier::get)
+        .orElse(new ImmutableTreeSet<>(Immutable.emptyList(), treeSet.comparator()));
   }
 }
