@@ -3,7 +3,7 @@ package com.kirekov.juu.measure;
 import java.util.Objects;
 
 /**
- * A class which contains the result of function execution and time spent for it
+ * A class which contains the result of function execution and time spent for it.
  *
  * @param <T> function result type
  * @see Measure
@@ -17,7 +17,7 @@ public class ExecutionResult<T> {
   private final MeasureUnit measureUnit;
 
   /**
-   * Instantiates object
+   * Instantiates object.
    *
    * @param result      result of calculation, can be null
    * @param time        time spent
@@ -31,6 +31,8 @@ public class ExecutionResult<T> {
   }
 
   /**
+   * Gets result of the execution.
+   *
    * @return function result
    */
   public T getResult() {
@@ -38,6 +40,8 @@ public class ExecutionResult<T> {
   }
 
   /**
+   * Gets time spent for the calculation.
+   *
    * @return time spent
    */
   public long getTime() {
@@ -45,6 +49,8 @@ public class ExecutionResult<T> {
   }
 
   /**
+   * Gets {@linkplain MeasureUnit} that was used to measure calculation time.
+   *
    * @return measure unit
    */
   public MeasureUnit getMeasureUnit() {
