@@ -10,7 +10,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
- * An immutable implementation of java native {@link HashSet}
+ * An immutable implementation of java native {@link HashSet}.
  *
  * @param <T> the type of the content
  * @see ImmutableSet
