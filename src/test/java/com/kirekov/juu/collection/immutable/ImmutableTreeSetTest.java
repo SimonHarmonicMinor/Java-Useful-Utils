@@ -171,11 +171,6 @@ class ImmutableTreeSetTest {
 
     ImmutableNavigableSet<String> subset1 =
         set.subSet("1", true, "2", true);
-    ImmutableNavigableSet<String> subset2 =
-        set.subSet("1", false, "4", false);
-    ImmutableNavigableSet<String> subset3 =
-        set.subSet("5", true, "2", true);
-
     assertEquals(2, subset1.size());
     int i = 1;
     for (String str : subset1) {
@@ -183,6 +178,8 @@ class ImmutableTreeSetTest {
       i++;
     }
 
+    ImmutableNavigableSet<String> subset2 =
+        set.subSet("1", false, "4", false);
     assertEquals(2, subset2.size());
     i = 2;
     for (String str : subset2) {
@@ -190,6 +187,8 @@ class ImmutableTreeSetTest {
       i++;
     }
 
+    ImmutableNavigableSet<String> subset3 =
+        set.subSet("5", true, "2", true);
     assertTrue(subset3.isEmpty());
   }
 
@@ -201,11 +200,6 @@ class ImmutableTreeSetTest {
 
     ImmutableNavigableSet<String> subset1 =
         set.headSet("3", true);
-    ImmutableNavigableSet<String> subset2 =
-        set.headSet("5", false);
-    ImmutableNavigableSet<String> subset3 =
-        set.headSet("0", false);
-
     assertEquals(3, subset1.size());
     int i = 1;
     for (String str : subset1) {
@@ -213,6 +207,8 @@ class ImmutableTreeSetTest {
       i++;
     }
 
+    ImmutableNavigableSet<String> subset2 =
+        set.headSet("5", false);
     assertEquals(4, subset2.size());
     i = 1;
     for (String str : subset2) {
@@ -220,6 +216,8 @@ class ImmutableTreeSetTest {
       i++;
     }
 
+    ImmutableNavigableSet<String> subset3 =
+        set.headSet("0", false);
     assertTrue(subset3.isEmpty());
   }
 
@@ -231,11 +229,6 @@ class ImmutableTreeSetTest {
 
     ImmutableNavigableSet<String> subset1 =
         set.tailSet("3", true);
-    ImmutableNavigableSet<String> subset2 =
-        set.tailSet("4", false);
-    ImmutableNavigableSet<String> subset3 =
-        set.tailSet("6", false);
-
     assertEquals(3, subset1.size());
     int i = 3;
     for (String str : subset1) {
@@ -243,6 +236,8 @@ class ImmutableTreeSetTest {
       i++;
     }
 
+    ImmutableNavigableSet<String> subset2 =
+        set.tailSet("4", false);
     assertEquals(1, subset2.size());
     i = 5;
     for (String str : subset2) {
@@ -250,6 +245,8 @@ class ImmutableTreeSetTest {
       i++;
     }
 
+    ImmutableNavigableSet<String> subset3 =
+        set.tailSet("6", false);
     assertTrue(subset3.isEmpty());
   }
 
@@ -274,11 +271,6 @@ class ImmutableTreeSetTest {
 
     ImmutableSortedSet<String> subSet1 =
         set.subSet("1", "3");
-    ImmutableSortedSet<String> subSet2 =
-        set.subSet("2", "5");
-    ImmutableSortedSet<String> subSet3 =
-        set.subSet("6", "1");
-
     assertEquals(2, subSet1.size());
     int i = 1;
     for (String str : subSet1) {
@@ -286,6 +278,8 @@ class ImmutableTreeSetTest {
       i++;
     }
 
+    ImmutableSortedSet<String> subSet2 =
+        set.subSet("2", "5");
     assertEquals(3, subSet2.size());
     i = 2;
     for (String str : subSet2) {
@@ -293,6 +287,8 @@ class ImmutableTreeSetTest {
       i++;
     }
 
+    ImmutableSortedSet<String> subSet3 =
+        set.subSet("6", "1");
     assertTrue(subSet3.isEmpty());
   }
 
@@ -304,11 +300,6 @@ class ImmutableTreeSetTest {
 
     ImmutableSortedSet<String> subSet1 =
         set.headSet("4");
-    ImmutableSortedSet<String> subSet2 =
-        set.headSet("2");
-    ImmutableSortedSet<String> subSet3 =
-        set.headSet("0");
-
     assertEquals(3, subSet1.size());
     int i = 1;
     for (String str : subSet1) {
@@ -316,6 +307,8 @@ class ImmutableTreeSetTest {
       i++;
     }
 
+    ImmutableSortedSet<String> subSet2 =
+        set.headSet("2");
     assertEquals(1, subSet2.size());
     i = 1;
     for (String str : subSet2) {
@@ -323,6 +316,8 @@ class ImmutableTreeSetTest {
       i++;
     }
 
+    ImmutableSortedSet<String> subSet3 =
+        set.headSet("0");
     assertTrue(subSet3.isEmpty());
   }
 
@@ -334,11 +329,6 @@ class ImmutableTreeSetTest {
 
     ImmutableSortedSet<String> subSet1 =
         set.tailSet("2");
-    ImmutableSortedSet<String> subSet2 =
-        set.tailSet("4");
-    ImmutableSortedSet<String> subSet3 =
-        set.tailSet("6");
-
     assertEquals(4, subSet1.size());
     int i = 2;
     for (String str : subSet1) {
@@ -346,6 +336,8 @@ class ImmutableTreeSetTest {
       i++;
     }
 
+    ImmutableSortedSet<String> subSet2 =
+        set.tailSet("4");
     assertEquals(2, subSet2.size());
     i = 4;
     for (String str : subSet2) {
@@ -353,6 +345,8 @@ class ImmutableTreeSetTest {
       i++;
     }
 
+    ImmutableSortedSet<String> subSet3 =
+        set.tailSet("6");
     assertTrue(subSet3.isEmpty());
   }
 
