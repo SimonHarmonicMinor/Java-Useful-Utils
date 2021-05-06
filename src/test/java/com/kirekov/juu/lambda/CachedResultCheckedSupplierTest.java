@@ -10,11 +10,11 @@ class CachedResultCheckedSupplierTest {
   void testGetCalculatesValueOnlyOnce() {
     CheckedSupplier<Integer, IllegalArgumentException> checkedSupplier =
         new CheckedSupplier<Integer, IllegalArgumentException>() {
-          private int i = 1;
+          private int value = 1;
 
           @Override
           public Integer get() throws IllegalArgumentException {
-            return i++;
+            return value++;
           }
         };
 
