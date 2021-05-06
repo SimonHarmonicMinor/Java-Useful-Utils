@@ -7,6 +7,13 @@ import java.util.NavigableSet;
 import java.util.Optional;
 
 /**
+ * Defines an immutable navigable map. Unlike native {@linkplain NavigableMap} this interface does
+ * not provide any methods that can mutate its state. So, it safe to use it in concurrent
+ * environments.
+ *
+ * <p>It is strongly recommended to instantiate this map with only immutable keys and values in
+ * order not to face with some unexpected mutations.</p>
+ *
  * @param <K> the type of the key
  * @param <V> the type of value
  * @see NavigableMap
