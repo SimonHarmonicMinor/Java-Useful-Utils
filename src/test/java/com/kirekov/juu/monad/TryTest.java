@@ -19,6 +19,8 @@ import java.util.function.Consumer;
 import org.junit.jupiter.api.Test;
 
 /**
+ * Test cases for {@linkplain Try}.
+ *
  * @see Try
  */
 class TryTest {
