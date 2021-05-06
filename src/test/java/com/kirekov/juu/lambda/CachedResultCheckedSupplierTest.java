@@ -1,31 +1,31 @@
 package com.kirekov.juu.lambda;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
 
 class CachedResultCheckedSupplierTest {
 
-    @Test
-    void testGetCalculatesValueOnlyOnce() {
-        CheckedSupplier<Integer, IllegalArgumentException> checkedSupplier =
-                new CheckedSupplier<Integer, IllegalArgumentException>() {
-                    private int i = 1;
+  @Test
+  void testGetCalculatesValueOnlyOnce() {
+    CheckedSupplier<Integer, IllegalArgumentException> checkedSupplier =
+        new CheckedSupplier<Integer, IllegalArgumentException>() {
+          private int value = 1;
 
-                    @Override
-                    public Integer get() throws IllegalArgumentException {
-                        return i++;
-                    }
-                };
+          @Override
+          public Integer get() throws IllegalArgumentException {
+            return value++;
+          }
+        };
 
-        CheckedSupplier<Integer, IllegalArgumentException> cachedResultCheckedSupplier =
-                new CachedResultCheckedSupplier<>(checkedSupplier);
+    CheckedSupplier<Integer, IllegalArgumentException> cachedResultCheckedSupplier =
+        new CachedResultCheckedSupplier<>(checkedSupplier);
 
-        assertEquals(1, cachedResultCheckedSupplier.get());
-        assertEquals(1, cachedResultCheckedSupplier.get());
-        assertEquals(1, cachedResultCheckedSupplier.get());
-        assertEquals(1, cachedResultCheckedSupplier.get());
-        assertEquals(1, cachedResultCheckedSupplier.get());
-        assertEquals(1, cachedResultCheckedSupplier.get());
-    }
+    assertEquals(1, cachedResultCheckedSupplier.get());
+    assertEquals(1, cachedResultCheckedSupplier.get());
+    assertEquals(1, cachedResultCheckedSupplier.get());
+    assertEquals(1, cachedResultCheckedSupplier.get());
+    assertEquals(1, cachedResultCheckedSupplier.get());
+    assertEquals(1, cachedResultCheckedSupplier.get());
+  }
 }

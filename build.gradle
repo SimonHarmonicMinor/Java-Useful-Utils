@@ -24,7 +24,6 @@ checkstyle {
     maxWarnings = 0
     showViolations = true
     toolVersion = '8.42'
-    checkstyleTest.enabled = false
 }
 
 repositories {
