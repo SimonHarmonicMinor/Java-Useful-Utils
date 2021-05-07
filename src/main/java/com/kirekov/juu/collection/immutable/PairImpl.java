@@ -13,6 +13,7 @@ import java.util.Objects;
  * @see Serializable
  * @since 1.0
  */
+@SuppressWarnings("serial")
 class PairImpl<K, V> implements Pair<K, V>, Serializable {
 
   private final K key;
