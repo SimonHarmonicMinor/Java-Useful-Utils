@@ -25,6 +25,7 @@ import java.util.function.Supplier;
  * @see TreeMap
  * @since 1.1
  */
+@SuppressWarnings("serial")
 public class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V>, Serializable {
 
   private final TreeMap<K, V> treeMap;
