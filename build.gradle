@@ -9,7 +9,7 @@ plugins {
 }
 
 tasks.withType(JavaCompile) {
-    options.compilerArgs << "-Xlint:all" << "-Werror"
+    options.compilerArgs << "-Xlint" << "-Xlint:-serial" << "-Werror"
 }
 
 java {
