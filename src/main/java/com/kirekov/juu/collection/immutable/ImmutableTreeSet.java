@@ -24,6 +24,7 @@ import java.util.stream.Stream;
  * @see Set
  * @see TreeSet
  */
+@SuppressWarnings("serial")
 public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializable {
 
   private final TreeSet<T> treeSet;
