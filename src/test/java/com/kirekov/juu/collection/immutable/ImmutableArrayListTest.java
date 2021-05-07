@@ -610,6 +610,7 @@ class ImmutableArrayListTest {
         Arrays.asList(item1, item2, item3, item4, item5, item6)
     );
 
+    @SuppressWarnings("unchecked")
     BiConsumer<Integer, String> consumer = mock(BiConsumer.class);
 
     assertThrows(NullPointerException.class, () -> list.forEachIndexed(null));

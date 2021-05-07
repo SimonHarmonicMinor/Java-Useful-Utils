@@ -92,6 +92,7 @@ public class Immutable {
    * @throws NullPointerException if {@code elements} is null
    */
   @SafeVarargs
+  @SuppressWarnings("varargs")
   public static <T> ImmutableList<T> listOf(T... elements) {
     return listOf(Arrays.stream(elements).collect(Collectors.toList()), false);
   }
@@ -133,6 +134,7 @@ public class Immutable {
    * @throws NullPointerException if {@code elements} is null
    */
   @SafeVarargs
+  @SuppressWarnings("varargs")
   public static <T> ImmutableSet<T> setOf(T... elements) {
     Objects.requireNonNull(elements);
     return setOf(Arrays.stream(elements).collect(Collectors.toSet()), false);
