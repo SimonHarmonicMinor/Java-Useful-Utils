@@ -23,7 +23,7 @@ implementation 'com.kirekov:java-useful-utils'
 ```
 
 ### Status
-![Maven Central](https://img.shields.io/maven-central/v/com.kirekov/java-useful-utils)
+[![Maven Central](https://img.shields.io/maven-central/v/com.kirekov/java-useful-utils)](https://mvnrepository.com/artifact/com.kirekov/java-useful-utils)
 [![Build Status](https://travis-ci.com/SimonHarmonicMinor/Java-Useful-Utils.svg?branch=master)](https://travis-ci.com/SimonHarmonicMinor/Java-Useful-Utils)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=SimonHarmonicMinor_Java-Useful-Utils&metric=alert_status)](https://sonarcloud.io/dashboard?id=SimonHarmonicMinor_Java-Useful-Utils)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=SimonHarmonicMinor_Java-Useful-Utils&metric=coverage)](https://sonarcloud.io/dashboard?id=SimonHarmonicMinor_Java-Useful-Utils)

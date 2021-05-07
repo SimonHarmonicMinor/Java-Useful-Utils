@@ -5,6 +5,7 @@ plugins {
     id 'jacoco'
     id "org.sonarqube" version "2.7.1"
     id 'checkstyle'
+    id "io.github.gradle-nexus.publish-plugin" version "1.1.0"
 }
 
 java {
@@ -41,9 +42,29 @@ test {
     useJUnitPlatform()
 }
 
+task testsJar(type: Jar) {
+    archiveClassifier = 'tests'
+    from sourceSets.test.output
+}
+
 publishing {
     publications {
         javaUsefulUtils(MavenPublication) {
+            artifact jar {
+                extension 'jar'
+            }
+            artifact javadocJar {
+                classifier 'javadoc'
+                extension 'jar'
+            }
+            artifact sourcesJar {
+                classifier 'sources'
+                extension 'jar'
+            }
+            artifact testsJar {
+                classifier 'tests'
+                extension 'jar'
+            }
             pom {
                 name = 'Java Useful Utils'
                 description = 'Just some useful utils for everyday coding'
@@ -84,6 +105,15 @@ publishing {
 
 signing {
     sign publishing.publications.javaUsefulUtils
+}
+
+nexusPublishing {
+    repositories {
+        sonatype {
+            username = findProperty('ossSonatypeUsername')
+            password = findProperty('ossSonatypePassword')
+        }
+    }
 }
 
 javadoc {

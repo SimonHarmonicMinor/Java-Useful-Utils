@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./gradlew publish
+./gradlew publishToSonatype
