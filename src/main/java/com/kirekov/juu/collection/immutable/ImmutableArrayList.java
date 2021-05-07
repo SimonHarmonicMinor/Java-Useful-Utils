@@ -25,6 +25,7 @@ import java.util.stream.Stream;
  * @see Serializable
  * @since 1.0
  */
+@SuppressWarnings("serial")
 public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
 
   private final ArrayList<T> arrayList;
