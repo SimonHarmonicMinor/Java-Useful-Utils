@@ -19,7 +19,6 @@ import java.util.stream.Stream;
  * @see Serializable
  * @since 1.0
  */
-@SuppressWarnings("serial")
 public class ImmutableHashSet<T> implements ImmutableSet<T>, Serializable {
 
   private final HashSet<T> hashSet;
