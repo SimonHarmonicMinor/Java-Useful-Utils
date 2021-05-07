@@ -16,6 +16,7 @@ import java.util.Objects;
  * @see Serializable
  * @since 1.0
  */
+@SuppressWarnings("serial")
 public class ImmutableHashMap<K, V> implements ImmutableMap<K, V>, Serializable {
 
   private final HashMap<K, V> hashMap;
