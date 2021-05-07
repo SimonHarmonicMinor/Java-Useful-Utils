@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Static class for retrieving empty sets and lists or instantiating immutable collections. The
@@ -92,6 +93,7 @@ public class Immutable {
    * @throws NullPointerException if {@code elements} is null
    */
   @SafeVarargs
+  @SuppressWarnings("varargs")
   public static <T> ImmutableList<T> listOf(T... elements) {
     return listOf(Arrays.stream(elements).collect(Collectors.toList()), false);
   }
@@ -133,6 +135,7 @@ public class Immutable {
    * @throws NullPointerException if {@code elements} is null
    */
   @SafeVarargs
+  @SuppressWarnings("varargs")
   public static <T> ImmutableSet<T> setOf(T... elements) {
     Objects.requireNonNull(elements);
     return setOf(Arrays.stream(elements).collect(Collectors.toSet()), false);
