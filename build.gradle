@@ -16,7 +16,7 @@ java {
 }
 
 group 'com.kirekov'
-version '1.3.1'
+version '1.3.3'
 description 'Just some useful utils for everyday coding'
 
 checkstyle {
