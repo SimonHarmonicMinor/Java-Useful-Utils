@@ -117,6 +117,7 @@ public class Try<T> implements Streaming<T> {
    * @throws NullPointerException if suppliers parameter is null
    */
   @SafeVarargs
+  @SuppressWarnings("varargs")
   public static <T, E extends Throwable> Try<T> getFirst(CheckedSupplier<T, E>... suppliers) {
     Objects.requireNonNull(suppliers);
     return getFirst(Arrays.stream(suppliers).collect(Collectors.toList()));
