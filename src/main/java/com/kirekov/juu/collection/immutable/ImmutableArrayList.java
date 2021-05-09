@@ -116,7 +116,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T> {
       newArrayList.add(get(fromNorm));
       fromNorm = nextValueFunc.apply(fromNorm);
     }
-    return Immutable.listOfWithoutCloning(newArrayList);
+    return listOfWithoutCloning(newArrayList);
   }
 
   @Override
@@ -146,7 +146,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T> {
     for (T t : iterable) {
       copy.add(t);
     }
-    return Immutable.listOfWithoutCloning(copy);
+    return listOfWithoutCloning(copy);
   }
 
   private static <R> R getValByIndex(ImmutableList<R> immutableList, int index) {
@@ -166,7 +166,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T> {
       R right = getValByIndex(list, i);
       newArrayList.add(Pair.of(left, right));
     }
-    return Immutable.listOfWithoutCloning(newArrayList);
+    return listOfWithoutCloning(newArrayList);
   }
 
   @Override
@@ -175,7 +175,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T> {
     for (int i = 0; i < size() - 1; i++) {
       newArrayList.add(Pair.of(get(i), get(i + 1)));
     }
-    return Immutable.listOfWithoutCloning(newArrayList);
+    return listOfWithoutCloning(newArrayList);
   }
 
   @Override
@@ -185,7 +185,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T> {
     for (T t : arrayList) {
       newList.add(mapper.apply(t));
     }
-    return Immutable.listOfWithoutCloning(newList);
+    return listOfWithoutCloning(newList);
   }
 
   @Override
@@ -195,7 +195,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T> {
     for (int i = 0; i < arrayList.size(); i++) {
       newList.add(mapper.apply(i, arrayList.get(i)));
     }
-    return Immutable.listOfWithoutCloning(newList);
+    return listOfWithoutCloning(newList);
   }
 
   @Override
@@ -206,7 +206,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T> {
       ImmutableArrayList<R> listElement = new ImmutableArrayList<>(mapper.apply(t));
       newList.addAll(listElement.arrayList);
     }
-    return Immutable.listOfWithoutCloning(newList);
+    return listOfWithoutCloning(newList);
   }
 
   @Override
@@ -219,7 +219,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T> {
           new ImmutableArrayList<>(mapper.apply(i, arrayList.get(i)));
       newList.addAll(listElement.arrayList);
     }
-    return Immutable.listOfWithoutCloning(newList);
+    return listOfWithoutCloning(newList);
   }
 
   @Override
@@ -231,7 +231,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T> {
         newList.add(t);
       }
     }
-    return Immutable.listOfWithoutCloning(newList);
+    return listOfWithoutCloning(newList);
   }
 
   @Override
@@ -243,7 +243,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T> {
         newList.add(arrayList.get(i));
       }
     }
-    return Immutable.listOfWithoutCloning(newList);
+    return listOfWithoutCloning(newList);
   }
 
   @Override
@@ -259,7 +259,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T> {
     Objects.requireNonNull(comparator);
     ArrayList<T> copy = new ArrayList<>(arrayList);
     copy.sort(comparator);
-    return Immutable.listOfWithoutCloning(copy);
+    return listOfWithoutCloning(copy);
   }
 
   @Override
@@ -271,7 +271,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T> {
     for (int i = 0; i < Math.min(size(), size); i++) {
       newList.add(arrayList.get(i));
     }
-    return Immutable.listOfWithoutCloning(newList);
+    return listOfWithoutCloning(newList);
   }
 
   @Override
@@ -283,7 +283,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T> {
     for (int i = Math.min(size, size()); i < arrayList.size(); i++) {
       newList.add(arrayList.get(i));
     }
-    return Immutable.listOfWithoutCloning(newList);
+    return listOfWithoutCloning(newList);
   }
 
   @Override
@@ -340,5 +340,9 @@ public class ImmutableArrayList<T> implements ImmutableList<T> {
   @Override
   public String toString() {
     return ImmutableCollectionUtils.listToString(this);
+  }
+
+  private static <T> ImmutableArrayList<T> listOfWithoutCloning(Iterable<T> elements) {
+    return new ImmutableArrayList<>(elements, false);
   }
 }
