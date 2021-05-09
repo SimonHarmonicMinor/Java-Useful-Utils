@@ -2,7 +2,6 @@ package com.kirekov.juu.collection.immutable;
 
 import com.kirekov.juu.lambda.TriFunction;
 import com.kirekov.juu.monad.Try;
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -21,11 +20,10 @@ import java.util.function.Supplier;
  * @param <V> the type of the value
  * @see ImmutableNavigableMap
  * @see ImmutableMap
- * @see Serializable
  * @see TreeMap
  * @since 1.1
  */
-public class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V>, Serializable {
+public class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V> {
 
   private final TreeMap<K, V> treeMap;
   private final ImmutableSet<K> keys;
