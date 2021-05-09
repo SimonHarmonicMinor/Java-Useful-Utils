@@ -47,22 +47,6 @@ public class ImmutableArrayList<T> implements ImmutableList<T> {
     }
   }
 
-  private int normalizeIndex(int index) {
-    return index >= 0 ? index : size() + index;
-  }
-
-  private void checkStepSize(int stepSize) {
-    if (stepSize == 0) {
-      throw new IllegalArgumentException("Step size cannot be zero");
-    }
-  }
-
-  private void checkIndex(int index) {
-    if (index < 0 || index >= size()) {
-      throw new IndexOutOfBoundsException(String.format("Index %d is out of bounds", index));
-    }
-  }
-
   @Override
   public T get(int index) {
     int normalized = normalizeIndex(index);
@@ -149,13 +133,6 @@ public class ImmutableArrayList<T> implements ImmutableList<T> {
     return listOfWithoutCloning(copy);
   }
 
-  private static <R> R getValByIndex(ImmutableList<R> immutableList, int index) {
-    if (index < immutableList.size()) {
-      return immutableList.get(index);
-    }
-    return null;
-  }
-
   @Override
   public <R> ImmutableList<Pair<T, R>> zipWith(ImmutableList<R> list) {
     Objects.requireNonNull(list);
@@ -211,7 +188,8 @@ public class ImmutableArrayList<T> implements ImmutableList<T> {
 
   @Override
   public <R> ImmutableList<R> flatMapIndexed(
-      BiFunction<Integer, ? super T, ? extends Iterable<R>> mapper) {
+      BiFunction<Integer, ? super T, ? extends Iterable<R>> mapper
+  ) {
     Objects.requireNonNull(mapper);
     ArrayList<R> newList = new ArrayList<>(arrayList.size());
     for (int i = 0; i < arrayList.size(); i++) {
@@ -340,6 +318,29 @@ public class ImmutableArrayList<T> implements ImmutableList<T> {
   @Override
   public String toString() {
     return ImmutableCollectionUtils.listToString(this);
+  }
+
+  private int normalizeIndex(int index) {
+    return index >= 0 ? index : size() + index;
+  }
+
+  private void checkStepSize(int stepSize) {
+    if (stepSize == 0) {
+      throw new IllegalArgumentException("Step size cannot be zero");
+    }
+  }
+
+  private void checkIndex(int index) {
+    if (index < 0 || index >= size()) {
+      throw new IndexOutOfBoundsException(String.format("Index %d is out of bounds", index));
+    }
+  }
+
+  private static <R> R getValByIndex(ImmutableList<R> immutableList, int index) {
+    if (index < immutableList.size()) {
+      return immutableList.get(index);
+    }
+    return null;
   }
 
   private static <T> ImmutableArrayList<T> listOfWithoutCloning(Iterable<T> elements) {
