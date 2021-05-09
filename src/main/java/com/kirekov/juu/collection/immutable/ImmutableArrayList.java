@@ -1,7 +1,6 @@
 package com.kirekov.juu.collection.immutable;
 
 import com.kirekov.juu.monad.Try;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -22,10 +21,9 @@ import java.util.stream.Stream;
  * @see ImmutableList
  * @see List
  * @see ArrayList
- * @see Serializable
  * @since 1.0
  */
-public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
+public class ImmutableArrayList<T> implements ImmutableList<T> {
 
   private final ArrayList<T> arrayList;
 
