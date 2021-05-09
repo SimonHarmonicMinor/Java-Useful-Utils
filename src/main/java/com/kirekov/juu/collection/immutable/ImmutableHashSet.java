@@ -1,6 +1,5 @@
 package com.kirekov.juu.collection.immutable;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Objects;
@@ -16,10 +15,9 @@ import java.util.stream.Stream;
  * @see ImmutableSet
  * @see Set
  * @see HashSet
- * @see Serializable
  * @since 1.0
  */
-public class ImmutableHashSet<T> implements ImmutableSet<T>, Serializable {
+public class ImmutableHashSet<T> implements ImmutableSet<T> {
 
   private final HashSet<T> hashSet;
 
