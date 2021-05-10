@@ -22,6 +22,8 @@ import java.util.stream.Stream;
  * exception can be retrieved with {@link Try#getReasonOfEmptiness()}.
  * <p>Class overrides {@link Object#equals(Object)} and {@link Object#hashCode()} methods.</p>
  *
+ * All monad methods execute calculation <b>eagerly</b>.
+ *
  * @param <T> the type of the return value
  * @since 1.0
  */
