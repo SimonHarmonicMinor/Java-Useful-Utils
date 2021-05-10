@@ -111,10 +111,6 @@ public class Immutable {
     return listOf(elements, true);
   }
 
-  static <T> ImmutableList<T> listOfWithoutCloning(Iterable<T> elements) {
-    return listOf(elements, false);
-  }
-
   private static <T> ImmutableSet<T> setOf(Iterable<T> elements, boolean needsCloning) {
     Objects.requireNonNull(elements);
     if (!elements.iterator().hasNext()) {

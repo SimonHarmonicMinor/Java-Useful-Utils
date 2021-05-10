@@ -1,7 +1,6 @@
 package com.kirekov.juu.collection.immutable;
 
 import com.kirekov.juu.monad.Try;
-import java.io.Serializable;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -24,7 +23,7 @@ import java.util.stream.Stream;
  * @see Set
  * @see TreeSet
  */
-public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T>, Serializable {
+public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T> {
 
   private final TreeSet<T> treeSet;
 

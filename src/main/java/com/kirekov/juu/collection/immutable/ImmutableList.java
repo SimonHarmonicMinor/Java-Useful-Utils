@@ -186,6 +186,7 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
    * @return new list
    * @throws NullPointerException if {@code mapper} is null
    */
+  @Override
   <R> ImmutableList<R> map(Function<? super T, ? extends R> mapper);
 
   /**
@@ -219,6 +220,7 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
    * @return new list
    * @throws NullPointerException if {@code mapper} is null
    */
+  @Override
   <R> ImmutableList<R> flatMap(Function<? super T, ? extends Iterable<R>> mapper);
 
   /**

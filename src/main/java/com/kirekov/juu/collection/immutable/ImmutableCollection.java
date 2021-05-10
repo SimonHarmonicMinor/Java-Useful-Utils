@@ -10,6 +10,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BinaryOperator;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -331,4 +332,35 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
    * @return true if objects are equal, otherwise false
    */
   boolean equals(Object obj);
+
+  /**
+   * Maps content from one type to another.
+   *
+   * @param mapper mapping function
+   * @param <R>    the result type
+   * @return new collection
+   */
+  <R> ImmutableCollection<R> map(Function<? super T, ? extends R> mapper);
+
+  /**
+   * Joins {@link Iterable} objects that mapper returns. For instance,
+   *
+   * <pre>{@code
+   * class Job {
+   *     String name;
+   *     Collection<Person> people;
+   *     ...
+   * }
+   * ...
+   * ImmutableCollection<Job> jobs = getJobs();
+   * ImmutableCollection<Person> people =
+   *      jobs.flatMap(j -> j.getPeople());
+   * }</pre>
+   *
+   * @param mapper mapping function, that returns {@link Iterable}
+   * @param <R>    the type of the return collection
+   * @return new list
+   * @throws NullPointerException if {@code mapper} is null
+   */
+  <R> ImmutableCollection<R> flatMap(Function<? super T, ? extends Iterable<R>> mapper);
 }

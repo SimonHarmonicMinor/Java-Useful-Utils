@@ -1,7 +1,6 @@
 package com.kirekov.juu.collection.immutable;
 
 import com.kirekov.juu.lambda.TriFunction;
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -13,10 +12,9 @@ import java.util.Objects;
  * @param <V> the type of the value
  * @see ImmutableMap
  * @see HashMap
- * @see Serializable
  * @since 1.0
  */
-public class ImmutableHashMap<K, V> implements ImmutableMap<K, V>, Serializable {
+public class ImmutableHashMap<K, V> implements ImmutableMap<K, V> {
 
   private final HashMap<K, V> hashMap;
   private final ImmutableSet<K> keys;
