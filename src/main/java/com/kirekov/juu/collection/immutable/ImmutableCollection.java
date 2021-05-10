@@ -341,4 +341,26 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
    * @return new collection
    */
   <R> ImmutableCollection<R> map(Function<? super T, ? extends R> mapper);
+
+  /**
+   * Joins {@link Iterable} objects that mapper returns. For instance,
+   *
+   * <pre>{@code
+   * class Job {
+   *     String name;
+   *     Collection<Person> people;
+   *     ...
+   * }
+   * ...
+   * ImmutableCollection<Job> jobs = getJobs();
+   * ImmutableCollection<Person> people =
+   *      jobs.flatMap(j -> j.getPeople());
+   * }</pre>
+   *
+   * @param mapper mapping function, that returns {@link Iterable}
+   * @param <R>    the type of the return collection
+   * @return new list
+   * @throws NullPointerException if {@code mapper} is null
+   */
+  <R> ImmutableCollection<R> flatMap(Function<? super T, ? extends Iterable<R>> mapper);
 }

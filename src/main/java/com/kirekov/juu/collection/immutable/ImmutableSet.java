@@ -40,7 +40,7 @@ public interface ImmutableSet<T> extends ImmutableCollection<T> {
    * <pre>{@code
    * class Job {
    *     String name;
-   *     List<Person> people;
+   *     Set<Person> people;
    *     ...
    * }
    * ...
@@ -54,6 +54,7 @@ public interface ImmutableSet<T> extends ImmutableCollection<T> {
    * @return new set
    * @throws NullPointerException if {@code mapper} is null
    */
+  @Override
   <R> ImmutableSet<R> flatMap(Function<? super T, ? extends Iterable<R>> mapper);
 
   /**
