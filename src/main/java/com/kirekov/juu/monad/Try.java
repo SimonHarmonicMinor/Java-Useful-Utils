@@ -23,9 +23,8 @@ import java.util.stream.Stream;
  * <p>Class overrides {@link Object#equals(Object)} and {@link Object#hashCode()} methods.</p>
  * <p>All monad methods execute calculation <b>eagerly</b>.</p>
  * <p>The class only catches exceptions of type {@link Exception}. It means that all {@linkplain
- * Throwable}
- * instances shall be skipped. The motivation is that {@link Error} extends from {@linkplain
- * Throwable} but this exceptions should not be caught manually.</p>
+ * Throwable} instances shall be skipped. The motivation is that {@link Error} extends from
+ * {@linkplain Throwable} but this exceptions should not be caught manually.</p>
  *
  * @param <T> the type of the return value
  * @since 1.0
@@ -314,7 +313,7 @@ public class Try<T> implements Streaming<T> {
    * @param consumer consumer that will be called, if container is not empty
    * @throws NullPointerException if consumer is null
    */
-  public void ifPresent(Consumer<T> consumer) {
+  public void ifPresent(Consumer<? super T> consumer) {
     Objects.requireNonNull(consumer);
     if (isPresent()) {
       consumer.accept(value);
