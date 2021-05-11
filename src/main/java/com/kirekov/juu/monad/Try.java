@@ -98,10 +98,10 @@ public class Try<T> implements Streaming<T> {
    * @see Try#of(CheckedSupplier)
    */
   public static <T, E extends Exception> Try<T> getFirst(
-      Iterable<CheckedSupplier<T, E>> suppliers) {
+      Iterable<CheckedSupplier<? extends T, E>> suppliers) {
     Objects.requireNonNull(suppliers);
-    for (CheckedSupplier<T, E> supplier : suppliers) {
-      Try<T> t = Try.of(supplier);
+    for (CheckedSupplier<? extends T, E> supplier : suppliers) {
+      Try<T> t = Try.of(supplier::get);
       if (t.isPresent()) {
         return t;
       }
