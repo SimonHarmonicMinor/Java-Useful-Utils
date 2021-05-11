@@ -179,15 +179,22 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
   ImmutableList<Pair<T, T>> zipWithNext();
 
   /**
-   * Maps the content of the list from one type to another.
-   *
-   * @param mapper mapping function
-   * @param <R>    the result type
-   * @return new list
-   * @throws NullPointerException if {@code mapper} is null
+   * {@inheritDoc}
    */
   @Override
   <R> ImmutableList<R> map(Function<? super T, ? extends R> mapper);
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  <R> ImmutableList<R> flatMap(Function<? super T, ? extends Iterable<R>> mapper);
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  ImmutableList<T> filter(Predicate<? super T> predicate);
 
   /**
    * Maps the content of the list from one type to another. Mapper accepts current index and current
@@ -201,29 +208,6 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
   <R> ImmutableList<R> mapIndexed(BiFunction<Integer, ? super T, ? extends R> mapper);
 
   /**
-   * Joins {@link Iterable} objects that mapper returns. For instance,
-   *
-   * <pre>{@code
-   * class Job {
-   *     String name;
-   *     List<Person> people;
-   *     ...
-   * }
-   * ...
-   * ImmutableList<Job> jobs = getJobs();
-   * ImmutableList<Person> people =
-   *      jobs.flatMap(j -&gt; j.getPeople());
-   * }</pre>
-   *
-   * @param mapper mapping function, that returns {@link Iterable}
-   * @param <R>    the type of the return list
-   * @return new list
-   * @throws NullPointerException if {@code mapper} is null
-   */
-  @Override
-  <R> ImmutableList<R> flatMap(Function<? super T, ? extends Iterable<R>> mapper);
-
-  /**
    * This method has exactly the same behaviour as {@link ImmutableList#flatMap(Function)}, but
    * mapper accepts two arguments. The first is the current index and the second is the current
    * value.
@@ -235,16 +219,6 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
    * @see ImmutableList#flatMap(Function)
    */
   <R> ImmutableList<R> flatMapIndexed(BiFunction<Integer, ? super T, ? extends Iterable<R>> mapper);
-
-  /**
-   * Returns new list which values match provided predicate.
-   *
-   * @param predicate predicate to apply to each element to determine if it should be included
-   * @return new list
-   * @throws NullPointerException if {@code predicate} is null
-   */
-  @Override
-  ImmutableList<T> filter(Predicate<? super T> predicate);
 
   /**
    * Returns new list which values match provided predicate.
