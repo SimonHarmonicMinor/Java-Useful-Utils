@@ -240,9 +240,9 @@ public class Try<T> implements Streaming<T> {
    * @return the container itself or the new one
    * @throws NullPointerException if supplier is null
    */
-  public <E extends Exception> Try<T> orElseTry(CheckedSupplier<T, E> supplier) {
+  public <E extends Exception> Try<T> orElseTry(CheckedSupplier<? extends T, E> supplier) {
     Objects.requireNonNull(supplier);
-    return isPresent() ? this : Try.of(supplier);
+    return isPresent() ? this : Try.of(supplier::get);
   }
 
   /**
