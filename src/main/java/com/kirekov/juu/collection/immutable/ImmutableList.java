@@ -243,6 +243,7 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
    * @return new list
    * @throws NullPointerException if {@code predicate} is null
    */
+  @Override
   ImmutableList<T> filter(Predicate<? super T> predicate);
 
   /**

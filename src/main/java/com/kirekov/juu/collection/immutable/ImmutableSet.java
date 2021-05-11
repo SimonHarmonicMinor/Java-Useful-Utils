@@ -64,5 +64,6 @@ public interface ImmutableSet<T> extends ImmutableCollection<T> {
    * @return new set
    * @throws NullPointerException if {@code predicate} is null
    */
+  @Override
   ImmutableSet<T> filter(Predicate<? super T> predicate);
 }
