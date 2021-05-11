@@ -15,54 +15,26 @@ import java.util.function.Predicate;
 public interface ImmutableSet<T> extends ImmutableCollection<T> {
 
   /**
-   * Concatenates current set with provided iterable object and returns new set.
-   *
-   * @param iterable iterable object to join with
-   * @return new set that contains current elements and elements provided with {@code iterable}
-   * @throws NullPointerException if {@code iterable} is null
+   * {@inheritDoc}
    */
+  @Override
   ImmutableSet<T> concatWith(Iterable<T> iterable);
 
   /**
-   * Maps the content of the set from one type to another.
-   *
-   * @param mapper mapping function
-   * @param <R>    the result type
-   * @return new set
-   * @throws NullPointerException if {@code mapper} is null
+   * {@inheritDoc}
    */
   @Override
   <R> ImmutableSet<R> map(Function<? super T, ? extends R> mapper);
 
   /**
-   * Joins {@link Iterable} objects that mapper returns.
-   *
-   * <pre>{@code
-   * class Job {
-   *     String name;
-   *     Set<Person> people;
-   *     ...
-   * }
-   * ...
-   * ImmutableSet<Job> jobs = getJobs();
-   * ImmutableSet<Person> people =
-   *      jobs.flatMap(j -&gt; j.getPeople());
-   * }</pre>
-   *
-   * @param mapper mapping function, that returns {@link Iterable}&lt;{@code R}&gt;
-   * @param <R>    the type of the return set
-   * @return new set
-   * @throws NullPointerException if {@code mapper} is null
+   * {@inheritDoc}
    */
   @Override
   <R> ImmutableSet<R> flatMap(Function<? super T, ? extends Iterable<R>> mapper);
 
   /**
-   * Returns new set which values match provided predicate.
-   *
-   * @param predicate predicate to apply to each element to determine if it should be included
-   * @return new set
-   * @throws NullPointerException if {@code predicate} is null
+   * {@inheritDoc}
    */
+  @Override
   ImmutableSet<T> filter(Predicate<? super T> predicate);
 }

@@ -363,4 +363,23 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
    * @throws NullPointerException if {@code mapper} is null
    */
   <R> ImmutableCollection<R> flatMap(Function<? super T, ? extends Iterable<R>> mapper);
+
+  /**
+   * Returns new collection which values match provided predicate.
+   *
+   * @param predicate predicate to apply to each element to determine if it should be included
+   * @return new collection
+   * @throws NullPointerException if {@code predicate} is null
+   */
+  ImmutableCollection<T> filter(Predicate<? super T> predicate);
+
+  /**
+   * Concatenates current collection with provided iterable object and returns new collections.
+   *
+   * @param iterable iterable object to join with
+   * @return new collection that contains current elements and elements provided with {@code
+   * iterable}
+   * @throws NullPointerException if {@code iterable} is null
+   */
+  ImmutableCollection<T> concatWith(Iterable<T> iterable);
 }
