@@ -77,7 +77,7 @@ public class Try<T> implements Streaming<T> {
    * exception
    * @throws NullPointerException if suppliers parameter is null
    */
-  public static <T, E extends Exception> Try<T> of(CheckedSupplier<T, E> supplier) {
+  public static <T, E extends Exception> Try<T> of(CheckedSupplier<? extends T, E> supplier) {
     Objects.requireNonNull(supplier);
     try {
       return new Try<>(supplier.get(), null);
@@ -101,7 +101,7 @@ public class Try<T> implements Streaming<T> {
       Iterable<CheckedSupplier<? extends T, E>> suppliers) {
     Objects.requireNonNull(suppliers);
     for (CheckedSupplier<? extends T, E> supplier : suppliers) {
-      Try<T> t = Try.of(supplier::get);
+      Try<T> t = Try.of(supplier);
       if (t.isPresent()) {
         return t;
       }
@@ -242,7 +242,7 @@ public class Try<T> implements Streaming<T> {
    */
   public <E extends Exception> Try<T> orElseTry(CheckedSupplier<? extends T, E> supplier) {
     Objects.requireNonNull(supplier);
-    return isPresent() ? this : Try.of(supplier::get);
+    return isPresent() ? this : Try.of(supplier);
   }
 
   /**
