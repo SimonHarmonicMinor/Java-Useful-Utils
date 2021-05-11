@@ -13,6 +13,7 @@ import static org.mockito.Mockito.verify;
 import com.kirekov.juu.exception.EmptyContainerException;
 import com.kirekov.juu.lambda.CheckedFunction;
 import com.kirekov.juu.lambda.CheckedSupplier;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -44,13 +45,15 @@ class TryTest {
   @Test
   void getFirstReturnsFirstPresent() {
     Try<Integer> t = Try.getFirst(
-        () -> {
-          throw new Exception();
-        },
-        () -> {
-          throw new Exception();
-        },
-        () -> 2
+        Arrays.asList(
+            () -> {
+              throw new Exception();
+            },
+            () -> {
+              throw new Exception();
+            },
+            () -> 2
+        )
     );
     assertTrue(t.isPresent());
     assertEquals(2, t.get());
@@ -59,15 +62,17 @@ class TryTest {
   @Test
   void getFirstReturnsEmpty() {
     Try<Integer> t = Try.getFirst(
-        () -> {
-          throw new Exception();
-        },
-        () -> {
-          throw new Exception();
-        },
-        () -> {
-          throw new Exception();
-        }
+        Arrays.asList(
+            () -> {
+              throw new Exception();
+            },
+            () -> {
+              throw new Exception();
+            },
+            () -> {
+              throw new Exception();
+            }
+        )
     );
     assertTrue(t.isEmpty());
   }

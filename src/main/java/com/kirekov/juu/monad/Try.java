@@ -112,22 +112,6 @@ public class Try<T> implements Streaming<T> {
   }
 
   /**
-   * Proxy method for {@link Try#getFirst(Iterable)}.
-   *
-   * @param suppliers varargs of suppliers
-   * @param <T>       the type of the return value
-   * @param <E>       the type of the exception that supplier may throw
-   * @return a container with the value of the succeeded supplier or {@link Try#empty()}
-   * @throws NullPointerException if suppliers parameter is null
-   */
-  @SafeVarargs
-  @SuppressWarnings("varargs")
-  public static <T, E extends Exception> Try<T> getFirst(CheckedSupplier<T, E>... suppliers) {
-    Objects.requireNonNull(suppliers);
-    return getFirst(Arrays.stream(suppliers).collect(Collectors.toList()));
-  }
-
-  /**
    * Whether the value is present in the container.
    *
    * @return true if value is present and false otherwise
