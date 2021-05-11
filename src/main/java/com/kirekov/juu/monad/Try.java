@@ -273,6 +273,18 @@ public class Try<T> implements Streaming<T> {
   }
 
   /**
+   * It container is not empty, returns its value, otherwise throws {@linkplain
+   * EmptyContainerException}. The cause is assigned to {@linkplain Try#getReasonOfEmptiness()}
+   *
+   * @return the value of the container
+   */
+  public T orElseThrow() {
+    return orElseThrow(
+        () -> new EmptyContainerException(CONTAINER_IS_EMPTY_MSG, reasonOfEmptiness)
+    );
+  }
+
+  /**
    * If container is not empty, returns its value, otherwise throws given exception.
    *
    * @param exceptionSupplier supplier, that returns exception

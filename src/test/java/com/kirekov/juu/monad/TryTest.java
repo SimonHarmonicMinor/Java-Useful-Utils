@@ -276,6 +276,24 @@ class TryTest {
   }
 
   @Test
+  void orElseThrowWithNoArgsThrowsException() {
+    Try<Integer> t = Try.of(() -> 3)
+        .map(val -> val + 1)
+        .map(val -> {
+          throw new Exception();
+        });
+    assertThrows(EmptyContainerException.class, t::orElseThrow);
+  }
+
+  @Test
+  void orElseThrowWithNoArgsDoesNotThrowException() {
+    Try<Integer> t = Try.of(() -> 3)
+        .map(val -> val + 1)
+        .map(val -> val * 2);
+    assertEquals(8, t.orElseThrow());
+  }
+
+  @Test
   void ifPresentCallsConsumer() {
     final String val = "dasdasdgdfg";
     @SuppressWarnings("unchecked") final Collection<Object> collection = mock(Collection.class);
