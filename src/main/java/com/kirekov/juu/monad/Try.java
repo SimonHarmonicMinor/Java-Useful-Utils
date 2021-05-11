@@ -4,14 +4,12 @@ import com.kirekov.juu.collection.Streaming;
 import com.kirekov.juu.exception.EmptyContainerException;
 import com.kirekov.juu.lambda.CheckedFunction;
 import com.kirekov.juu.lambda.CheckedSupplier;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -21,6 +19,10 @@ import java.util.stream.Stream;
  * If container is empty, it keeps the reason of emptiness — the exception that led to it. The
  * exception can be retrieved with {@link Try#getReasonOfEmptiness()}.
  * <p>Class overrides {@link Object#equals(Object)} and {@link Object#hashCode()} methods.</p>
+ * <p>All monad methods execute calculation <b>eagerly</b>.</p>
+ * <p>The class only catches exceptions of type {@link Exception}. It means that all {@linkplain
+ * Throwable} instances shall be skipped. The motivation is that {@link Error} extends from
+ * {@linkplain Throwable} but this exceptions should not be caught manually.</p>
  *
  * @param <T> the type of the return value
  * @since 1.0
@@ -32,9 +34,9 @@ public class Try<T> implements Streaming<T> {
       new EmptyContainerException(CONTAINER_IS_EMPTY_MSG, null));
 
   private final T value;
-  private final Throwable reasonOfEmptiness;
+  private final Exception reasonOfEmptiness;
 
-  private Try(T value, Throwable reasonOfEmptiness) {
+  private Try(T value, Exception reasonOfEmptiness) {
     this.value = value;
     this.reasonOfEmptiness = reasonOfEmptiness;
   }
@@ -59,14 +61,14 @@ public class Try<T> implements Streaming<T> {
    * @return empty container
    * @throws NullPointerException if {@code reasonOfEmptiness} is null
    */
-  public static <T> Try<T> empty(Throwable reasonOfEmptiness) {
+  public static <T> Try<T> empty(Exception reasonOfEmptiness) {
     Objects.requireNonNull(reasonOfEmptiness);
     return new Try<>(null, reasonOfEmptiness);
   }
 
   /**
    * Instantiates a container by calculating the value of the supplier. If supplier fails with an
-   * exception, returns {@link Try#empty(Throwable)}.
+   * exception, returns {@link Try#empty(Exception)}.
    *
    * @param supplier function that returns value
    * @param <T>      the type of the return value
@@ -75,11 +77,11 @@ public class Try<T> implements Streaming<T> {
    * exception
    * @throws NullPointerException if suppliers parameter is null
    */
-  public static <T, E extends Throwable> Try<T> of(CheckedSupplier<T, E> supplier) {
+  public static <T, E extends Exception> Try<T> of(CheckedSupplier<T, E> supplier) {
     Objects.requireNonNull(supplier);
     try {
       return new Try<>(supplier.get(), null);
-    } catch (Throwable e) {
+    } catch (Exception e) {
       return empty(e);
     }
   }
@@ -95,7 +97,7 @@ public class Try<T> implements Streaming<T> {
    * @throws NullPointerException if suppliers parameter is null
    * @see Try#of(CheckedSupplier)
    */
-  public static <T, E extends Throwable> Try<T> getFirst(
+  public static <T, E extends Exception> Try<T> getFirst(
       Iterable<CheckedSupplier<T, E>> suppliers) {
     Objects.requireNonNull(suppliers);
     for (CheckedSupplier<T, E> supplier : suppliers) {
@@ -105,22 +107,6 @@ public class Try<T> implements Streaming<T> {
       }
     }
     return empty();
-  }
-
-  /**
-   * Proxy method for {@link Try#getFirst(Iterable)}.
-   *
-   * @param suppliers varargs of suppliers
-   * @param <T>       the type of the return value
-   * @param <E>       the type of the exception that supplier may throw
-   * @return a container with the value of the succeeded supplier or {@link Try#empty()}
-   * @throws NullPointerException if suppliers parameter is null
-   */
-  @SafeVarargs
-  @SuppressWarnings("varargs")
-  public static <T, E extends Throwable> Try<T> getFirst(CheckedSupplier<T, E>... suppliers) {
-    Objects.requireNonNull(suppliers);
-    return getFirst(Arrays.stream(suppliers).collect(Collectors.toList()));
   }
 
   /**
@@ -152,7 +138,7 @@ public class Try<T> implements Streaming<T> {
    * @return a container with the new value or an empty one
    * @throws NullPointerException if mapper is null
    */
-  public <U, E extends Throwable> Try<U> map(CheckedFunction<? super T, ? extends U, E> mapper) {
+  public <U, E extends Exception> Try<U> map(CheckedFunction<? super T, ? extends U, E> mapper) {
     Objects.requireNonNull(mapper);
     if (isEmpty()) {
       return empty(reasonOfEmptiness);
@@ -188,7 +174,7 @@ public class Try<T> implements Streaming<T> {
    * @see Try#map(CheckedFunction)
    */
   @SuppressWarnings("unchecked")
-  public <U, E extends Throwable> Try<U> flatMap(
+  public <U, E extends Exception> Try<U> flatMap(
       CheckedFunction<? super T, ? extends Try<? extends U>, E> mapper) {
     Objects.requireNonNull(mapper);
     if (isEmpty()) {
@@ -196,13 +182,13 @@ public class Try<T> implements Streaming<T> {
     }
     try {
       return (Try<U>) mapper.apply(value);
-    } catch (Throwable e) {
+    } catch (Exception e) {
       return empty(e);
     }
   }
 
   /**
-   * If container is empty or predicate's test returns false, returns {@link Try#empty(Throwable)},
+   * If container is empty or predicate's test returns false, returns {@link Try#empty(Exception)},
    * otherwise returns the container itself.
    *
    * @param predicate predicate function
@@ -254,7 +240,7 @@ public class Try<T> implements Streaming<T> {
    * @return the container itself or the new one
    * @throws NullPointerException if supplier is null
    */
-  public <E extends Throwable> Try<T> orElseTry(CheckedSupplier<T, E> supplier) {
+  public <E extends Exception> Try<T> orElseTry(CheckedSupplier<T, E> supplier) {
     Objects.requireNonNull(supplier);
     return isPresent() ? this : Try.of(supplier);
   }
@@ -281,7 +267,7 @@ public class Try<T> implements Streaming<T> {
    * @return the value of the container or the default one
    * @throws NullPointerException if {@code reasonOfEmptiness} is null
    */
-  public T orElseGet(Function<Throwable, ? extends T> reasonOfEmptinessProvider) {
+  public T orElseGet(Function<? super Exception, ? extends T> reasonOfEmptinessProvider) {
     Objects.requireNonNull(reasonOfEmptinessProvider);
     return isPresent() ? value : reasonOfEmptinessProvider.apply(reasonOfEmptiness);
   }
@@ -295,7 +281,7 @@ public class Try<T> implements Streaming<T> {
    * @throws E                    if container is empty
    * @throws NullPointerException if exceptionSupplier is null
    */
-  public <E extends Throwable> T orElseThrow(Supplier<? extends E> exceptionSupplier) throws E {
+  public <E extends Exception> T orElseThrow(Supplier<? extends E> exceptionSupplier) throws E {
     Objects.requireNonNull(exceptionSupplier);
     if (isPresent()) {
       return value;
@@ -309,7 +295,7 @@ public class Try<T> implements Streaming<T> {
    * @param consumer consumer that will be called, if container is not empty
    * @throws NullPointerException if consumer is null
    */
-  public void ifPresent(Consumer<T> consumer) {
+  public void ifPresent(Consumer<? super T> consumer) {
     Objects.requireNonNull(consumer);
     if (isPresent()) {
       consumer.accept(value);
@@ -322,7 +308,7 @@ public class Try<T> implements Streaming<T> {
    * @param reasonOfEmptinessProvider consumer that accepts reason of emptiness
    * @throws NullPointerException if {@code reasonOfEmptiness} is null
    */
-  public void ifEmpty(Consumer<Throwable> reasonOfEmptinessProvider) {
+  public void ifEmpty(Consumer<? super Exception> reasonOfEmptinessProvider) {
     Objects.requireNonNull(reasonOfEmptinessProvider);
     if (isEmpty()) {
       reasonOfEmptinessProvider.accept(reasonOfEmptiness);
@@ -335,7 +321,7 @@ public class Try<T> implements Streaming<T> {
    *
    * @return reason of emptiness
    */
-  public Optional<Throwable> getReasonOfEmptiness() {
+  public Optional<Exception> getReasonOfEmptiness() {
     if (isEmpty()) {
       return Optional.ofNullable(reasonOfEmptiness);
     } else {
