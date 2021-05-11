@@ -15,12 +15,9 @@ import java.util.function.Predicate;
 public interface ImmutableSet<T> extends ImmutableCollection<T> {
 
   /**
-   * Concatenates current set with provided iterable object and returns new set.
-   *
-   * @param iterable iterable object to join with
-   * @return new set that contains current elements and elements provided with {@code iterable}
-   * @throws NullPointerException if {@code iterable} is null
+   * {@inheritDoc}
    */
+  @Override
   ImmutableSet<T> concatWith(Iterable<T> iterable);
 
   /**

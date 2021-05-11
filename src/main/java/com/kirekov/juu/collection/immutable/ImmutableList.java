@@ -141,15 +141,6 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
   ImmutableList<T> step(int fromIndex, int stepSize);
 
   /**
-   * Concatenates current list with provided iterable object and returns new list.
-   *
-   * @param iterable iterable object to join with
-   * @return new list that contains current elements and elements provided with {@code iterable}
-   * @throws NullPointerException if {@code iterable} is null
-   */
-  ImmutableList<T> concatWith(Iterable<T> iterable);
-
-  /**
    * Zips current list with provided list and returns pairs, where key contains the element from the
    * current list and value contains the element from the provided list.
    *
@@ -177,6 +168,12 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
    * @return new list
    */
   ImmutableList<Pair<T, T>> zipWithNext();
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  ImmutableList<T> concatWith(Iterable<T> iterable);
 
   /**
    * {@inheritDoc}
