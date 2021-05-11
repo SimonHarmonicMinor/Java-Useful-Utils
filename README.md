@@ -166,7 +166,7 @@ Try.of(() -> Integer.parseInt(getStringValue))
    })
 ```
 
-`reason` has the type of `Throwable` and it's the instance of that very
+`reason` has the type of `Exception` and it's the instance of that very
 exception that broke the chain. 
 For instance, if `Integer.parseInt` threw an exception, 
 the `reason` would be the type of `NumberFormatException`.
