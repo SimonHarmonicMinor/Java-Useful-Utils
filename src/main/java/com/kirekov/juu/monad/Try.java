@@ -77,7 +77,7 @@ public class Try<T> implements Streaming<T> {
    * exception
    * @throws NullPointerException if suppliers parameter is null
    */
-  public static <T, E extends Exception> Try<T> of(CheckedSupplier<T, E> supplier) {
+  public static <T, E extends Exception> Try<T> of(CheckedSupplier<? extends T, E> supplier) {
     Objects.requireNonNull(supplier);
     try {
       return new Try<>(supplier.get(), null);
@@ -98,9 +98,9 @@ public class Try<T> implements Streaming<T> {
    * @see Try#of(CheckedSupplier)
    */
   public static <T, E extends Exception> Try<T> getFirst(
-      Iterable<CheckedSupplier<T, E>> suppliers) {
+      Iterable<CheckedSupplier<? extends T, E>> suppliers) {
     Objects.requireNonNull(suppliers);
-    for (CheckedSupplier<T, E> supplier : suppliers) {
+    for (CheckedSupplier<? extends T, E> supplier : suppliers) {
       Try<T> t = Try.of(supplier);
       if (t.isPresent()) {
         return t;
@@ -240,7 +240,7 @@ public class Try<T> implements Streaming<T> {
    * @return the container itself or the new one
    * @throws NullPointerException if supplier is null
    */
-  public <E extends Exception> Try<T> orElseTry(CheckedSupplier<T, E> supplier) {
+  public <E extends Exception> Try<T> orElseTry(CheckedSupplier<? extends T, E> supplier) {
     Objects.requireNonNull(supplier);
     return isPresent() ? this : Try.of(supplier);
   }
@@ -270,6 +270,18 @@ public class Try<T> implements Streaming<T> {
   public T orElseGet(Function<? super Exception, ? extends T> reasonOfEmptinessProvider) {
     Objects.requireNonNull(reasonOfEmptinessProvider);
     return isPresent() ? value : reasonOfEmptinessProvider.apply(reasonOfEmptiness);
+  }
+
+  /**
+   * It container is not empty, returns its value, otherwise throws {@linkplain
+   * EmptyContainerException}. The cause is assigned to {@linkplain Try#getReasonOfEmptiness()}
+   *
+   * @return the value of the container
+   */
+  public T orElseThrow() {
+    return orElseThrow(
+        () -> new EmptyContainerException(CONTAINER_IS_EMPTY_MSG, reasonOfEmptiness)
+    );
   }
 
   /**
