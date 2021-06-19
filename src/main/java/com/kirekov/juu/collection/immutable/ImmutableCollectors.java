@@ -100,7 +100,7 @@ public class ImmutableCollectors {
         HashMap::new,
         uniqKeysMapAccumulator(keyMapper, valueMapper),
         uniqKeysMapMerger(),
-        map -> new ImmutableHashMap<>(map, false)
+        ImmutableHashMap::new
     );
   }
 
