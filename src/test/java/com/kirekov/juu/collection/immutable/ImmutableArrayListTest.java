@@ -46,23 +46,6 @@ class ImmutableArrayListTest {
   }
 
   @Test
-  void instantiateWithoutCloning() {
-    ArrayList<Integer> arrayList = new ArrayList<>();
-    arrayList.add(1);
-    arrayList.add(2);
-    arrayList.add(3);
-    ImmutableArrayList<Integer> immutableArrayList = new ImmutableArrayList<>(arrayList, false);
-    assertEquals(3, immutableArrayList.size());
-    assertEquals(1, immutableArrayList.get(0));
-    assertEquals(2, immutableArrayList.get(1));
-    assertEquals(3, immutableArrayList.get(2));
-
-    arrayList.clear();
-
-    assertEquals(0, immutableArrayList.size());
-  }
-
-  @Test
   void instantiateWithImmutableArrayList() {
     ArrayList<Integer> arrayList = new ArrayList<>();
     arrayList.add(1);

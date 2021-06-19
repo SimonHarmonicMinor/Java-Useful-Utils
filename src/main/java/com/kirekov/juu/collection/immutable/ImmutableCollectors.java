@@ -66,7 +66,7 @@ public class ImmutableCollectors {
    * @see ImmutableCollectors#toCollection(Function)
    */
   public static <T> Collector<T, List<T>, ImmutableList<T>> toList() {
-    return toCollection(list -> new ImmutableArrayList<>(list, false));
+    return toCollection(ImmutableArrayList::new);
   }
 
   /**

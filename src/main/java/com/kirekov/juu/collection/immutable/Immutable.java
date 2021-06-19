@@ -72,15 +72,6 @@ public class Immutable {
     return (ImmutableMap<K, V>) EMPTY_HASH_MAP;
   }
 
-
-  private static <T> ImmutableList<T> listOf(Iterable<T> elements, boolean needsCloning) {
-    Objects.requireNonNull(elements);
-    if (!elements.iterator().hasNext()) {
-      return emptyList();
-    }
-    return new ImmutableArrayList<>(elements, needsCloning);
-  }
-
   /**
    * Creates new immutable list from given elements. If array is empty, returns {@link
    * Immutable#emptyList()}. This is the preferred way of creating immutable lists, unless you need
@@ -94,7 +85,7 @@ public class Immutable {
   @SafeVarargs
   @SuppressWarnings("varargs")
   public static <T> ImmutableList<T> listOf(T... elements) {
-    return listOf(Arrays.stream(elements).collect(Collectors.toList()), false);
+    return listOf(Arrays.stream(elements).collect(Collectors.toList()));
   }
 
   /**
@@ -108,7 +99,11 @@ public class Immutable {
    * @throws NullPointerException if {@code elements} is null
    */
   public static <T> ImmutableList<T> listOf(Iterable<T> elements) {
-    return listOf(elements, true);
+    Objects.requireNonNull(elements);
+    if (!elements.iterator().hasNext()) {
+      return emptyList();
+    }
+    return new ImmutableArrayList<>(elements);
   }
 
   /**
