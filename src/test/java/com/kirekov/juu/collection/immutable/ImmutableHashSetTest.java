@@ -28,7 +28,7 @@ class ImmutableHashSetTest {
     hashSet.add(item4);
     hashSet.add(item4);
 
-    ImmutableSet<Integer> immutableSet = new ImmutableHashSet<>(hashSet, true);
+    ImmutableSet<Integer> immutableSet = new ImmutableHashSet<>(hashSet);
 
     assertEquals(4, immutableSet.size());
     assertTrue(immutableSet.contains(item1));
@@ -39,33 +39,6 @@ class ImmutableHashSetTest {
     hashSet.clear();
 
     assertEquals(4, immutableSet.size());
-  }
-
-  @Test
-  void instantiateWithoutCloning() {
-    HashSet<Integer> hashSet = new HashSet<>();
-    int item1 = 1;
-    int item2 = 2;
-    int item3 = 3;
-    int item4 = 4;
-
-    hashSet.add(item1);
-    hashSet.add(item2);
-    hashSet.add(item3);
-    hashSet.add(item4);
-    hashSet.add(item4);
-
-    ImmutableSet<Integer> immutableSet = new ImmutableHashSet<>(hashSet, false);
-
-    assertEquals(4, immutableSet.size());
-    assertTrue(immutableSet.contains(item1));
-    assertTrue(immutableSet.contains(item2));
-    assertTrue(immutableSet.contains(item3));
-    assertTrue(immutableSet.contains(item4));
-
-    hashSet.clear();
-
-    assertTrue(immutableSet.isEmpty());
   }
 
   @Test

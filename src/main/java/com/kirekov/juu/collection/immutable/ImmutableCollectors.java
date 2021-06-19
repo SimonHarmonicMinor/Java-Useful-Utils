@@ -77,7 +77,7 @@ public class ImmutableCollectors {
    * @see ImmutableCollectors#toCollection(Function)
    */
   public static <T> Collector<T, ?, ImmutableSet<T>> toSet() {
-    return toCollection(set -> new ImmutableHashSet<>(set, false));
+    return toCollection(ImmutableHashSet::new);
   }
 
   /**
