@@ -174,7 +174,7 @@ public class Immutable {
     for (Pair<K, V> p : pairs) {
       hashMap.put(p.getKey(), p.getValue());
     }
-    return new ImmutableHashMap<>(hashMap, false);
+    return new ImmutableHashMap<>(hashMap);
   }
 
   /**
