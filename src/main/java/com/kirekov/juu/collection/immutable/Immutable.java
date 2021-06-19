@@ -111,14 +111,6 @@ public class Immutable {
     return listOf(elements, true);
   }
 
-  private static <T> ImmutableSet<T> setOf(Iterable<T> elements, boolean needsCloning) {
-    Objects.requireNonNull(elements);
-    if (!elements.iterator().hasNext()) {
-      return emptySet();
-    }
-    return new ImmutableHashSet<>(elements, needsCloning);
-  }
-
   /**
    * Creates new immutable set from given elements. If array is empty, returns {@link
    * Immutable#emptySet()}. This is the preferred way of creating immutable sets, unless you need
@@ -133,7 +125,7 @@ public class Immutable {
   @SuppressWarnings("varargs")
   public static <T> ImmutableSet<T> setOf(T... elements) {
     Objects.requireNonNull(elements);
-    return setOf(Arrays.stream(elements).collect(Collectors.toSet()), false);
+    return setOf(Arrays.stream(elements).collect(Collectors.toSet()));
   }
 
   /**
@@ -147,11 +139,11 @@ public class Immutable {
    * @throws NullPointerException if {@code elements} is null
    */
   public static <T> ImmutableSet<T> setOf(Iterable<T> elements) {
-    return setOf(elements, true);
-  }
-
-  static <T> ImmutableSet<T> setOfWithoutCloning(Iterable<T> elements) {
-    return setOf(elements, false);
+    Objects.requireNonNull(elements);
+    if (!elements.iterator().hasNext()) {
+      return emptySet();
+    }
+    return new ImmutableHashSet<>(elements);
   }
 
   /**

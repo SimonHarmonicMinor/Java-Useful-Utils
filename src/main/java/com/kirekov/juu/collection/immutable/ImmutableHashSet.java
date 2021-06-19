@@ -21,22 +21,15 @@ public class ImmutableHashSet<T> implements ImmutableSet<T> {
 
   private final HashSet<T> hashSet;
 
+  /**
+   * Constructor.
+   *
+   * @param iterable the source of elements
+   */
   public ImmutableHashSet(Iterable<T> iterable) {
-    this(iterable, true);
-  }
-
-  ImmutableHashSet(Iterable<T> iterable, boolean needsCloning) {
-    Objects.requireNonNull(iterable);
-    if (iterable instanceof HashSet) {
-      this.hashSet = needsCloning ? new HashSet<>((HashSet<T>) iterable) : (HashSet<T>) iterable;
-    } else if (iterable instanceof ImmutableHashSet) {
-      ImmutableHashSet<T> immutableHashSet = (ImmutableHashSet<T>) iterable;
-      this.hashSet = immutableHashSet.hashSet;
-    } else {
-      hashSet = new HashSet<>();
-      for (T element : iterable) {
-        hashSet.add(element);
-      }
+    hashSet = new HashSet<>();
+    for (T element : iterable) {
+      hashSet.add(element);
     }
   }
 
@@ -47,7 +40,7 @@ public class ImmutableHashSet<T> implements ImmutableSet<T> {
     for (T t : iterable) {
       newHashSet.add(t);
     }
-    return Immutable.setOfWithoutCloning(newHashSet);
+    return new ImmutableHashSet<>(newHashSet);
   }
 
   @Override
@@ -57,7 +50,7 @@ public class ImmutableHashSet<T> implements ImmutableSet<T> {
     for (T t : this) {
       newHashSet.add(mapper.apply(t));
     }
-    return Immutable.setOfWithoutCloning(newHashSet);
+    return new ImmutableHashSet<>(newHashSet);
   }
 
   @Override
@@ -68,7 +61,7 @@ public class ImmutableHashSet<T> implements ImmutableSet<T> {
       ImmutableHashSet<R> immutableHashSet = new ImmutableHashSet<>(mapper.apply(t));
       newHashSet.addAll(immutableHashSet.hashSet);
     }
-    return Immutable.setOfWithoutCloning(newHashSet);
+    return new ImmutableHashSet<>(newHashSet);
   }
 
   @Override
@@ -80,7 +73,7 @@ public class ImmutableHashSet<T> implements ImmutableSet<T> {
         newHashSet.add(t);
       }
     }
-    return Immutable.setOfWithoutCloning(newHashSet);
+    return new ImmutableHashSet<>(newHashSet);
   }
 
   @Override

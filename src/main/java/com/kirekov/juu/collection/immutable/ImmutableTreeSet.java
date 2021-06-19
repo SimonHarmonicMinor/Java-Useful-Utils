@@ -178,7 +178,7 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T> {
     for (T t : this) {
       hashSet.add(mapper.apply(t));
     }
-    return Immutable.setOfWithoutCloning(hashSet);
+    return new ImmutableHashSet<>(hashSet);
   }
 
   @Override
@@ -190,7 +190,7 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T> {
         hashSet.add(r);
       }
     }
-    return Immutable.setOfWithoutCloning(hashSet);
+    return new ImmutableHashSet<>(hashSet);
   }
 
   @Override
