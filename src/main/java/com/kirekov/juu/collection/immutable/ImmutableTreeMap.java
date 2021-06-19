@@ -136,12 +136,12 @@ public class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V> {
 
   @Override
   public ImmutableNavigableSet<K> navigableKeySet() {
-    return new ImmutableTreeSet<>(treeMap.navigableKeySet(), false);
+    return new ImmutableTreeSet<>(treeMap.navigableKeySet());
   }
 
   @Override
   public ImmutableNavigableSet<K> reversedOrderKeySet() {
-    return new ImmutableTreeSet<>(treeMap.descendingKeySet(), false);
+    return new ImmutableTreeSet<>(treeMap.descendingKeySet());
   }
 
   private ImmutableNavigableMap<K, V> tryGetSubMap(Supplier<ImmutableNavigableMap<K, V>> supplier) {

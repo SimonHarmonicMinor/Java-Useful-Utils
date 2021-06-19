@@ -39,7 +39,7 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T> {
 
   public static <R> ImmutableTreeSet<R> ofSortedSet(SortedSet<R> sortedSet) {
     Objects.requireNonNull(sortedSet);
-    return new ImmutableTreeSet<>(sortedSet, true);
+    return new ImmutableTreeSet<>(sortedSet);
   }
 
   ImmutableTreeSet(Iterable<T> iterable, Comparator<? super T> comparator) {
@@ -50,12 +50,8 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T> {
     }
   }
 
-  ImmutableTreeSet(SortedSet<T> sortedSet, boolean needsCloning) {
-    if (sortedSet instanceof TreeSet) {
-      this.treeSet = needsCloning ? new TreeSet<>(sortedSet) : (TreeSet<T>) sortedSet;
-    } else {
-      this.treeSet = new TreeSet<>(sortedSet);
-    }
+  ImmutableTreeSet(SortedSet<T> sortedSet) {
+    this.treeSet = new TreeSet<>(sortedSet);
   }
 
   @Override
@@ -80,7 +76,7 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T> {
 
   @Override
   public ImmutableNavigableSet<T> reversedOrderSet() {
-    return new ImmutableTreeSet<>(treeSet.descendingSet(), false);
+    return new ImmutableTreeSet<>(treeSet.descendingSet());
   }
 
   @Override
@@ -92,8 +88,8 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T> {
   public ImmutableSortedSet<T> subSet(T fromElement, T toElement) {
     return tryGetSubSet(() ->
         new ImmutableTreeSet<>(
-            treeSet.subSet(fromElement, toElement),
-            false));
+            treeSet.subSet(fromElement, toElement)
+        ));
   }
 
   @Override
@@ -101,40 +97,40 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T> {
       boolean toInclusive) {
     return tryGetSubSet(() ->
         new ImmutableTreeSet<>(
-            treeSet.subSet(fromElement, fromInclusive, toElement, toInclusive),
-            false));
+            treeSet.subSet(fromElement, fromInclusive, toElement, toInclusive)
+        ));
   }
 
   @Override
   public ImmutableSortedSet<T> headSet(T toElement) {
     return tryGetSubSet(() ->
         new ImmutableTreeSet<>(
-            treeSet.headSet(toElement),
-            false));
+            treeSet.headSet(toElement)
+        ));
   }
 
   @Override
   public ImmutableNavigableSet<T> headSet(T toElement, boolean inclusive) {
     return tryGetSubSet(() ->
         new ImmutableTreeSet<>(
-            treeSet.headSet(toElement, inclusive),
-            false));
+            treeSet.headSet(toElement, inclusive)
+        ));
   }
 
   @Override
   public ImmutableSortedSet<T> tailSet(T fromElement) {
     return tryGetSubSet(() ->
         new ImmutableTreeSet<>(
-            treeSet.tailSet(fromElement),
-            false));
+            treeSet.tailSet(fromElement)
+        ));
   }
 
   @Override
   public ImmutableNavigableSet<T> tailSet(T fromElement, boolean inclusive) {
     return tryGetSubSet(() ->
         new ImmutableTreeSet<>(
-            treeSet.tailSet(fromElement, inclusive),
-            false));
+            treeSet.tailSet(fromElement, inclusive)
+        ));
   }
 
   @Override
@@ -168,7 +164,7 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T> {
     for (T t : iterable) {
       newTreeSet.add(t);
     }
-    return new ImmutableTreeSet<>(newTreeSet, false);
+    return new ImmutableTreeSet<>(newTreeSet);
   }
 
   @Override
@@ -202,7 +198,7 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T> {
         newTreeSet.add(t);
       }
     }
-    return new ImmutableTreeSet<>(newTreeSet, false);
+    return new ImmutableTreeSet<>(newTreeSet);
   }
 
   @Override
