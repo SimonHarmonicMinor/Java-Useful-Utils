@@ -18,7 +18,7 @@ class ImmutableHashMapTest {
     mutable.put("2", 2);
     mutable.put("3", 3);
 
-    ImmutableMap<String, Integer> immutableMap = new ImmutableHashMap<>(mutable, true);
+    ImmutableMap<String, Integer> immutableMap = new ImmutableHashMap<>(mutable);
 
     assertEquals(3, immutableMap.size());
     assertEquals(1, immutableMap.get("1"));
@@ -31,25 +31,6 @@ class ImmutableHashMapTest {
     assertEquals(1, immutableMap.get("1"));
     assertEquals(2, immutableMap.get("2"));
     assertEquals(3, immutableMap.get("3"));
-  }
-
-  @Test
-  void instantiateWithoutCloning() {
-    Map<String, Integer> mutable = new HashMap<>();
-    mutable.put("1", 1);
-    mutable.put("2", 2);
-    mutable.put("3", 3);
-
-    ImmutableMap<String, Integer> immutableMap = new ImmutableHashMap<>(mutable, false);
-
-    assertEquals(3, immutableMap.size());
-    assertEquals(1, immutableMap.get("1"));
-    assertEquals(2, immutableMap.get("2"));
-    assertEquals(3, immutableMap.get("3"));
-
-    mutable.clear();
-
-    assertTrue(immutableMap.isEmpty());
   }
 
   @Test

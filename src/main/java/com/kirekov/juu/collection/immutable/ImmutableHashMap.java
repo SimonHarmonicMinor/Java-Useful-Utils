@@ -28,15 +28,7 @@ public class ImmutableHashMap<K, V> implements ImmutableMap<K, V> {
    * @param map source map
    */
   public ImmutableHashMap(Map<K, V> map) {
-    this(map, true);
-  }
-
-  ImmutableHashMap(Map<K, V> map, boolean needsCloning) {
-    if (needsCloning || !(map instanceof HashMap)) {
-      this.hashMap = new HashMap<>(map);
-    } else {
-      this.hashMap = (HashMap<K, V>) map;
-    }
+    this.hashMap = new HashMap<>(map);
     this.keys = Immutable.setOf(hashMap.keySet());
     this.values = Immutable.listOf(hashMap.values());
     this.pairs = ImmutableMapUtils.toPairSet(hashMap.entrySet());

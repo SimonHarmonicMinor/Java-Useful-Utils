@@ -50,6 +50,6 @@ class ImmutableMapUtils {
             newHashMap.put(k, v);
           }
         });
-    return new ImmutableHashMap<>(newHashMap, false);
+    return new ImmutableHashMap<>(newHashMap);
   }
 }
