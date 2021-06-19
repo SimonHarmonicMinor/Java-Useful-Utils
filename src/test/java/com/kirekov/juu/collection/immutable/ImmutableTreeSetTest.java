@@ -78,35 +78,6 @@ class ImmutableTreeSetTest {
   }
 
   @Test
-  void ofSortedSetWithoutCloning() {
-    SortedSet<String> sortedSet = new TreeSet<>(Arrays.asList("1", "2", "3", "4"));
-    int i = 1;
-    for (String str : sortedSet) {
-      assertEquals(String.valueOf(i), str);
-      i++;
-    }
-
-    ImmutableTreeSet<String> set = new ImmutableTreeSet<>(
-        sortedSet,
-        false
-    );
-    assertFalse(set.isEmpty());
-    assertTrue(set.isNotEmpty());
-    assertEquals(4, set.size());
-
-    i = 1;
-    for (String str : set) {
-      assertEquals(String.valueOf(i), str);
-      i++;
-    }
-
-    sortedSet.clear();
-
-    assertTrue(set.isEmpty());
-    assertFalse(set.isNotEmpty());
-  }
-
-  @Test
   void lowerHigher() {
     ImmutableTreeSet<String> set = ImmutableTreeSet.of(
         Arrays.asList("1", "2", "3", "4", "5")
