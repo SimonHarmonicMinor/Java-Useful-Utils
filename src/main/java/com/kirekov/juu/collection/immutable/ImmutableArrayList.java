@@ -27,6 +27,11 @@ public class ImmutableArrayList<T> implements ImmutableList<T> {
 
   private final ArrayList<T> arrayList;
 
+  /**
+   * Constructor.
+   *
+   * @param iterable the source of elements
+   */
   public ImmutableArrayList(Iterable<T> iterable) {
     arrayList = new ArrayList<>();
     for (T element : iterable) {
