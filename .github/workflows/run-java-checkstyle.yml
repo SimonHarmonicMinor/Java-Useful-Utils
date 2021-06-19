@@ -1,3 +1,5 @@
+name: "Run Java Checkstyle"
+
 on: pull_request
 
 jobs:
