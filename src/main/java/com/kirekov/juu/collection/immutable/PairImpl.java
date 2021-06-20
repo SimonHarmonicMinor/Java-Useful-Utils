@@ -9,7 +9,7 @@ import java.util.Objects;
  * @param <V> the type of the value
  * @since 1.0
  */
-class PairImpl<K, V> implements Pair<K, V> {
+final class PairImpl<K, V> implements Pair<K, V> {
 
   private final K key;
   private final V value;
