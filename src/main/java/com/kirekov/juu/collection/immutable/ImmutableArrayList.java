@@ -299,12 +299,19 @@ public class ImmutableArrayList<T> implements ImmutableList<T> {
 
   @Override
   public boolean equals(Object o) {
-    return ImmutableCollectionUtils.listEquals(this, o);
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    ImmutableArrayList<?> that = (ImmutableArrayList<?>) o;
+    return arrayList.equals(that.arrayList);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(arrayList);
+    return arrayList.hashCode();
   }
 
   @Override
