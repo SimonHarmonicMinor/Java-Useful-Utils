@@ -13,7 +13,7 @@ import java.util.function.Supplier;
  * @see ExecutionResult
  * @since 0.1
  */
-public class Measure<T> {
+public final class Measure<T> {
 
   private final Supplier<T> supplier;
 

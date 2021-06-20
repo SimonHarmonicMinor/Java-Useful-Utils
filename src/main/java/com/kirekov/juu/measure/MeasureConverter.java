@@ -5,10 +5,16 @@ package com.kirekov.juu.measure;
  *
  * @since 0.1
  */
-public class MeasureConverter {
+public final class MeasureConverter {
 
   private static final long MEGA_COEFFICIENT = 1000L * 1000L;
   private static final long KILO_COEFFICIENT = 1000L;
+
+  /**
+   * Suppresses default constructor, ensuring non-instantiability.
+   */
+  private MeasureConverter() {
+  }
 
   /**
    * Convert millis to nanos.
