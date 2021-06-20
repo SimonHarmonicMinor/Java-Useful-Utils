@@ -13,7 +13,7 @@ import java.util.stream.Stream;
  * @param <T> the type of the return parameter
  * @since 1.0
  */
-public class Lazy<T> implements Streaming<T> {
+public final class Lazy<T> implements Streaming<T> {
 
   private final Supplier<T> supplier;
 
