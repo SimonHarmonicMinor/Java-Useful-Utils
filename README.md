@@ -28,7 +28,8 @@ implementation 'com.kirekov:java-useful-utils'
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=SimonHarmonicMinor_Java-Useful-Utils&metric=alert_status)](https://sonarcloud.io/dashboard?id=SimonHarmonicMinor_Java-Useful-Utils)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=SimonHarmonicMinor_Java-Useful-Utils&metric=coverage)](https://sonarcloud.io/dashboard?id=SimonHarmonicMinor_Java-Useful-Utils)
 [![Hits-of-Code](https://hitsofcode.com/github/SimonHarmonicMinor/Java-Useful-Utils)](https://hitsofcode.com/github/SimonHarmonicMinor/Java-Useful-Utils/view)
-[![checkstyle](https://img.shields.io/badge/checkstyle-intergrated-brightgreen)](https://checkstyle.sourceforge.io/)
+[![checkstyle](https://img.shields.io/badge/checkstyle-intergrated-informational)](https://checkstyle.sourceforge.io/)
+[![PMD](https://img.shields.io/badge/PMD-intergrated-informational)](https://pmd.github.io/pmd-6.35.0/pmd_rules_java.html)
 
 ### Usage
 The library consists of three big parts.
