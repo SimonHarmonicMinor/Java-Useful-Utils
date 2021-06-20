@@ -14,7 +14,7 @@ import java.util.Objects;
  * @see HashMap
  * @since 1.0
  */
-public class ImmutableHashMap<K, V> implements ImmutableMap<K, V> {
+public final class ImmutableHashMap<K, V> implements ImmutableMap<K, V> {
 
   private final HashMap<K, V> hashMap;
   private final ImmutableSet<K> keys;
@@ -107,11 +107,18 @@ public class ImmutableHashMap<K, V> implements ImmutableMap<K, V> {
 
   @Override
   public boolean equals(Object o) {
-    return ImmutableCollectionUtils.mapEquals(this, o);
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    ImmutableHashMap<?, ?> that = (ImmutableHashMap<?, ?>) o;
+    return hashMap.equals(that.hashMap);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(hashMap);
+    return hashMap.hashCode();
   }
 }
