@@ -54,7 +54,7 @@ class PairImplTest {
 
   @Test
   void equalsShouldReturnFalseIfComparingWithDifferentClass() {
-    assertNotEquals(new PairImpl<>("1","341"), "1");
+    assertNotEquals(new PairImpl<>("1", "341"), "1");
   }
 
   @Test
