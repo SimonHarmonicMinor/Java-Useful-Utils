@@ -23,4 +23,12 @@ class PairImplTest {
     Pair<Integer, String> pair2 = new PairImpl<>(key, value);
     assertEquals(pair1, pair2);
   }
+
+  @Test
+  void shouldReturnCorrectToStringRepresentation() {
+    int key = 24124;
+    String value = "fsdfasdfdsfaf";
+    Pair<Integer, String> pair = new PairImpl<>(key, value);
+    assertEquals(String.format("(key=%s; value=%s)", key, value), pair.toString());
+  }
 }
