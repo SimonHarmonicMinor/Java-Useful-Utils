@@ -23,7 +23,7 @@ import java.util.function.Supplier;
  * @see TreeMap
  * @since 1.1
  */
-public class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V> {
+public final class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V> {
 
   private final NavigableMap<K, V> navigableMap;
   private final ImmutableSet<K> keys;
@@ -295,5 +295,22 @@ public class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V> {
   @Override
   public Map<K, V> toMutableMap() {
     return new HashMap<>(this.navigableMap);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    ImmutableTreeMap<?, ?> that = (ImmutableTreeMap<?, ?>) o;
+    return treeMap.equals(that.treeMap);
+  }
+
+  @Override
+  public int hashCode() {
+    return treeMap.hashCode();
   }
 }
