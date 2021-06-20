@@ -23,7 +23,7 @@ import java.util.function.Supplier;
  * @see TreeMap
  * @since 1.1
  */
-public class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V> {
+public final class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V> {
 
   private final TreeMap<K, V> treeMap;
   private final ImmutableSet<K> keys;
