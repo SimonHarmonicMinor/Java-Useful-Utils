@@ -161,7 +161,7 @@ If you need the exception that led to the error, you can use
 ```java
 Try.of(() -> Integer.parseInt(getStringValue))
    .map(x -> 2 % x)
-   .orElseGet(reason -> {
+   .orElseGet((Exception reason) -> {
        log.error("Something went wrong", reason);
        return 0;
    })
@@ -172,7 +172,11 @@ exception that broke the chain.
 For instance, if `Integer.parseInt` threw an exception, 
 the `reason` would be the type of `NumberFormatException`.
 On the other hand, if `x == 0` in the `map` callback,
-the reason would be the type of `ArithmeticException`. 
+the reason would be the type of `ArithmeticException`.
+
+The class only catches `Exception` type. 
+It means that all `Throwable` instances are skipped.
+The motivation is that `Error` extends from `Throwable` but these exceptions should not be caught manually.
 
 ###### Lazy
 
