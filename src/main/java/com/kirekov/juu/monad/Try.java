@@ -27,7 +27,7 @@ import java.util.stream.Stream;
  * @param <T> the type of the return value
  * @since 1.0
  */
-public class Try<T> implements Streaming<T> {
+public final class Try<T> implements Streaming<T> {
 
   private static final String CONTAINER_IS_EMPTY_MSG = "Container is empty";
   private static final Try<?> EMPTY = new Try<>(null,
