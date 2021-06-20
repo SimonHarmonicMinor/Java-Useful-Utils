@@ -34,7 +34,11 @@ public abstract class AbstractImmutableList<T> implements ImmutableList<T> {
   public int hashCode() {
     int hashCode = 1;
     for (T element : this) {
-      hashCode = 31 * hashCode + (element == null ? 0 : element.hashCode());
+      if (element == null) {
+        hashCode = 31 * hashCode;
+      } else {
+        hashCode = 31 * hashCode + element.hashCode();
+      }
     }
     return hashCode;
   }
