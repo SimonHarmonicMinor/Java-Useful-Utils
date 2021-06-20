@@ -298,6 +298,23 @@ public class ImmutableArrayList<T> extends AbstractImmutableList<T> {
     return new UnmodifiableIterator<>(arrayList.iterator());
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    ImmutableArrayList<?> that = (ImmutableArrayList<?>) o;
+    return arrayList.equals(that.arrayList);
+  }
+
+  @Override
+  public int hashCode() {
+    return arrayList.hashCode();
+  }
+
   private int normalizeIndex(int index) {
     return index >= 0 ? index : size() + index;
   }
