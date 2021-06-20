@@ -1,6 +1,5 @@
 package com.kirekov.juu.collection.immutable;
 
-import com.kirekov.juu.collection.immutable.abstraction.AbstractImmutableMap;
 import com.kirekov.juu.monad.Try;
 import java.util.Collections;
 import java.util.Comparator;
@@ -23,8 +22,7 @@ import java.util.function.Supplier;
  * @see TreeMap
  * @since 1.1
  */
-public final class ImmutableTreeMap<K, V> extends AbstractImmutableMap<K, V> implements
-    ImmutableNavigableMap<K, V> {
+public final class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V> {
 
   private final NavigableMap<K, V> navigableMap;
   private final ImmutableSet<K> keys;

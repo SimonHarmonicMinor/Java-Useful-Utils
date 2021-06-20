@@ -1,6 +1,5 @@
 package com.kirekov.juu.collection.immutable;
 
-import com.kirekov.juu.collection.immutable.abstraction.AbstractImmutableMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,7 +12,7 @@ import java.util.Map;
  * @see HashMap
  * @since 1.0
  */
-public final class ImmutableHashMap<K, V> extends AbstractImmutableMap<K, V> {
+public final class ImmutableHashMap<K, V> implements ImmutableMap<K, V> {
 
   private final Map<K, V> hashMap;
   private final ImmutableSet<K> keys;
