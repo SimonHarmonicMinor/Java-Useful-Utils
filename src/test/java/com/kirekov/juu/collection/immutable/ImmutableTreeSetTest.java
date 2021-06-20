@@ -494,6 +494,31 @@ class ImmutableTreeSetTest {
   }
 
   @Test
+  void equalsShouldReturnTrueOnTheSameObject() {
+    ImmutableNavigableSet<String> set1 = ImmutableTreeSet.of(
+        Arrays.asList("1", "2", "3", "4", "5")
+    );
+    assertEquals(set1, set1);
+  }
+
+  @Test
+  void equalsShouldReturnOnNullComparison(){
+    ImmutableNavigableSet<String> set1 = ImmutableTreeSet.of(
+        Arrays.asList("1", "2", "3")
+    );
+    assertNotEquals(set1, null);
+  }
+
+  @Test
+  void equalsShouldReturnOnDifferentClassesComparison(){
+    ImmutableNavigableSet<String> set1 = ImmutableTreeSet.of(
+        Arrays.asList("1", "2", "3")
+    );
+    assertNotEquals(set1, new TreeSet<>());
+  }
+
+
+  @Test
   void toStringTest() {
     ImmutableNavigableSet<String> set = ImmutableTreeSet.of(
         Arrays.asList("1", "2", "3", "4", "5")
