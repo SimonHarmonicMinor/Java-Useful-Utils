@@ -1,6 +1,6 @@
 package com.kirekov.juu.collection.immutable;
 
-import com.kirekov.juu.lambda.TriFunction;
+import com.kirekov.juu.collection.immutable.abstraction.AbstractImmutableMap;
 import com.kirekov.juu.monad.Try;
 import java.util.Collections;
 import java.util.Comparator;
@@ -23,7 +23,8 @@ import java.util.function.Supplier;
  * @see TreeMap
  * @since 1.1
  */
-public final class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V> {
+public final class ImmutableTreeMap<K, V> extends AbstractImmutableMap<K, V> implements
+    ImmutableNavigableMap<K, V> {
 
   private final NavigableMap<K, V> navigableMap;
   private final ImmutableSet<K> keys;
@@ -243,32 +244,6 @@ public final class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V>
   public boolean containsValue(Object value) {
     return Try.of(() -> navigableMap.containsValue(value))
         .orElse(false);
-  }
-
-  @Override
-  public boolean containsPair(Pair<K, V> pair) {
-    Objects.requireNonNull(pair);
-    return pairSet().contains(pair);
-  }
-
-  @Override
-  public ImmutableMap<K, V> concatWithOverride(ImmutableMap<K, V> map) {
-    Objects.requireNonNull(map);
-    return ImmutableMapUtils.concatenationWithOverride(this.navigableMap, map);
-  }
-
-  @Override
-  public ImmutableMap<K, V> concatWithoutOverride(ImmutableMap<K, V> map) {
-    Objects.requireNonNull(map);
-    return ImmutableMapUtils.concatenationWithoutOverride(this.navigableMap, map);
-  }
-
-  @Override
-  public ImmutableMap<K, V> concatWith(ImmutableMap<K, V> map,
-      TriFunction<K, V, V, V> overrideBehaviour) {
-    Objects.requireNonNull(map);
-    Objects.requireNonNull(overrideBehaviour);
-    return ImmutableMapUtils.concatenation(this.navigableMap, map, overrideBehaviour);
   }
 
   @Override
