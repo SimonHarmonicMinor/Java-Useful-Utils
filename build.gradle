@@ -6,6 +6,7 @@ plugins {
     id "org.sonarqube" version "2.7.1"
     id 'checkstyle'
     id "io.github.gradle-nexus.publish-plugin" version "1.1.0"
+    id 'pmd'
 }
 
 tasks.withType(JavaCompile) {
@@ -22,6 +23,21 @@ java {
 group 'com.kirekov'
 version 'DEV-SNAPSHOT'
 description 'Just some useful utils for everyday coding'
+
+pmd {
+    consoleOutput = true
+    toolVersion = "6.31.0"
+    ignoreFailures = false
+    ruleSets = []
+}
+
+pmdMain {
+    ruleSetFiles = files("codestyle/pmd_main.xml")
+}
+
+pmdTest {
+    ruleSetFiles = files("codestyle/pmd_test.xml")
+}
 
 checkstyle {
     configFile = file('codestyle/checkstyle.xml')
