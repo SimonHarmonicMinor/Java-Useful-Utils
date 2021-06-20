@@ -18,7 +18,7 @@ import java.util.stream.Stream;
  * @see HashSet
  * @since 1.0
  */
-public class ImmutableHashSet<T> extends AbstractImmutableSet<T> {
+public final class ImmutableHashSet<T> extends AbstractImmutableSet<T> {
 
   private final HashSet<T> hashSet;
 
