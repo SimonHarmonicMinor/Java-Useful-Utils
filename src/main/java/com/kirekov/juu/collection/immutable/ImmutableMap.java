@@ -31,7 +31,9 @@ public interface ImmutableMap<K, V> {
    *
    * @return true if size is zero, otherwise false
    */
-  boolean isEmpty();
+  default boolean isEmpty() {
+    return size() == 0;
+  }
 
   /**
    * Whether the map is NOT empty.
