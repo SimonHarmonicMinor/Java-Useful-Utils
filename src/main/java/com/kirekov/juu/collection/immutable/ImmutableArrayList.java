@@ -1,7 +1,6 @@
 package com.kirekov.juu.collection.immutable;
 
 import com.kirekov.juu.collection.immutable.abstraction.AbstractImmutableList;
-import com.kirekov.juu.monad.Try;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -255,8 +254,7 @@ public final class ImmutableArrayList<T> extends AbstractImmutableList<T> {
 
   @Override
   public boolean contains(Object element) {
-    return Try.of(() -> arrayList.contains(element))
-        .orElse(false);
+    return arrayList.contains(element);
   }
 
   @Override
