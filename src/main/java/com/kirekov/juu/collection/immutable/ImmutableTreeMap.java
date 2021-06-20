@@ -12,7 +12,6 @@ import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.function.Supplier;
-import java.util.List;
 
 /**
  * An immutable implementation of java native {@link TreeMap}.
