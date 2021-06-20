@@ -21,29 +21,6 @@ class ImmutableCollectionUtils {
     return String.format("{%s}", baseCollectionString(collection));
   }
 
-  static <T> String listToString(ImmutableCollection<T> collection) {
-    return String.format("[%s]", baseCollectionString(collection));
-  }
-
-  static boolean listEquals(ImmutableList<?> current, Object other) {
-    if (current == other) {
-      return true;
-    }
-    if (!(other instanceof ImmutableList)) {
-      return false;
-    }
-    ImmutableList<?> otherList = (ImmutableList<?>) other;
-    if (otherList.size() != current.size()) {
-      return false;
-    }
-    for (int i = 0; i < current.size(); i++) {
-      if (!Objects.equals(current.get(i), otherList.get(i))) {
-        return false;
-      }
-    }
-    return true;
-  }
-
   static boolean setEquals(ImmutableSet<?> current, Object other) {
     if (current == other) {
       return true;
