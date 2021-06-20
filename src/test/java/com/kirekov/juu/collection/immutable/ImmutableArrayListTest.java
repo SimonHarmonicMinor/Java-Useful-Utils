@@ -896,6 +896,14 @@ class ImmutableArrayListTest {
 
     assertNotNull(list1.toString());
     assertNotNull(list2.toString());
+    assertEquals(
+        String.format(
+            "[%s, %s, %s, %s, %s]",
+            item1, item2, item3, item4, item5
+        ),
+        list1.toString()
+    );
+    assertEquals("[]", list2.toString());
   }
 
   @Test

@@ -1,6 +1,6 @@
 package com.kirekov.juu.collection.immutable;
 
-import com.kirekov.juu.monad.Try;
+import com.kirekov.juu.collection.immutable.abstraction.AbstractImmutableList;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -23,7 +23,7 @@ import java.util.stream.Stream;
  * @see ArrayList
  * @since 1.0
  */
-public class ImmutableArrayList<T> implements ImmutableList<T> {
+public final class ImmutableArrayList<T> extends AbstractImmutableList<T> {
 
   private final ArrayList<T> arrayList;
 
@@ -93,15 +93,6 @@ public class ImmutableArrayList<T> implements ImmutableList<T> {
       fromNorm = nextValueFunc.apply(fromNorm);
     }
     return new ImmutableArrayList<>(newArrayList);
-  }
-
-  @Override
-  public ImmutableList<T> step(int stepSize) {
-    if (stepSize > 0) {
-      return step(0, stepSize);
-    } else {
-      return step(-1, stepSize);
-    }
   }
 
   @Override
@@ -257,19 +248,13 @@ public class ImmutableArrayList<T> implements ImmutableList<T> {
   }
 
   @Override
-  public ImmutableList<T> reversed() {
-    return step(-1);
-  }
-
-  @Override
   public int size() {
     return arrayList.size();
   }
 
   @Override
   public boolean contains(Object element) {
-    return Try.of(() -> arrayList.contains(element))
-        .orElse(false);
+    return arrayList.contains(element);
   }
 
   @Override
@@ -312,11 +297,6 @@ public class ImmutableArrayList<T> implements ImmutableList<T> {
   @Override
   public int hashCode() {
     return arrayList.hashCode();
-  }
-
-  @Override
-  public String toString() {
-    return ImmutableCollectionUtils.listToString(this);
   }
 
   private int normalizeIndex(int index) {
