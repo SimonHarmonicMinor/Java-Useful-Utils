@@ -506,7 +506,7 @@ class ImmutableTreeSetTest {
     ImmutableNavigableSet<String> set1 = ImmutableTreeSet.of(
         Arrays.asList("1", "2", "3")
     );
-    assertNotEquals(set1, null);
+    assertNotEquals(null, set1);
   }
 
   @Test
