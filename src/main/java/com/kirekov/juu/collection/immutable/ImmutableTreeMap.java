@@ -306,11 +306,11 @@ public final class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V>
       return false;
     }
     ImmutableTreeMap<?, ?> that = (ImmutableTreeMap<?, ?>) o;
-    return treeMap.equals(that.treeMap);
+    return navigableMap.equals(that.navigableMap);
   }
 
   @Override
   public int hashCode() {
-    return treeMap.hashCode();
+    return navigableMap.hashCode();
   }
 }
