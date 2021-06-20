@@ -230,11 +230,6 @@ public final class ImmutableTreeMap<K, V> extends AbstractImmutableMap<K, V> imp
   }
 
   @Override
-  public boolean isEmpty() {
-    return navigableMap.isEmpty();
-  }
-
-  @Override
   public boolean containsKey(Object key) {
     return Try.of(() -> navigableMap.containsKey(key))
         .orElse(false);
