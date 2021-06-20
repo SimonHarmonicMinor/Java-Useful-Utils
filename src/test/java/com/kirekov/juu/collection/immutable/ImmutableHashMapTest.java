@@ -264,6 +264,30 @@ class ImmutableHashMapTest {
   }
 
   @Test
+  void shouldNotEqualIfObjectsOfDifferentType() {
+    Map<String, Integer> mutable = new HashMap<>();
+    mutable.put("1", 1);
+    mutable.put("2", 2);
+    mutable.put("3", 3);
+    mutable.put("4", 4);
+
+    ImmutableMap<String, Integer> map = new ImmutableHashMap<>(mutable);
+    assertNotEquals(map, mutable);
+  }
+
+  @Test
+  void shouldEqualIfObjectIsTheSame() {
+    Map<String, Integer> mutable = new HashMap<>();
+    mutable.put("1", 1);
+    mutable.put("2", 2);
+    mutable.put("3", 3);
+    mutable.put("4", 4);
+
+    ImmutableMap<String, Integer> map = new ImmutableHashMap<>(mutable);
+    assertEquals(map, map);
+  }
+
+  @Test
   void getOrDefault() {
     Map<String, Integer> mutable = new HashMap<>();
     mutable.put("1", 1);
