@@ -1,5 +1,6 @@
 package com.kirekov.juu.collection.immutable;
 
+import com.kirekov.juu.collection.immutable.abstraction.AbstractImmutableSet;
 import com.kirekov.juu.monad.Try;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -23,7 +24,7 @@ import java.util.stream.Stream;
  * @see Set
  * @see TreeSet
  */
-public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T> {
+public class ImmutableTreeSet<T> extends AbstractImmutableSet<T> implements ImmutableNavigableSet<T> {
 
   private final TreeSet<T> treeSet;
 
@@ -239,17 +240,19 @@ public class ImmutableTreeSet<T> implements ImmutableNavigableSet<T> {
 
   @Override
   public boolean equals(Object o) {
-    return ImmutableCollectionUtils.setEquals(this, o);
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    ImmutableTreeSet<?> that = (ImmutableTreeSet<?>) o;
+    return treeSet.equals(that.treeSet);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(treeSet);
-  }
-
-  @Override
-  public String toString() {
-    return ImmutableCollectionUtils.setToString(this);
+    return treeSet.hashCode();
   }
 
   private ImmutableNavigableSet<T> tryGetSubSet(Supplier<ImmutableNavigableSet<T>> supplier) {
