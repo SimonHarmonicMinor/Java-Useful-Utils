@@ -14,7 +14,7 @@ import java.util.Objects;
  * @see HashMap
  * @since 1.0
  */
-public class ImmutableHashMap<K, V> implements ImmutableMap<K, V> {
+public final class ImmutableHashMap<K, V> implements ImmutableMap<K, V> {
 
   private final HashMap<K, V> hashMap;
   private final ImmutableSet<K> keys;
