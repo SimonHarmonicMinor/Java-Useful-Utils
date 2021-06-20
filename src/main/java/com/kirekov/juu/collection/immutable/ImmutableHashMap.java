@@ -39,11 +39,6 @@ public final class ImmutableHashMap<K, V> extends AbstractImmutableMap<K, V> {
   }
 
   @Override
-  public boolean isEmpty() {
-    return hashMap.isEmpty();
-  }
-
-  @Override
   public boolean containsKey(Object key) {
     return hashMap.containsKey(key);
   }
