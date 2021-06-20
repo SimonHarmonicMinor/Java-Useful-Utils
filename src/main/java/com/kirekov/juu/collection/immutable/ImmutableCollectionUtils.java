@@ -3,47 +3,12 @@ package com.kirekov.juu.collection.immutable;
 import com.kirekov.juu.monad.Try;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 class ImmutableCollectionUtils {
 
   private ImmutableCollectionUtils() {
-  }
-
-  private static <T> String baseCollectionString(ImmutableCollection<T> collection) {
-    return collection.stream().map(Objects::toString).collect(Collectors.joining(", "));
-  }
-
-  static <T> String setToString(ImmutableCollection<T> collection) {
-    return String.format("{%s}", baseCollectionString(collection));
-  }
-
-  static boolean setEquals(ImmutableSet<?> current, Object other) {
-    if (current == other) {
-      return true;
-    }
-    if (!(other instanceof ImmutableSet)) {
-      return false;
-    }
-    ImmutableSet<?> otherSet = (ImmutableSet<?>) other;
-    if (current.size() != otherSet.size()) {
-      return false;
-    }
-
-    BiConsumer<ImmutableSet<?>, ImmutableSet<?>> checkForEquality =
-        (set1, set2) -> {
-          for (Object obj : set1) {
-            if (set2.notContains(obj)) {
-              throw new RuntimeException("not equal");
-            }
-          }
-        };
-    checkForEquality.accept(current, otherSet);
-    checkForEquality.accept(otherSet, current);
-    return true;
   }
 
   static boolean pairEquals(Pair<?, ?> current, Object other) {

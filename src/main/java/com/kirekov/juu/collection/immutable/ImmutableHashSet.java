@@ -1,5 +1,6 @@
 package com.kirekov.juu.collection.immutable;
 
+import com.kirekov.juu.collection.immutable.abstraction.AbstractImmutableSet;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Objects;
@@ -17,7 +18,7 @@ import java.util.stream.Stream;
  * @see HashSet
  * @since 1.0
  */
-public class ImmutableHashSet<T> implements ImmutableSet<T> {
+public final class ImmutableHashSet<T> extends AbstractImmutableSet<T> {
 
   private final HashSet<T> hashSet;
 
@@ -113,16 +114,18 @@ public class ImmutableHashSet<T> implements ImmutableSet<T> {
 
   @Override
   public boolean equals(Object o) {
-    return ImmutableCollectionUtils.setEquals(this, o);
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    ImmutableHashSet<?> that = (ImmutableHashSet<?>) o;
+    return hashSet.equals(that.hashSet);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(hashSet);
-  }
-
-  @Override
-  public String toString() {
-    return ImmutableCollectionUtils.setToString(this);
+    return hashSet.hashCode();
   }
 }
