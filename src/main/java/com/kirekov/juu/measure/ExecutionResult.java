@@ -10,7 +10,7 @@ import java.util.Objects;
  * @see MeasureUnit
  * @since 0.1
  */
-public class ExecutionResult<T> {
+public final class ExecutionResult<T> {
 
   private final T result;
   private final long time;
