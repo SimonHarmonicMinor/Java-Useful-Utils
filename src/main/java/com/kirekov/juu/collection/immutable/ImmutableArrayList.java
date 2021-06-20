@@ -24,7 +24,7 @@ import java.util.stream.Stream;
  * @see ArrayList
  * @since 1.0
  */
-public class ImmutableArrayList<T> extends AbstractImmutableList<T> implements ImmutableList<T> {
+public class ImmutableArrayList<T> extends AbstractImmutableList<T> {
 
   private final ArrayList<T> arrayList;
 
