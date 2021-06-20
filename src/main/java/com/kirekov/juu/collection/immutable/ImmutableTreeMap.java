@@ -25,7 +25,7 @@ import java.util.function.Supplier;
  */
 public final class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V> {
 
-  private final TreeMap<K, V> treeMap;
+  private final NavigableMap<K, V> navigableMap;
   private final ImmutableSet<K> keys;
   private final ImmutableList<V> values;
   private final ImmutableSet<Pair<K, V>> pairs;
@@ -59,101 +59,101 @@ public final class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V>
 
   ImmutableTreeMap(Map<K, V> map, Comparator<? super K> comparator) {
     Objects.requireNonNull(map);
-    treeMap = new TreeMap<>(comparator);
-    map.forEach(treeMap::put);
-    keys = Immutable.setOf(treeMap.keySet());
-    values = Immutable.listOf(treeMap.values());
-    pairs = ImmutableMapUtils.toPairSet(treeMap.entrySet());
+    navigableMap = new TreeMap<>(comparator);
+    map.forEach(navigableMap::put);
+    keys = Immutable.setOf(navigableMap.keySet());
+    values = Immutable.listOf(navigableMap.values());
+    pairs = ImmutableMapUtils.toPairSet(navigableMap.entrySet());
   }
 
   ImmutableTreeMap(SortedMap<K, V> sortedMap) {
-    treeMap = new TreeMap<>(sortedMap);
-    keys = Immutable.setOf(treeMap.keySet());
-    values = Immutable.listOf(treeMap.values());
-    pairs = ImmutableMapUtils.toPairSet(treeMap.entrySet());
+    navigableMap = new TreeMap<>(sortedMap);
+    keys = Immutable.setOf(navigableMap.keySet());
+    values = Immutable.listOf(navigableMap.values());
+    pairs = ImmutableMapUtils.toPairSet(navigableMap.entrySet());
   }
 
   @Override
   public Optional<Pair<K, V>> lowerPair(K key) {
-    return ImmutableCollectionUtils.tryGetElement(() -> treeMap.lowerEntry(key))
+    return ImmutableCollectionUtils.tryGetElement(() -> navigableMap.lowerEntry(key))
         .map(Pair::of);
   }
 
   @Override
   public Optional<K> lowerKey(K key) {
-    return ImmutableCollectionUtils.tryGetElement(() -> treeMap.lowerKey(key));
+    return ImmutableCollectionUtils.tryGetElement(() -> navigableMap.lowerKey(key));
   }
 
   @Override
   public Optional<Pair<K, V>> floorPair(K key) {
-    return ImmutableCollectionUtils.tryGetElement(() -> treeMap.floorEntry(key))
+    return ImmutableCollectionUtils.tryGetElement(() -> navigableMap.floorEntry(key))
         .map(Pair::of);
   }
 
   @Override
   public Optional<K> floorKey(K key) {
-    return ImmutableCollectionUtils.tryGetElement(() -> treeMap.floorKey(key));
+    return ImmutableCollectionUtils.tryGetElement(() -> navigableMap.floorKey(key));
   }
 
   @Override
   public Optional<Pair<K, V>> ceilingPair(K key) {
-    return ImmutableCollectionUtils.tryGetElement(() -> treeMap.ceilingEntry(key))
+    return ImmutableCollectionUtils.tryGetElement(() -> navigableMap.ceilingEntry(key))
         .map(Pair::of);
   }
 
   @Override
   public Optional<K> ceilingKey(K key) {
-    return ImmutableCollectionUtils.tryGetElement(() -> treeMap.ceilingKey(key));
+    return ImmutableCollectionUtils.tryGetElement(() -> navigableMap.ceilingKey(key));
   }
 
   @Override
   public Optional<Pair<K, V>> higherPair(K key) {
-    return ImmutableCollectionUtils.tryGetElement(() -> treeMap.higherEntry(key))
+    return ImmutableCollectionUtils.tryGetElement(() -> navigableMap.higherEntry(key))
         .map(Pair::of);
   }
 
   @Override
   public Optional<K> higherKey(K key) {
-    return ImmutableCollectionUtils.tryGetElement(() -> treeMap.higherKey(key));
+    return ImmutableCollectionUtils.tryGetElement(() -> navigableMap.higherKey(key));
   }
 
   @Override
   public Optional<Pair<K, V>> firstPair() {
-    return ImmutableCollectionUtils.tryGetElement(treeMap::firstEntry)
+    return ImmutableCollectionUtils.tryGetElement(navigableMap::firstEntry)
         .map(Pair::of);
   }
 
   @Override
   public Optional<Pair<K, V>> lastPair() {
-    return ImmutableCollectionUtils.tryGetElement(treeMap::lastEntry)
+    return ImmutableCollectionUtils.tryGetElement(navigableMap::lastEntry)
         .map(Pair::of);
   }
 
   @Override
   public ImmutableNavigableMap<K, V> reversedOrderMap() {
-    return new ImmutableTreeMap<>(treeMap.descendingMap());
+    return new ImmutableTreeMap<>(navigableMap.descendingMap());
   }
 
   @Override
   public ImmutableNavigableSet<K> navigableKeySet() {
-    return new ImmutableTreeSet<>(treeMap.navigableKeySet());
+    return new ImmutableTreeSet<>(navigableMap.navigableKeySet());
   }
 
   @Override
   public ImmutableNavigableSet<K> reversedOrderKeySet() {
-    return new ImmutableTreeSet<>(treeMap.descendingKeySet());
+    return new ImmutableTreeSet<>(navigableMap.descendingKeySet());
   }
 
   private ImmutableNavigableMap<K, V> tryGetSubMap(Supplier<ImmutableNavigableMap<K, V>> supplier) {
     return Try.of(supplier::get)
-        .orElse(new ImmutableTreeMap<>(Collections.emptyMap(), treeMap.comparator()));
+        .orElse(new ImmutableTreeMap<>(Collections.emptyMap(), navigableMap.comparator()));
   }
 
   @Override
   public ImmutableSortedMap<K, V> subMap(K fromKey, K toKey) {
     return tryGetSubMap(() ->
         new ImmutableTreeMap<>(
-            treeMap.subMap(fromKey, toKey)
+            navigableMap.subMap(fromKey, toKey)
         ));
   }
 
@@ -162,7 +162,7 @@ public final class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V>
       boolean toInclusive) {
     return tryGetSubMap(() ->
         new ImmutableTreeMap<>(
-            treeMap.subMap(fromKey, fromInclusive, toKey, toInclusive)
+            navigableMap.subMap(fromKey, fromInclusive, toKey, toInclusive)
         ));
   }
 
@@ -170,7 +170,7 @@ public final class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V>
   public ImmutableSortedMap<K, V> headMap(K toKey) {
     return tryGetSubMap(() ->
         new ImmutableTreeMap<>(
-            treeMap.headMap(toKey)
+            navigableMap.headMap(toKey)
         ));
   }
 
@@ -178,7 +178,7 @@ public final class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V>
   public ImmutableNavigableMap<K, V> headMap(K toKey, boolean inclusive) {
     return tryGetSubMap(() ->
         new ImmutableTreeMap<>(
-            treeMap.headMap(toKey, inclusive)
+            navigableMap.headMap(toKey, inclusive)
         ));
   }
 
@@ -186,7 +186,7 @@ public final class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V>
   public ImmutableSortedMap<K, V> tailMap(K fromKey) {
     return tryGetSubMap(() ->
         new ImmutableTreeMap<>(
-            treeMap.tailMap(fromKey)
+            navigableMap.tailMap(fromKey)
         ));
   }
 
@@ -194,28 +194,28 @@ public final class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V>
   public ImmutableNavigableMap<K, V> tailMap(K fromKey, boolean inclusive) {
     return tryGetSubMap(() ->
         new ImmutableTreeMap<>(
-            treeMap.tailMap(fromKey, inclusive)
+            navigableMap.tailMap(fromKey, inclusive)
         ));
   }
 
   @Override
   public NavigableMap<K, V> toMutableNavigableMap() {
-    return new TreeMap<>(treeMap);
+    return new TreeMap<>(navigableMap);
   }
 
   @Override
   public Comparator<? super K> comparator() {
-    return treeMap.comparator();
+    return navigableMap.comparator();
   }
 
   @Override
   public Optional<K> firstKey() {
-    return ImmutableCollectionUtils.tryGetElement(treeMap::firstKey);
+    return ImmutableCollectionUtils.tryGetElement(navigableMap::firstKey);
   }
 
   @Override
   public Optional<K> lastKey() {
-    return ImmutableCollectionUtils.tryGetElement(treeMap::lastKey);
+    return ImmutableCollectionUtils.tryGetElement(navigableMap::lastKey);
   }
 
   @Override
@@ -225,23 +225,23 @@ public final class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V>
 
   @Override
   public int size() {
-    return treeMap.size();
+    return navigableMap.size();
   }
 
   @Override
   public boolean isEmpty() {
-    return treeMap.isEmpty();
+    return navigableMap.isEmpty();
   }
 
   @Override
   public boolean containsKey(Object key) {
-    return Try.of(() -> treeMap.containsKey(key))
+    return Try.of(() -> navigableMap.containsKey(key))
         .orElse(false);
   }
 
   @Override
   public boolean containsValue(Object value) {
-    return Try.of(() -> treeMap.containsValue(value))
+    return Try.of(() -> navigableMap.containsValue(value))
         .orElse(false);
   }
 
@@ -254,13 +254,13 @@ public final class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V>
   @Override
   public ImmutableMap<K, V> concatWithOverride(ImmutableMap<K, V> map) {
     Objects.requireNonNull(map);
-    return ImmutableMapUtils.concatenationWithOverride(this.treeMap, map);
+    return ImmutableMapUtils.concatenationWithOverride(this.navigableMap, map);
   }
 
   @Override
   public ImmutableMap<K, V> concatWithoutOverride(ImmutableMap<K, V> map) {
     Objects.requireNonNull(map);
-    return ImmutableMapUtils.concatenationWithoutOverride(this.treeMap, map);
+    return ImmutableMapUtils.concatenationWithoutOverride(this.navigableMap, map);
   }
 
   @Override
@@ -268,12 +268,12 @@ public final class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V>
       TriFunction<K, V, V, V> overrideBehaviour) {
     Objects.requireNonNull(map);
     Objects.requireNonNull(overrideBehaviour);
-    return ImmutableMapUtils.concatenation(this.treeMap, map, overrideBehaviour);
+    return ImmutableMapUtils.concatenation(this.navigableMap, map, overrideBehaviour);
   }
 
   @Override
   public V get(Object key) {
-    return Try.of(() -> treeMap.get(key))
+    return Try.of(() -> navigableMap.get(key))
         .orElse(null);
   }
 
@@ -294,7 +294,7 @@ public final class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V>
 
   @Override
   public Map<K, V> toMutableMap() {
-    return new HashMap<>(this.treeMap);
+    return new HashMap<>(this.navigableMap);
   }
 
   @Override
@@ -306,11 +306,11 @@ public final class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V>
       return false;
     }
     ImmutableTreeMap<?, ?> that = (ImmutableTreeMap<?, ?>) o;
-    return treeMap.equals(that.treeMap);
+    return navigableMap.equals(that.navigableMap);
   }
 
   @Override
   public int hashCode() {
-    return treeMap.hashCode();
+    return navigableMap.hashCode();
   }
 }

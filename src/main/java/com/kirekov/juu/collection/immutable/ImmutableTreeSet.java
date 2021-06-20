@@ -27,7 +27,7 @@ import java.util.stream.Stream;
 public final class ImmutableTreeSet<T>
     extends AbstractImmutableSet<T> implements ImmutableNavigableSet<T> {
 
-  private final TreeSet<T> treeSet;
+  private final NavigableSet<T> navigableSet;
 
   public static <R extends Comparable<R>> ImmutableTreeSet<R> of(Iterable<R> iterable) {
     Objects.requireNonNull(iterable);
@@ -46,51 +46,51 @@ public final class ImmutableTreeSet<T>
 
   ImmutableTreeSet(Iterable<T> iterable, Comparator<? super T> comparator) {
     Objects.requireNonNull(iterable);
-    treeSet = new TreeSet<>(comparator);
+    navigableSet = new TreeSet<>(comparator);
     for (T t : iterable) {
-      treeSet.add(t);
+      navigableSet.add(t);
     }
   }
 
   ImmutableTreeSet(SortedSet<T> sortedSet) {
-    this.treeSet = new TreeSet<>(sortedSet);
+    this.navigableSet = new TreeSet<>(sortedSet);
   }
 
   @Override
   public Optional<T> lower(T t) {
-    return ImmutableCollectionUtils.tryGetElement(() -> treeSet.lower(t));
+    return ImmutableCollectionUtils.tryGetElement(() -> navigableSet.lower(t));
   }
 
   @Override
   public Optional<T> floor(T t) {
-    return ImmutableCollectionUtils.tryGetElement(() -> treeSet.floor(t));
+    return ImmutableCollectionUtils.tryGetElement(() -> navigableSet.floor(t));
   }
 
   @Override
   public Optional<T> ceiling(T t) {
-    return ImmutableCollectionUtils.tryGetElement(() -> treeSet.ceiling(t));
+    return ImmutableCollectionUtils.tryGetElement(() -> navigableSet.ceiling(t));
   }
 
   @Override
   public Optional<T> higher(T t) {
-    return ImmutableCollectionUtils.tryGetElement(() -> treeSet.higher(t));
+    return ImmutableCollectionUtils.tryGetElement(() -> navigableSet.higher(t));
   }
 
   @Override
   public ImmutableNavigableSet<T> reversedOrderSet() {
-    return new ImmutableTreeSet<>(treeSet.descendingSet());
+    return new ImmutableTreeSet<>(navigableSet.descendingSet());
   }
 
   @Override
   public Iterator<T> reversedOrderIterator() {
-    return new UnmodifiableIterator<>(treeSet.descendingIterator());
+    return new UnmodifiableIterator<>(navigableSet.descendingIterator());
   }
 
   @Override
   public ImmutableSortedSet<T> subSet(T fromElement, T toElement) {
     return tryGetSubSet(() ->
         new ImmutableTreeSet<>(
-            treeSet.subSet(fromElement, toElement)
+            navigableSet.subSet(fromElement, toElement)
         ));
   }
 
@@ -99,7 +99,7 @@ public final class ImmutableTreeSet<T>
       boolean toInclusive) {
     return tryGetSubSet(() ->
         new ImmutableTreeSet<>(
-            treeSet.subSet(fromElement, fromInclusive, toElement, toInclusive)
+            navigableSet.subSet(fromElement, fromInclusive, toElement, toInclusive)
         ));
   }
 
@@ -107,7 +107,7 @@ public final class ImmutableTreeSet<T>
   public ImmutableSortedSet<T> headSet(T toElement) {
     return tryGetSubSet(() ->
         new ImmutableTreeSet<>(
-            treeSet.headSet(toElement)
+            navigableSet.headSet(toElement)
         ));
   }
 
@@ -115,7 +115,7 @@ public final class ImmutableTreeSet<T>
   public ImmutableNavigableSet<T> headSet(T toElement, boolean inclusive) {
     return tryGetSubSet(() ->
         new ImmutableTreeSet<>(
-            treeSet.headSet(toElement, inclusive)
+            navigableSet.headSet(toElement, inclusive)
         ));
   }
 
@@ -123,7 +123,7 @@ public final class ImmutableTreeSet<T>
   public ImmutableSortedSet<T> tailSet(T fromElement) {
     return tryGetSubSet(() ->
         new ImmutableTreeSet<>(
-            treeSet.tailSet(fromElement)
+            navigableSet.tailSet(fromElement)
         ));
   }
 
@@ -131,28 +131,28 @@ public final class ImmutableTreeSet<T>
   public ImmutableNavigableSet<T> tailSet(T fromElement, boolean inclusive) {
     return tryGetSubSet(() ->
         new ImmutableTreeSet<>(
-            treeSet.tailSet(fromElement, inclusive)
+            navigableSet.tailSet(fromElement, inclusive)
         ));
   }
 
   @Override
   public NavigableSet<T> toMutableNavigableSet() {
-    return new TreeSet<>(treeSet);
+    return new TreeSet<>(navigableSet);
   }
 
   @Override
   public Comparator<? super T> comparator() {
-    return treeSet.comparator();
+    return navigableSet.comparator();
   }
 
   @Override
   public Optional<T> first() {
-    return ImmutableCollectionUtils.tryGetElement(treeSet::first);
+    return ImmutableCollectionUtils.tryGetElement(navigableSet::first);
   }
 
   @Override
   public Optional<T> last() {
-    return ImmutableCollectionUtils.tryGetElement(treeSet::last);
+    return ImmutableCollectionUtils.tryGetElement(navigableSet::last);
   }
 
   @Override
@@ -162,7 +162,7 @@ public final class ImmutableTreeSet<T>
 
   @Override
   public ImmutableSet<T> concatWith(Iterable<T> iterable) {
-    TreeSet<T> newTreeSet = new TreeSet<>(treeSet);
+    TreeSet<T> newTreeSet = new TreeSet<>(navigableSet);
     for (T t : iterable) {
       newTreeSet.add(t);
     }
@@ -205,18 +205,18 @@ public final class ImmutableTreeSet<T>
 
   @Override
   public int size() {
-    return treeSet.size();
+    return navigableSet.size();
   }
 
   @Override
   public boolean contains(Object element) {
-    return Try.of(() -> treeSet.contains(element))
+    return Try.of(() -> navigableSet.contains(element))
         .orElse(false);
   }
 
   @Override
   public ImmutableList<T> toList() {
-    return Immutable.listOf(treeSet);
+    return Immutable.listOf(navigableSet);
   }
 
   @Override
@@ -226,17 +226,17 @@ public final class ImmutableTreeSet<T>
 
   @Override
   public Stream<T> parallelStream() {
-    return treeSet.parallelStream();
+    return navigableSet.parallelStream();
   }
 
   @Override
   public Stream<T> stream() {
-    return treeSet.stream();
+    return navigableSet.stream();
   }
 
   @Override
   public Iterator<T> iterator() {
-    return new UnmodifiableIterator<>(treeSet.iterator());
+    return new UnmodifiableIterator<>(navigableSet.iterator());
   }
 
   @Override
@@ -248,16 +248,16 @@ public final class ImmutableTreeSet<T>
       return false;
     }
     ImmutableTreeSet<?> that = (ImmutableTreeSet<?>) o;
-    return treeSet.equals(that.treeSet);
+    return navigableSet.equals(that.navigableSet);
   }
 
   @Override
   public int hashCode() {
-    return treeSet.hashCode();
+    return navigableSet.hashCode();
   }
 
   private ImmutableNavigableSet<T> tryGetSubSet(Supplier<ImmutableNavigableSet<T>> supplier) {
     return Try.of(supplier::get)
-        .orElse(new ImmutableTreeSet<>(Immutable.emptyList(), treeSet.comparator()));
+        .orElse(new ImmutableTreeSet<>(Immutable.emptyList(), navigableSet.comparator()));
   }
 }

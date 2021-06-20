@@ -25,7 +25,7 @@ import java.util.stream.Stream;
  */
 public final class ImmutableArrayList<T> extends AbstractImmutableList<T> {
 
-  private final ArrayList<T> arrayList;
+  private final List<T> arrayList;
 
   /**
    * Constructor.

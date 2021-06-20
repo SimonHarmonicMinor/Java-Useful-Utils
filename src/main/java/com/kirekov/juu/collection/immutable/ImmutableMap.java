@@ -181,6 +181,7 @@ public interface ImmutableMap<K, V> {
    * @param o the reference object with which to compare
    * @return true if two objects are equal and false otherwise
    */
+  @Override
   boolean equals(Object o);
 
   /**
@@ -188,6 +189,7 @@ public interface ImmutableMap<K, V> {
    *
    * @return a hash code value for this object
    */
+  @Override
   int hashCode();
 
   /**
