@@ -1,7 +1,5 @@
 package com.kirekov.juu.collection.immutable;
 
-import static com.kirekov.juu.collection.immutable.ImmutableCollectionUtils.pairEquals;
-
 import java.util.Objects;
 
 /**
@@ -11,7 +9,7 @@ import java.util.Objects;
  * @param <V> the type of the value
  * @since 1.0
  */
-class PairImpl<K, V> implements Pair<K, V> {
+final class PairImpl<K, V> implements Pair<K, V> {
 
   private final K key;
   private final V value;
@@ -33,7 +31,14 @@ class PairImpl<K, V> implements Pair<K, V> {
 
   @Override
   public boolean equals(Object o) {
-    return pairEquals(this, o);
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    PairImpl<?, ?> pair = (PairImpl<?, ?>) o;
+    return Objects.equals(key, pair.key) && Objects.equals(value, pair.value);
   }
 
   @Override

@@ -11,18 +11,6 @@ class ImmutableCollectionUtils {
   private ImmutableCollectionUtils() {
   }
 
-  static boolean pairEquals(Pair<?, ?> current, Object other) {
-    if (current == other) {
-      return true;
-    }
-    if (!(other instanceof Pair)) {
-      return false;
-    }
-    Pair<?, ?> otherPair = (Pair<?, ?>) other;
-    return Objects.equals(current.getKey(), otherPair.getKey())
-        && Objects.equals(current.getValue(), otherPair.getValue());
-  }
-
   static boolean mapEquals(ImmutableMap<?, ?> current, Object other) {
     if (current == other) {
       return true;
