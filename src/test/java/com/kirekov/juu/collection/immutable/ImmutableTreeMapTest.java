@@ -2,6 +2,7 @@ package com.kirekov.juu.collection.immutable;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -1102,5 +1103,65 @@ class ImmutableTreeMapTest {
     mutableMap.clear();
 
     assertEquals(3, immutableMap.size());
+  }
+
+  @Test
+  void equalsShouldReturnTrueIfObjectIsTheSame() {
+    Map<String, Integer> map1 = new HashMap<>();
+    map1.put("1", 1);
+    map1.put("2", 2);
+    map1.put("3", 3);
+
+    ImmutableTreeMap<String, Integer> immutableMap =
+        ImmutableTreeMap.of(map1);
+
+    assertEquals(immutableMap, immutableMap);
+  }
+
+  @Test
+  void equalsShouldReturnTrueIfObjectsAreEquivalent() {
+    Map<String, Integer> map1 = new HashMap<>();
+    map1.put("1", 1);
+    map1.put("2", 2);
+    map1.put("3", 3);
+
+    ImmutableTreeMap<String, Integer> immutableMap1 =
+        ImmutableTreeMap.of(map1);
+    ImmutableTreeMap<String, Integer> immutableMap2 =
+        ImmutableTreeMap.of(map1);
+
+    assertEquals(immutableMap1, immutableMap2);
+  }
+
+  @Test
+  void equalsShouldReturnFalseIfObjectsAreNotEquivalent() {
+    Map<String, Integer> map1 = new HashMap<>();
+    map1.put("1", 1);
+    map1.put("2", 2);
+    map1.put("3", 3);
+
+    Map<String, Integer> map2 = new HashMap<>();
+    map1.put("1", 1);
+    map1.put("2", 2);
+
+    ImmutableTreeMap<String, Integer> immutableMap1 =
+        ImmutableTreeMap.of(map1);
+    ImmutableTreeMap<String, Integer> immutableMap2 =
+        ImmutableTreeMap.of(map2);
+
+    assertNotEquals(immutableMap1, immutableMap2);
+  }
+
+  @Test
+  void equalsShouldReturnFalseIfObjectsAreNotTheSameType() {
+    Map<String, Integer> map1 = new HashMap<>();
+    map1.put("1", 1);
+    map1.put("2", 2);
+    map1.put("3", 3);
+
+    ImmutableTreeMap<String, Integer> immutableMap1 =
+        ImmutableTreeMap.of(map1);
+
+    assertNotEquals(immutableMap1, map1);
   }
 }

@@ -296,4 +296,21 @@ public class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V> {
   public Map<K, V> toMutableMap() {
     return new HashMap<>(this.treeMap);
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    ImmutableTreeMap<?, ?> that = (ImmutableTreeMap<?, ?>) o;
+    return treeMap.equals(that.treeMap);
+  }
+
+  @Override
+  public int hashCode() {
+    return treeMap.hashCode();
+  }
 }
