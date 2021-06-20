@@ -23,6 +23,7 @@ class PairImplTest {
     Pair<Integer, String> pair1 = new PairImpl<>(key, value);
     Pair<Integer, String> pair2 = new PairImpl<>(key, value);
     assertEquals(pair1, pair2);
+    assertEquals(pair1.hashCode(), pair2.hashCode());
   }
 
   @Test
