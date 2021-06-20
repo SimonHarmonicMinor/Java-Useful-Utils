@@ -1,6 +1,5 @@
 package com.kirekov.juu.collection.immutable;
 
-import com.kirekov.juu.lambda.TriFunction;
 import com.kirekov.juu.monad.Try;
 import java.util.Collections;
 import java.util.Comparator;
@@ -229,11 +228,6 @@ public final class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V>
   }
 
   @Override
-  public boolean isEmpty() {
-    return navigableMap.isEmpty();
-  }
-
-  @Override
   public boolean containsKey(Object key) {
     return Try.of(() -> navigableMap.containsKey(key))
         .orElse(false);
@@ -243,32 +237,6 @@ public final class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V>
   public boolean containsValue(Object value) {
     return Try.of(() -> navigableMap.containsValue(value))
         .orElse(false);
-  }
-
-  @Override
-  public boolean containsPair(Pair<K, V> pair) {
-    Objects.requireNonNull(pair);
-    return pairSet().contains(pair);
-  }
-
-  @Override
-  public ImmutableMap<K, V> concatWithOverride(ImmutableMap<K, V> map) {
-    Objects.requireNonNull(map);
-    return ImmutableMapUtils.concatenationWithOverride(this.navigableMap, map);
-  }
-
-  @Override
-  public ImmutableMap<K, V> concatWithoutOverride(ImmutableMap<K, V> map) {
-    Objects.requireNonNull(map);
-    return ImmutableMapUtils.concatenationWithoutOverride(this.navigableMap, map);
-  }
-
-  @Override
-  public ImmutableMap<K, V> concatWith(ImmutableMap<K, V> map,
-      TriFunction<K, V, V, V> overrideBehaviour) {
-    Objects.requireNonNull(map);
-    Objects.requireNonNull(overrideBehaviour);
-    return ImmutableMapUtils.concatenation(this.navigableMap, map, overrideBehaviour);
   }
 
   @Override

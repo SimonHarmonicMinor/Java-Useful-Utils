@@ -31,7 +31,9 @@ public interface ImmutableMap<K, V> {
    *
    * @return true if size is zero, otherwise false
    */
-  boolean isEmpty();
+  default boolean isEmpty() {
+    return size() == 0;
+  }
 
   /**
    * Whether the map is NOT empty.
@@ -85,7 +87,10 @@ public interface ImmutableMap<K, V> {
    * @return true if map contains pair, otherwise false
    * @throws NullPointerException if {@code pair} is null
    */
-  boolean containsPair(Pair<K, V> pair);
+  default boolean containsPair(Pair<K, V> pair) {
+    Objects.requireNonNull(pair);
+    return pairSet().contains(pair);
+  }
 
   /**
    * Whether the map NOT contains the given {@code pair}.
@@ -108,7 +113,9 @@ public interface ImmutableMap<K, V> {
    * @throws NullPointerException if {@code map} is null
    * @see ImmutableMap#concatWith(ImmutableMap, TriFunction)
    */
-  ImmutableMap<K, V> concatWithOverride(ImmutableMap<K, V> map);
+  default ImmutableMap<K, V> concatWithOverride(ImmutableMap<K, V> map) {
+    return concatWith(map, (key, oldVal, newVal) -> newVal);
+  }
 
   /**
    * Concatenates the current map with the given one. In case of occurring the same keys in two maps
@@ -119,7 +126,9 @@ public interface ImmutableMap<K, V> {
    * @throws NullPointerException if {@code map} is null
    * @see ImmutableMap#concatWith(ImmutableMap, TriFunction)
    */
-  ImmutableMap<K, V> concatWithoutOverride(ImmutableMap<K, V> map);
+  default ImmutableMap<K, V> concatWithoutOverride(ImmutableMap<K, V> map) {
+    return concatWith(map, (key, oldVal, newVal) -> oldVal);
+  }
 
   /**
    * Adds all pairs of keys and values from current map and the given map to the new one and returns
@@ -128,7 +137,7 @@ public interface ImmutableMap<K, V> {
    * <p>If these two maps have any equal keys, {@code overrideBehaviour} function will be called to
    * resolve the conflict.</p>
    *
-   * @param map               the map whose pairs will be added to the current one
+   * @param mapToConcatWith   the map whose pairs will be added to the current one
    * @param overrideBehaviour function is called every time when two same keys in two maps are
    *                          found. The first param is the key. The second param is the value from
    *                          the current map. The third param is the value from the given map.
@@ -136,7 +145,19 @@ public interface ImmutableMap<K, V> {
    * @return new map with merged pairs
    * @throws NullPointerException if {@code map} is null or {@code overrideBehaviour} is null
    */
-  ImmutableMap<K, V> concatWith(ImmutableMap<K, V> map, TriFunction<K, V, V, V> overrideBehaviour);
+  default ImmutableMap<K, V> concatWith(ImmutableMap<K, V> mapToConcatWith,
+      TriFunction<K, V, V, V> overrideBehaviour) {
+    Map<K, V> resultMutableMap = toMutableMap();
+    mapToConcatWith.forEach(
+        (k, v) -> {
+          if (this.containsKey(k)) {
+            resultMutableMap.put(k, overrideBehaviour.apply(k, this.get(k), v));
+          } else {
+            resultMutableMap.put(k, v);
+          }
+        });
+    return new ImmutableHashMap<>(resultMutableMap);
+  }
 
   /**
    * Gets the value from the map by {@code key}.
