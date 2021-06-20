@@ -323,6 +323,7 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
    *
    * @return hashcode of the collection
    */
+  @Override
   int hashCode();
 
   /**
@@ -331,6 +332,7 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
    * @param obj the object whose equality with the collection is to be tested
    * @return true if objects are equal, otherwise false
    */
+  @Override
   boolean equals(Object obj);
 
   /**

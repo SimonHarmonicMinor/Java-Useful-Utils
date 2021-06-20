@@ -20,7 +20,7 @@ import java.util.stream.Stream;
  */
 public final class ImmutableHashSet<T> extends AbstractImmutableSet<T> {
 
-  private final HashSet<T> hashSet;
+  private final Set<T> hashSet;
 
   /**
    * Constructor.

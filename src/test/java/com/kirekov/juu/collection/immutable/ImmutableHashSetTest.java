@@ -43,10 +43,10 @@ class ImmutableHashSetTest {
 
   @Test
   void concatWith() {
-    String item1 = "dasgsdfg";
-    String item2 = "123afdasgsdfg";
-    String item3 = "123afda14fsdffg";
-    String item4 = "123adfgdfgfda14fsdffg";
+    String item1 = "dasgsdfggdgsf";
+    String item2 = "123afdasgsdfgherjer";
+    String item3 = "123afda14fsdffgdfsdfh";
+    String item4 = "123adfgdfgfda14fsdffgfgdfgfdgh";
 
     ImmutableSet<String> immutableSet = new ImmutableHashSet<>(
         Stream.of(item1, item2, item3, item4).collect(Collectors.toSet())

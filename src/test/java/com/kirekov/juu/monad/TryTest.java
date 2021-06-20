@@ -317,7 +317,6 @@ class TryTest {
 
   @Test
   void ifEmptyDoesNotCallConsumer() {
-    final int val = 123141;
     @SuppressWarnings("unchecked") final Collection<Object> collection = mock(Collection.class);
     final Consumer<Throwable> consumer = collection::add;
 
