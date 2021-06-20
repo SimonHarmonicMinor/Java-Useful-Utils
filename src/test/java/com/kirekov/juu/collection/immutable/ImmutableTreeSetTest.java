@@ -502,7 +502,7 @@ class ImmutableTreeSetTest {
   }
 
   @Test
-  void equalsShouldReturnOnNullComparison(){
+  void equalsShouldReturnOnNullComparison() {
     ImmutableNavigableSet<String> set1 = ImmutableTreeSet.of(
         Arrays.asList("1", "2", "3")
     );
@@ -510,7 +510,7 @@ class ImmutableTreeSetTest {
   }
 
   @Test
-  void equalsShouldReturnOnDifferentClassesComparison(){
+  void equalsShouldReturnOnDifferentClassesComparison() {
     ImmutableNavigableSet<String> set1 = ImmutableTreeSet.of(
         Arrays.asList("1", "2", "3")
     );
