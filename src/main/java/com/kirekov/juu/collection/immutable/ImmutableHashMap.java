@@ -1,9 +1,8 @@
 package com.kirekov.juu.collection.immutable;
 
-import com.kirekov.juu.lambda.TriFunction;
+import com.kirekov.juu.collection.immutable.abstraction.AbstractImmutableMap;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * An immutable implementation of java native {@link HashMap}.
@@ -14,7 +13,7 @@ import java.util.Objects;
  * @see HashMap
  * @since 1.0
  */
-public final class ImmutableHashMap<K, V> implements ImmutableMap<K, V> {
+public final class ImmutableHashMap<K, V> extends AbstractImmutableMap<K, V> {
 
   private final Map<K, V> hashMap;
   private final ImmutableSet<K> keys;
@@ -52,32 +51,6 @@ public final class ImmutableHashMap<K, V> implements ImmutableMap<K, V> {
   @Override
   public boolean containsValue(Object value) {
     return hashMap.containsValue(value);
-  }
-
-  @Override
-  public boolean containsPair(Pair<K, V> pair) {
-    Objects.requireNonNull(pair);
-    return pairSet().contains(pair);
-  }
-
-  @Override
-  public ImmutableMap<K, V> concatWithOverride(ImmutableMap<K, V> map) {
-    Objects.requireNonNull(map);
-    return ImmutableMapUtils.concatenationWithOverride(this.hashMap, map);
-  }
-
-  @Override
-  public ImmutableMap<K, V> concatWithoutOverride(ImmutableMap<K, V> map) {
-    Objects.requireNonNull(map);
-    return ImmutableMapUtils.concatenationWithoutOverride(this.hashMap, map);
-  }
-
-  @Override
-  public ImmutableMap<K, V> concatWith(
-      ImmutableMap<K, V> map, TriFunction<K, V, V, V> overrideBehaviour) {
-    Objects.requireNonNull(map);
-    Objects.requireNonNull(overrideBehaviour);
-    return ImmutableMapUtils.concatenation(this.hashMap, map, overrideBehaviour);
   }
 
   @Override
