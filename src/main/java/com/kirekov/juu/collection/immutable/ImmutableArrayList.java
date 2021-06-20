@@ -1,5 +1,6 @@
 package com.kirekov.juu.collection.immutable;
 
+import com.kirekov.juu.collection.immutable.abstraction.AbstractImmutableList;
 import com.kirekov.juu.monad.Try;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -23,7 +24,7 @@ import java.util.stream.Stream;
  * @see ArrayList
  * @since 1.0
  */
-public class ImmutableArrayList<T> implements ImmutableList<T> {
+public class ImmutableArrayList<T> extends AbstractImmutableList<T> implements ImmutableList<T> {
 
   private final ArrayList<T> arrayList;
 
@@ -295,28 +296,6 @@ public class ImmutableArrayList<T> implements ImmutableList<T> {
   @Override
   public Iterator<T> iterator() {
     return new UnmodifiableIterator<>(arrayList.iterator());
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    ImmutableArrayList<?> that = (ImmutableArrayList<?>) o;
-    return arrayList.equals(that.arrayList);
-  }
-
-  @Override
-  public int hashCode() {
-    return arrayList.hashCode();
-  }
-
-  @Override
-  public String toString() {
-    return ImmutableCollectionUtils.listToString(this);
   }
 
   private int normalizeIndex(int index) {
