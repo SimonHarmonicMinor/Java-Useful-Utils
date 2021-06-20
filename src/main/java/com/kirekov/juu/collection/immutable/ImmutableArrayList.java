@@ -97,15 +97,6 @@ public final class ImmutableArrayList<T> extends AbstractImmutableList<T> {
   }
 
   @Override
-  public ImmutableList<T> step(int stepSize) {
-    if (stepSize > 0) {
-      return step(0, stepSize);
-    } else {
-      return step(-1, stepSize);
-    }
-  }
-
-  @Override
   public ImmutableList<T> step(int fromIndex, int stepSize) {
     checkStepSize(stepSize);
     checkIndex(normalizeIndex(fromIndex));
@@ -255,11 +246,6 @@ public final class ImmutableArrayList<T> extends AbstractImmutableList<T> {
       newList.add(arrayList.get(i));
     }
     return new ImmutableArrayList<>(newList);
-  }
-
-  @Override
-  public ImmutableList<T> reversed() {
-    return step(-1);
   }
 
   @Override
