@@ -24,7 +24,7 @@ import java.util.stream.Stream;
  * @see Set
  * @see TreeSet
  */
-public class ImmutableTreeSet<T> extends AbstractImmutableSet<T> implements ImmutableNavigableSet<T> {
+public final class ImmutableTreeSet<T> extends AbstractImmutableSet<T> implements ImmutableNavigableSet<T> {
 
   private final TreeSet<T> treeSet;
 
