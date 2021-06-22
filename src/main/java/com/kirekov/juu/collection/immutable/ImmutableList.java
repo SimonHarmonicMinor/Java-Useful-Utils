@@ -103,22 +103,22 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
 
   /**
    * Returns sublist from {@code fromIndex} inclusively to {@code toIndex} exclusively with the
-   * given step size.<br> Supports negative indices. If {@code stepSize} is negative, then the list
-   * will be traversed backwards.
+   * given step size. Supports negative indices. If {@code stepSize} is negative, then the list is
+   * to be traversed backwards.
    *
    * <pre>{@code
    * ImmutableList<Integer> list = getList(); // [1, 2, 3, 4, 5, 6]
-   * list.slice(0, 3, 1);         // [1, 2, 3]
-   * list.slice(-1, 2, -1);       // [6, 5, 4]
-   * list.slice(0, 6, 2);         // [0, 3, 5]
+   * list.slice(0, 3, 1);                     // [1, 2, 3]
+   * list.slice(-1, 2, -1);                   // [6, 5, 4]
+   * list.slice(0, 6, 2);                     // [0, 3, 5]
    * }</pre>
    *
    * @param fromIndex start index (inclusively)
    * @param toIndex   end index (exclusively)
    * @param stepSize  the size of the step traversing
    * @return result sublist
-   * @throws IndexOutOfBoundsException if fromIndex is out of bounds
-   * @throws IllegalArgumentException  if stepSize is zero
+   * @throws IndexOutOfBoundsException if {@code fromIndex} is out of bounds
+   * @throws IllegalArgumentException  if {@code stepSize} is zero
    * @see ImmutableList#get(int)
    */
   ImmutableList<T> slice(int fromIndex, int toIndex, int stepSize);
