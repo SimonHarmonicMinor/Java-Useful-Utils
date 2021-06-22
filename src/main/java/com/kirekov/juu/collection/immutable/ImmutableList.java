@@ -64,10 +64,18 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
   OptionalInt lastIndexOf(T element);
 
   /**
-   * Proxy method for {@code this.slice(fromIndex, size(), 1)}.
+   * Returns sublist starting from {@code fromIndex}. Supports negative indices.
+   *
+   * <pre>{@code
+   * ImmutableList<Integer> list = getList(); // [1, 2, 3, 4, 5, 6]
+   * list.slice(1);                           // [2, 3, 4, 5, 6]
+   * list.slice(-2);                          // [5, 6]
+   * list.slice(-4);                          // [3, 4, 5, 6]
+   * }</pre>
    *
    * @param fromIndex start index (inclusively)
    * @return sublist
+   * @throws IndexOutOfBoundsException if {@code fromIndex} is out of bounds
    * @see ImmutableList#slice(int, int, int)
    */
   ImmutableList<T> slice(int fromIndex);
