@@ -81,12 +81,22 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
   ImmutableList<T> slice(int fromIndex);
 
   /**
-   * Proxy method for {@code this.slice(fromIndex, toIndex, 1)} if {@code fromIndex} is before
-   * {@code toIndex} and {@code this.slice(fromIndex, toIndex, -1)} otherwise.
+   * Returns sublist from {@code fromIndex} to {@code toIndex} exclusively. Supports negative
+   * indices. If {@code fromIndex} is placed before {@code toIndex}, the result list order is
+   * descending.
+   *
+   * <pre>{@code
+   * ImmutableList<Integer> list = getList(); // [1, 2, 3, 4, 5, 6]
+   * list.slice(1, 3);                        // [2, 3]
+   * list.slice(-3, -1);                      // [4, 5]
+   * list.slice(5, 1);                        // [6, 5, 4, 3]
+   * list.slice(-2, -6);                      // [5, 4, 3, 2]
+   * }</pre>
    *
    * @param fromIndex start index (inclusively)
    * @param toIndex   end index (exclusively)
    * @return sublist
+   * @throws IndexOutOfBoundsException if {@code fromIndex} is out of bounds
    * @see ImmutableList#slice(int, int, int)
    */
   ImmutableList<T> slice(int fromIndex, int toIndex);
