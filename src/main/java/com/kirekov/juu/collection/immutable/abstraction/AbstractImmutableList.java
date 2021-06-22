@@ -25,9 +25,4 @@ public abstract class AbstractImmutableList<T> implements ImmutableList<T> {
     }
     return builder.toString();
   }
-
-  @Override
-  public ImmutableList<T> reversed() {
-    return step(-1);
-  }
 }

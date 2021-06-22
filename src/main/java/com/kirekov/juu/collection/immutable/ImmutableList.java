@@ -287,5 +287,7 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
    *
    * @return reversed list
    */
-  ImmutableList<T> reversed();
+  default ImmutableList<T> reversed() {
+    return step(-1);
+  }
 }
