@@ -106,14 +106,30 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
   ImmutableList<T> slice(int fromIndex, int toIndex, int stepSize);
 
   /**
-   * Proxy method for {@code this.step(0, stepSize)} if {@code stepSize} is bigger than zero,
-   * otherwise {@code this.step(-1, stepSize)} shall be used.
+   * Returns new list with elements traversed by step step size. If {@code stepSize} is negative,
+   * the list ought to be traversed in reversed order.
+   *
+   * <pre>{@code
+   * ImmutableList<Integer> list = getList(); // [1, 2, 3, 4, 5, 6]
+   * list.step(2);                            // [1, 3, 5]
+   * list.step(-3);                           // [6, 3]
+   * }</pre>
    *
    * @param stepSize the size of step traversing
    * @return stepped list
+   * @throws IllegalArgumentException if {@code stepSize} is zero
    * @see ImmutableList#step(int, int)
    */
-  ImmutableList<T> step(int stepSize);
+  default ImmutableList<T> step(int stepSize) {
+    if (stepSize == 0) {
+      throw new IllegalArgumentException("Step size cannot be 0");
+    }
+    if (stepSize > 0) {
+      return step(0, stepSize);
+    } else {
+      return step(-1, stepSize);
+    }
+  }
 
   /**
    * Returns sublist traversed with given step starting from the given index.
