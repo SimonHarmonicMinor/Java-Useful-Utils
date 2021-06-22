@@ -64,56 +64,90 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
   OptionalInt lastIndexOf(T element);
 
   /**
-   * Proxy method for {@code this.slice(fromIndex, size(), 1)}.
+   * Returns sublist starting from {@code fromIndex}. Supports negative indices.
+   *
+   * <pre>{@code
+   * ImmutableList<Integer> list = getList(); // [1, 2, 3, 4, 5, 6]
+   * list.slice(1);                           // [2, 3, 4, 5, 6]
+   * list.slice(-2);                          // [5, 6]
+   * list.slice(-4);                          // [3, 4, 5, 6]
+   * }</pre>
    *
    * @param fromIndex start index (inclusively)
    * @return sublist
+   * @throws IndexOutOfBoundsException if {@code fromIndex} is out of bounds
    * @see ImmutableList#slice(int, int, int)
    */
   ImmutableList<T> slice(int fromIndex);
 
   /**
-   * Proxy method for {@code this.slice(fromIndex, toIndex, 1)} if {@code fromIndex} is before
-   * {@code toIndex} and {@code this.slice(fromIndex, toIndex, -1)} otherwise.
+   * Returns sublist from {@code fromIndex} to {@code toIndex} exclusively. Supports negative
+   * indices. If {@code fromIndex} is placed before {@code toIndex}, the result list order is
+   * descending.
+   *
+   * <pre>{@code
+   * ImmutableList<Integer> list = getList(); // [1, 2, 3, 4, 5, 6]
+   * list.slice(1, 3);                        // [2, 3]
+   * list.slice(-3, -1);                      // [4, 5]
+   * list.slice(5, 1);                        // [6, 5, 4, 3]
+   * list.slice(-2, -6);                      // [5, 4, 3, 2]
+   * }</pre>
    *
    * @param fromIndex start index (inclusively)
    * @param toIndex   end index (exclusively)
    * @return sublist
+   * @throws IndexOutOfBoundsException if {@code fromIndex} is out of bounds
    * @see ImmutableList#slice(int, int, int)
    */
   ImmutableList<T> slice(int fromIndex, int toIndex);
 
   /**
    * Returns sublist from {@code fromIndex} inclusively to {@code toIndex} exclusively with the
-   * given step size.<br> Supports negative indices. If {@code stepSize} is negative, then the list
-   * will be traversed backwards.
+   * given step size. Supports negative indices. If {@code stepSize} is negative, then the list is
+   * to be traversed backwards.
    *
    * <pre>{@code
    * ImmutableList<Integer> list = getList(); // [1, 2, 3, 4, 5, 6]
-   * list.slice(0, 3, 1);         // [1, 2, 3]
-   * list.slice(-1, 2, -1);       // [6, 5, 4]
-   * list.slice(0, 6, 2);         // [0, 3, 5]
+   * list.slice(0, 3, 1);                     // [1, 2, 3]
+   * list.slice(-1, 2, -1);                   // [6, 5, 4]
+   * list.slice(0, 6, 2);                     // [0, 3, 5]
    * }</pre>
    *
    * @param fromIndex start index (inclusively)
    * @param toIndex   end index (exclusively)
    * @param stepSize  the size of the step traversing
    * @return result sublist
-   * @throws IndexOutOfBoundsException if fromIndex is out of bounds
-   * @throws IllegalArgumentException  if stepSize is zero
+   * @throws IndexOutOfBoundsException if {@code fromIndex} is out of bounds
+   * @throws IllegalArgumentException  if {@code stepSize} is zero
    * @see ImmutableList#get(int)
    */
   ImmutableList<T> slice(int fromIndex, int toIndex, int stepSize);
 
   /**
-   * Proxy method for {@code this.step(0, stepSize)} if {@code stepSize} is bigger than zero,
-   * otherwise {@code this.step(-1, stepSize)} shall be used.
+   * Returns new list with elements traversed by step step size. If {@code stepSize} is negative,
+   * the list ought to be traversed in reversed order.
+   *
+   * <pre>{@code
+   * ImmutableList<Integer> list = getList(); // [1, 2, 3, 4, 5, 6]
+   * list.step(2);                            // [1, 3, 5]
+   * list.step(-3);                           // [6, 3]
+   * }</pre>
    *
    * @param stepSize the size of step traversing
    * @return stepped list
+   * @throws IllegalArgumentException if {@code stepSize} is zero
    * @see ImmutableList#step(int, int)
    */
-  ImmutableList<T> step(int stepSize);
+  default ImmutableList<T> step(int stepSize) {
+    if (stepSize == 0) {
+      throw new IllegalArgumentException("Step size cannot be 0");
+    }
+    if (stepSize > 0) {
+      return step(0, stepSize);
+    } else {
+      return step(-1, stepSize);
+    }
+  }
 
   /**
    * Returns sublist traversed with given step starting from the given index.
@@ -271,5 +305,7 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
    *
    * @return reversed list
    */
-  ImmutableList<T> reversed();
+  default ImmutableList<T> reversed() {
+    return step(-1);
+  }
 }
