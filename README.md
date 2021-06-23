@@ -10,7 +10,10 @@ This library has no dependencies (except the test scope).
 
 ### Quick start
 
+You need Java 8+ to use the library.
+
 Maven:
+
 ```xml
 <dependency>
     <groupId>com.kirekov</groupId>
