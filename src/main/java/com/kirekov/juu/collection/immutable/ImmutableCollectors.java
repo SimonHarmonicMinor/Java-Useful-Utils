@@ -21,13 +21,6 @@ import java.util.stream.Collector;
  */
 public class ImmutableCollectors {
 
-  static final Set<Collector.Characteristics> CH_ID =
-      Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.IDENTITY_FINISH));
-  static final Set<Collector.Characteristics> CH_UNORDERED_ID =
-      Collections.unmodifiableSet(
-          EnumSet.of(
-              Collector.Characteristics.UNORDERED, Collector.Characteristics.IDENTITY_FINISH));
-
   /**
    * Suppresses default constructor, ensuring non-instantiability.
    */
