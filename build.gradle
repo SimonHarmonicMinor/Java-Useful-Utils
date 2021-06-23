@@ -39,6 +39,8 @@ pmdTest {
     ruleSetFiles = files("codestyle/pmd_test.xml")
 }
 
+task runStaticAnalysis(dependsOn: [checkstyleMain, checkstyleTest, pmdMain, pmdTest])
+
 checkstyle {
     configFile = file('codestyle/checkstyle.xml')
     ignoreFailures = false
