@@ -1,13 +1,10 @@
 package com.kirekov.juu.collection.immutable;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
@@ -19,14 +16,7 @@ import java.util.stream.Collector;
  * @see java.util.stream.Collectors
  * @since 1.0
  */
-public class ImmutableCollectors {
-
-  static final Set<Collector.Characteristics> CH_ID =
-      Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.IDENTITY_FINISH));
-  static final Set<Collector.Characteristics> CH_UNORDERED_ID =
-      Collections.unmodifiableSet(
-          EnumSet.of(
-              Collector.Characteristics.UNORDERED, Collector.Characteristics.IDENTITY_FINISH));
+public final class ImmutableCollectors {
 
   /**
    * Suppresses default constructor, ensuring non-instantiability.
