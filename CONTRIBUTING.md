@@ -1,7 +1,7 @@
 # Contributing Guide
 
 Do you want to improve the library?
-Would you like to see yourself in the `README` *Authors* section?
+Would you like to see yourself in the `README` [Authors](https://github.com/SimonHarmonicMinor/Java-Useful-Utils#authors) section?
 That's great! Here is a guide how to contribute.
 
 
