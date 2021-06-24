@@ -16,7 +16,7 @@ import java.util.stream.Collector;
  * @see java.util.stream.Collectors
  * @since 1.0
  */
-public class ImmutableCollectors {
+public final class ImmutableCollectors {
 
   /**
    * Suppresses default constructor, ensuring non-instantiability.

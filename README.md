@@ -10,7 +10,10 @@ This library has no dependencies (except the test scope).
 
 ### Quick start
 
+You need Java 8+ to use the library.
+
 Maven:
+
 ```xml
 <dependency>
     <groupId>com.kirekov</groupId>
@@ -30,6 +33,7 @@ implementation 'com.kirekov:java-useful-utils'
 [![Hits-of-Code](https://hitsofcode.com/github/SimonHarmonicMinor/Java-Useful-Utils)](https://hitsofcode.com/github/SimonHarmonicMinor/Java-Useful-Utils/view)
 [![checkstyle](https://img.shields.io/badge/checkstyle-intergrated-informational)](https://checkstyle.sourceforge.io/)
 [![PMD](https://img.shields.io/badge/PMD-intergrated-informational)](https://pmd.github.io/pmd-6.35.0/pmd_rules_java.html)
+[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/SimonHarmonicMinor/Java-Useful-Utils/blob/master/LICENSE)
 
 ### Usage
 The library consists of three big parts.
