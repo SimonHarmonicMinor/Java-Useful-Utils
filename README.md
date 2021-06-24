@@ -3,6 +3,8 @@ Truly immutable collections, functional errors handling, laziness and measuremen
 
 This library has no dependencies (except the test scope).
 
+If you want to contribute, check out the [Contributing Guide](./CONTRIBUTING.md).
+
 ### Table of contents
 * [Quick start](#quick-start)
 * [Status](#status)
