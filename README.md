@@ -9,6 +9,7 @@ If you want to contribute, check out the [Contributing Guide](./CONTRIBUTING.md)
 * [Quick start](#quick-start)
 * [Status](#status)
 * [Usage](#usage)
+* [Authors](#authors)
 
 ### Quick start
 
@@ -348,3 +349,6 @@ Also lib has implementations for each primitive type.
 `MutableInt`, `MutableDouble`, `MutableShort`,
 `MutableLong`, `MutableFloat`, `MutableChar`,
 `MutableByte`, `MutableBoolean`.
+
+### Authors
+- [@SimonHarmonicMinor](https://github.com/SimonHarmonicMinor)
