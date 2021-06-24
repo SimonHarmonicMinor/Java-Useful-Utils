@@ -2,7 +2,6 @@ package com.kirekov.juu.collection.immutable.abstraction;
 
 import com.kirekov.juu.collection.immutable.ImmutableSet;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * Abstract immutable set.
