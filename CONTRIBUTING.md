@@ -17,4 +17,8 @@ That's great! Here is a guide how to contribute.
 Also you should know that the repository uses [SonarCloud](https://sonarcloud.io/) to measure the test coverage.
 If it's lower than 80%, the check doesn't pass.
 
+The commits should be written according to this pattern: `[#TASK_ID] - message`.
+
+For example, `[#96] - Fixed ImmutableList.slice(int fromIndex, int toIndex) javadoc`.
+
 That's basically everything you need to know. Feel free to contribute!
