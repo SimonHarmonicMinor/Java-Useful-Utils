@@ -26,4 +26,9 @@ For example, `feature/#96-move-methods`
 The repository checks commit messages and branches names automatically on each pull request.
 So, any violation does not allow proceeding further.
 
+The release process is automatic.
+Each pull request merge to `master` branch uploads a new `DEV-SNAPSHOT` version.
+Whilst merge to `releases` creates a new concrete release. 
+Merge to `releases` can only be made by the repository maintainer.
+
 That's basically everything you need to know. Feel free to contribute!
