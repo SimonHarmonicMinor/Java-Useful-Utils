@@ -29,11 +29,11 @@ jobs:
           accessToken: ${{ secrets.GITHUB_TOKEN }}
           error: 'The commit message should be formatted as "[#TASK_ID] - message"'
       - name: Get current branch name
-        id: current_branch
-        uses: ryolambert/current-branch@v1.0
+        uses: nelonoel/branch-name@v1.0.1
       - name: Check current branch name
         shell: python
         run: |
+          import os
           import re
-          branch = {{ steps.current_branch.outputs.branch }}
+          branch = os.getenv('BRANCH_NAME')
           assert re.match(r"^[\d|\w]+/#\d+-.+", branch), 'The branch should be formatted as "type/#TASK_ID-description"'
