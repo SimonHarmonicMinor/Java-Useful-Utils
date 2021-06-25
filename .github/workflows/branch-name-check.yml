@@ -1,4 +1,4 @@
-name: 'Commit Message Check'
+name: 'Branch name check'
 on:
   pull_request:
     types:
@@ -14,20 +14,10 @@ on:
       - synchronize
 
 jobs:
-  check-commit-message:
-    name: Check Commit Message
+  branch-name-check:
+    name: Branch name check
     runs-on: ubuntu-latest
     steps:
-      - name: Check Commit Type
-        uses: gsactions/commit-message-checker@v1
-        with:
-          pattern: '([mM]erge .+|\[#\d+\] - .+$)'
-          flags: 'g'
-          excludeDescription: 'true'
-          excludeTitle: 'true'
-          checkAllCommitMessages: 'true'
-          accessToken: ${{ secrets.GITHUB_TOKEN }}
-          error: 'The commit message should be formatted as "[#TASK_ID] - message"'
       - name: Check current branch name
         shell: python
         run: |
