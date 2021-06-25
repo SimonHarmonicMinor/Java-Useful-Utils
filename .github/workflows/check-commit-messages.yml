@@ -25,7 +25,7 @@ jobs:
           flags: 'g'
           excludeDescription: 'true'
           excludeTitle: 'true'
-          checkAllCommitMessages: 'true'
+          checkAllCommitMessages: 'false'
           accessToken: ${{ secrets.GITHUB_TOKEN }}
           error: 'The commit message should be formatted as "[#TASK_ID] - message"'
       - name: Check current branch name
