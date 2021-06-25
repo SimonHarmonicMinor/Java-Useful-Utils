@@ -5,7 +5,7 @@ package com.kirekov.juu.collection.mutable;
  *
  * @see MutableValue
  */
-public class MutableDouble {
+public final class MutableDouble {
 
   private double value;
 
