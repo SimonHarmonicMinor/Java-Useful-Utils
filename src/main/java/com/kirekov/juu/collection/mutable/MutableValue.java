@@ -13,7 +13,7 @@ package com.kirekov.juu.collection.mutable;
  * @see MutableLong
  * @see MutableShort
  */
-public class MutableValue<T> {
+public final class MutableValue<T> {
 
   private T value;
 
