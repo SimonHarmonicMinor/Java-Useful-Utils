@@ -35,5 +35,5 @@ jobs:
         run: |
           import os
           import re
-          branch = os.getenv('BRANCH_NAME')
+          branch = os.getenv('GITHUB_HEAD_REF')
           assert re.match(r"^[\d|\w]+/#\d+-.+", branch), 'The branch should be formatted as "type/#TASK_ID-description" but received {}'.format(branch)
