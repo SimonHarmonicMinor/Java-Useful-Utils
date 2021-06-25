@@ -5,7 +5,7 @@ package com.kirekov.juu.collection.mutable;
  *
  * @see MutableValue
  */
-public class MutableFloat {
+public final class MutableFloat {
 
   private float value;
 

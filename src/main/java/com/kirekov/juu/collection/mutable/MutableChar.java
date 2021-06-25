@@ -5,7 +5,7 @@ package com.kirekov.juu.collection.mutable;
  *
  * @see MutableValue
  */
-public class MutableChar {
+public final class MutableChar {
 
   private char value;
 
