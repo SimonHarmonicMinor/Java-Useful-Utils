@@ -5,6 +5,9 @@ This library has no dependencies (except the test scope).
 
 If you want to contribute, check out the [Contributing Guide](./CONTRIBUTING.md).
 
+`master`branch provides the latest `DEV-SNAPSHOT` documentation.
+You can find the specific version info by git tags.
+
 ### Table of contents
 * [Quick start](#quick-start)
 * [Status](#status)
