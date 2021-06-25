@@ -36,4 +36,4 @@ jobs:
           import os
           import re
           branch = os.getenv('BRANCH_NAME')
-          assert re.match(r"^[\d|\w]+/#\d+-.+", branch), 'The branch should be formatted as "type/#TASK_ID-description"'
+          assert re.match(r"^[\d|\w]+/#\d+-.+", branch), 'The branch should be formatted as "type/#TASK_ID-description" but received {}'.format(branch)
