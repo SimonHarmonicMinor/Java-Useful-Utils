@@ -18,7 +18,12 @@ Also you should know that the repository uses [SonarCloud](https://sonarcloud.io
 If it's lower than 80%, the check doesn't pass.
 
 The commits should be written according to this pattern: `[#TASK_ID] - message`.
-
 For example, `[#96] - Fixed ImmutableList.slice(int fromIndex, int toIndex) javadoc`.
+
+The branches should be named as `type/#TASK_ID-desription`.
+For example, `feature/#96-move-methods`
+
+The repository checks commit messages and branches names automatically on each pull request.
+So, any violation does not allow proceeding further.
 
 That's basically everything you need to know. Feel free to contribute!
