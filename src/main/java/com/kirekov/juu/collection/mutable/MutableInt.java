@@ -5,7 +5,7 @@ package com.kirekov.juu.collection.mutable;
  *
  * @see MutableValue
  */
-public class MutableInt {
+public final class MutableInt {
 
   private int value;
 
