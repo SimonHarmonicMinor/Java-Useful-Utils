@@ -28,8 +28,6 @@ jobs:
           checkAllCommitMessages: 'true'
           accessToken: ${{ secrets.GITHUB_TOKEN }}
           error: 'The commit message should be formatted as "[#TASK_ID] - message"'
-      - name: Get current branch name
-        uses: nelonoel/branch-name@v1.0.1
       - name: Check current branch name
         shell: python
         run: |
