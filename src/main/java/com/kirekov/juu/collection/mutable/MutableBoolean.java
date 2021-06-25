@@ -5,7 +5,7 @@ package com.kirekov.juu.collection.mutable;
  *
  * @see MutableValue
  */
-public class MutableBoolean {
+public final class MutableBoolean {
 
   private boolean value;
 
