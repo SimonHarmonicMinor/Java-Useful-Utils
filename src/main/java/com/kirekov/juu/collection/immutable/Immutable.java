@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  * @see Pair
  * @since 1.0
  */
-public class Immutable {
+public final class Immutable {
 
   private static final ImmutableArrayList<?> EMPTY_ARRAY_LIST =
       new ImmutableArrayList<>(Collections.emptyList());
