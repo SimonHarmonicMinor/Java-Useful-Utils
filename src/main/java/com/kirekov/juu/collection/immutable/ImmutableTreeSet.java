@@ -29,6 +29,14 @@ public final class ImmutableTreeSet<T>
 
   private final NavigableSet<T> navigableSet;
 
+  /**
+   * Creates new {@linkplain ImmutableTreeSet}.
+   *
+   * @param iterable source of elements
+   * @param <R>      the type of the element
+   * @return new {@linkplain ImmutableTreeSet}
+   * @throws NullPointerException if {@code iterable} is null
+   */
   public static <R extends Comparable<R>> ImmutableTreeSet<R> of(Iterable<R> iterable) {
     Objects.requireNonNull(
         iterable,
@@ -37,6 +45,15 @@ public final class ImmutableTreeSet<T>
     return new ImmutableTreeSet<>(iterable, null);
   }
 
+  /**
+   * Creates new {@linkplain ImmutableTreeSet}.
+   *
+   * @param iterable   source of elements
+   * @param comparator element's comparator. Might be null
+   * @param <R>        the type of the element
+   * @return new {@linkplain ImmutableTreeSet}
+   * @throws NullPointerException if {@code iterable} is null
+   */
   public static <R> ImmutableTreeSet<R> of(Iterable<R> iterable, Comparator<R> comparator) {
     Objects.requireNonNull(
         iterable,
@@ -45,6 +62,14 @@ public final class ImmutableTreeSet<T>
     return new ImmutableTreeSet<>(iterable, comparator);
   }
 
+  /**
+   * Creates new {@linkplain ImmutableTreeSet}.
+   *
+   * @param sortedSet source of elements
+   * @param <R>       the type of the element
+   * @return new {@linkplain ImmutableTreeSet}
+   * @throws NullPointerException if {@code sortedSet} is null
+   */
   public static <R> ImmutableTreeSet<R> ofSortedSet(SortedSet<R> sortedSet) {
     Objects.requireNonNull(
         sortedSet,
@@ -53,6 +78,13 @@ public final class ImmutableTreeSet<T>
     return new ImmutableTreeSet<>(sortedSet);
   }
 
+  /**
+   * Constructor.
+   *
+   * @param iterable   source of elements
+   * @param comparator element's comparator. Might be null.
+   * @throws NullPointerException if {@code iterable} is null
+   */
   ImmutableTreeSet(Iterable<T> iterable, Comparator<? super T> comparator) {
     Objects.requireNonNull(
         iterable,
@@ -64,6 +96,12 @@ public final class ImmutableTreeSet<T>
     }
   }
 
+  /**
+   * Constructor.
+   *
+   * @param sortedSet source of elements
+   * @throws NullPointerException if {@code sortedSet} is null
+   */
   ImmutableTreeSet(SortedSet<T> sortedSet) {
     Objects.requireNonNull(
         sortedSet,
