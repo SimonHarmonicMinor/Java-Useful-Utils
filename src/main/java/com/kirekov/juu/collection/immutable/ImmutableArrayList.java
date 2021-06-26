@@ -108,7 +108,7 @@ public final class ImmutableArrayList<T> extends AbstractImmutableList<T> {
 
   @Override
   public ImmutableList<T> concatWith(Iterable<T> iterable) {
-    Objects.requireNonNull(iterable);
+    Objects.requireNonNull(iterable, "iterable to concat with cannot be null");
     ArrayList<T> copy = new ArrayList<>(this.arrayList);
     for (T t : iterable) {
       copy.add(t);
@@ -118,7 +118,7 @@ public final class ImmutableArrayList<T> extends AbstractImmutableList<T> {
 
   @Override
   public <R> ImmutableList<Pair<T, R>> zipWith(ImmutableList<R> list) {
-    Objects.requireNonNull(list);
+    Objects.requireNonNull(list, "list to zip with cannot be null");
     int maxSize = Math.max(size(), list.size());
     ArrayList<Pair<T, R>> newArrayList = new ArrayList<>(maxSize);
     for (int i = 0; i < maxSize; i++) {
@@ -140,7 +140,7 @@ public final class ImmutableArrayList<T> extends AbstractImmutableList<T> {
 
   @Override
   public <R> ImmutableList<R> map(Function<? super T, ? extends R> mapper) {
-    Objects.requireNonNull(mapper);
+    Objects.requireNonNull(mapper, "mapper function cannot be null");
     ArrayList<R> newList = new ArrayList<>(arrayList.size());
     for (T t : arrayList) {
       newList.add(mapper.apply(t));
@@ -150,7 +150,7 @@ public final class ImmutableArrayList<T> extends AbstractImmutableList<T> {
 
   @Override
   public <R> ImmutableList<R> mapIndexed(BiFunction<Integer, ? super T, ? extends R> mapper) {
-    Objects.requireNonNull(mapper);
+    Objects.requireNonNull(mapper, "indexed mapper function cannot be null");
     ArrayList<R> newList = new ArrayList<>(arrayList.size());
     for (int i = 0; i < arrayList.size(); i++) {
       newList.add(mapper.apply(i, arrayList.get(i)));
@@ -160,7 +160,7 @@ public final class ImmutableArrayList<T> extends AbstractImmutableList<T> {
 
   @Override
   public <R> ImmutableList<R> flatMap(Function<? super T, ? extends Iterable<R>> mapper) {
-    Objects.requireNonNull(mapper);
+    Objects.requireNonNull(mapper, "flat mapper function cannot be null");
     ArrayList<R> newList = new ArrayList<>(arrayList.size());
     for (T t : arrayList) {
       ImmutableArrayList<R> listElement = new ImmutableArrayList<>(mapper.apply(t));
@@ -173,7 +173,7 @@ public final class ImmutableArrayList<T> extends AbstractImmutableList<T> {
   public <R> ImmutableList<R> flatMapIndexed(
       BiFunction<Integer, ? super T, ? extends Iterable<R>> mapper
   ) {
-    Objects.requireNonNull(mapper);
+    Objects.requireNonNull(mapper, "indexed flat mapper function cannot be null");
     ArrayList<R> newList = new ArrayList<>(arrayList.size());
     for (int i = 0; i < arrayList.size(); i++) {
       ImmutableArrayList<R> listElement =
@@ -185,7 +185,7 @@ public final class ImmutableArrayList<T> extends AbstractImmutableList<T> {
 
   @Override
   public ImmutableList<T> filter(Predicate<? super T> predicate) {
-    Objects.requireNonNull(predicate);
+    Objects.requireNonNull(predicate, "filtering predicate cannot be null");
     ArrayList<T> newList = new ArrayList<>(arrayList.size());
     for (T t : arrayList) {
       if (predicate.test(t)) {
@@ -197,7 +197,7 @@ public final class ImmutableArrayList<T> extends AbstractImmutableList<T> {
 
   @Override
   public ImmutableList<T> filterIndexed(BiPredicate<Integer, ? super T> predicate) {
-    Objects.requireNonNull(predicate);
+    Objects.requireNonNull(predicate, "indexed filtering predicate cannot be null");
     ArrayList<T> newList = new ArrayList<>(arrayList.size());
     for (int i = 0; i < arrayList.size(); i++) {
       if (predicate.test(i, arrayList.get(i))) {
@@ -209,7 +209,7 @@ public final class ImmutableArrayList<T> extends AbstractImmutableList<T> {
 
   @Override
   public void forEachIndexed(BiConsumer<Integer, ? super T> action) {
-    Objects.requireNonNull(action);
+    Objects.requireNonNull(action, "indexed for-each consumer cannot be null");
     for (int i = 0; i < arrayList.size(); i++) {
       action.accept(i, arrayList.get(i));
     }
@@ -217,7 +217,7 @@ public final class ImmutableArrayList<T> extends AbstractImmutableList<T> {
 
   @Override
   public ImmutableList<T> sorted(Comparator<? super T> comparator) {
-    Objects.requireNonNull(comparator);
+    Objects.requireNonNull(comparator, "sorting comparator cannot be null");
     ArrayList<T> copy = new ArrayList<>(arrayList);
     copy.sort(comparator);
     return new ImmutableArrayList<>(copy);
