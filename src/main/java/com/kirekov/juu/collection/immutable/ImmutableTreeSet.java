@@ -30,22 +30,34 @@ public final class ImmutableTreeSet<T>
   private final NavigableSet<T> navigableSet;
 
   public static <R extends Comparable<R>> ImmutableTreeSet<R> of(Iterable<R> iterable) {
-    Objects.requireNonNull(iterable);
+    Objects.requireNonNull(
+        iterable,
+        "iterable to create ImmutableTreeSet cannot be null"
+    );
     return new ImmutableTreeSet<>(iterable, null);
   }
 
   public static <R> ImmutableTreeSet<R> of(Iterable<R> iterable, Comparator<R> comparator) {
-    Objects.requireNonNull(iterable);
+    Objects.requireNonNull(
+        iterable,
+        "iterable to create ImmutableTreeSet cannot be null"
+    );
     return new ImmutableTreeSet<>(iterable, comparator);
   }
 
   public static <R> ImmutableTreeSet<R> ofSortedSet(SortedSet<R> sortedSet) {
-    Objects.requireNonNull(sortedSet);
+    Objects.requireNonNull(
+        sortedSet,
+        "sortedSet to create ImmutableTreeSet cannot be null"
+    );
     return new ImmutableTreeSet<>(sortedSet);
   }
 
   ImmutableTreeSet(Iterable<T> iterable, Comparator<? super T> comparator) {
-    Objects.requireNonNull(iterable);
+    Objects.requireNonNull(
+        iterable,
+        "iterable to create ImmutableTreeSet cannot be null"
+    );
     navigableSet = new TreeSet<>(comparator);
     for (T t : iterable) {
       navigableSet.add(t);
@@ -53,6 +65,10 @@ public final class ImmutableTreeSet<T>
   }
 
   ImmutableTreeSet(SortedSet<T> sortedSet) {
+    Objects.requireNonNull(
+        sortedSet,
+        "sortedSet to create ImmutableTreeSet cannot be null"
+    );
     this.navigableSet = new TreeSet<>(sortedSet);
   }
 
@@ -95,8 +111,12 @@ public final class ImmutableTreeSet<T>
   }
 
   @Override
-  public ImmutableNavigableSet<T> subSet(T fromElement, boolean fromInclusive, T toElement,
-      boolean toInclusive) {
+  public ImmutableNavigableSet<T> subSet(
+      T fromElement,
+      boolean fromInclusive,
+      T toElement,
+      boolean toInclusive
+  ) {
     return tryGetSubSet(() ->
         new ImmutableTreeSet<>(
             navigableSet.subSet(fromElement, fromInclusive, toElement, toInclusive)
@@ -162,6 +182,7 @@ public final class ImmutableTreeSet<T>
 
   @Override
   public ImmutableSet<T> concatWith(Iterable<T> iterable) {
+    Objects.requireNonNull(iterable, "iterable to concat with cannot be null");
     TreeSet<T> newTreeSet = new TreeSet<>(navigableSet);
     for (T t : iterable) {
       newTreeSet.add(t);
@@ -171,7 +192,7 @@ public final class ImmutableTreeSet<T>
 
   @Override
   public <R> ImmutableSet<R> map(Function<? super T, ? extends R> mapper) {
-    Objects.requireNonNull(mapper);
+    Objects.requireNonNull(mapper, "mapper function cannot be null");
     HashSet<R> hashSet = new HashSet<>(size());
     for (T t : this) {
       hashSet.add(mapper.apply(t));
@@ -181,7 +202,7 @@ public final class ImmutableTreeSet<T>
 
   @Override
   public <R> ImmutableSet<R> flatMap(Function<? super T, ? extends Iterable<R>> mapper) {
-    Objects.requireNonNull(mapper);
+    Objects.requireNonNull(mapper, "flat mapper function cannot be null");
     HashSet<R> hashSet = new HashSet<>();
     for (T t : this) {
       for (R r : mapper.apply(t)) {
@@ -193,7 +214,7 @@ public final class ImmutableTreeSet<T>
 
   @Override
   public ImmutableSet<T> filter(Predicate<? super T> predicate) {
-    Objects.requireNonNull(predicate);
+    Objects.requireNonNull(predicate, "filtering predicate cannot be null");
     TreeSet<T> newTreeSet = new TreeSet<>(comparator());
     for (T t : this) {
       if (predicate.test(t)) {
