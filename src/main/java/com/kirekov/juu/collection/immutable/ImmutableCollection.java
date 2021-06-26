@@ -86,7 +86,8 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
    * @throws NullPointerException if "elements" is null
    */
   default boolean containsAll(Iterable<?> elements) {
-    Objects.requireNonNull(elements);
+    Objects
+        .requireNonNull(elements, "iterable or elements to test all their presence cannot be null");
     for (Object t : elements) {
       if (notContains(t)) {
         return false;
@@ -103,7 +104,8 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
    * @throws NullPointerException if "elements" is null
    */
   default boolean containsAny(Iterable<?> elements) {
-    Objects.requireNonNull(elements);
+    Objects.requireNonNull(elements,
+        "iterable or elements to test any of their presence cannot be null");
     for (Object t : elements) {
       if (contains(t)) {
         return true;
@@ -120,7 +122,7 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
    * @throws NullPointerException if predicate is null
    */
   default boolean allMatch(Predicate<? super T> predicate) {
-    Objects.requireNonNull(predicate);
+    Objects.requireNonNull(predicate, "predicate to match all elements cannot be null");
     for (T t : this) {
       if (!predicate.test(t)) {
         return false;
@@ -137,7 +139,7 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
    * @throws NullPointerException if predicate is null
    */
   default boolean anyMatch(Predicate<? super T> predicate) {
-    Objects.requireNonNull(predicate);
+    Objects.requireNonNull(predicate, "predicate to test any match cannot be null");
     for (T t : this) {
       if (predicate.test(t)) {
         return true;
@@ -154,7 +156,7 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
    * @throws NullPointerException if predicate is null
    */
   default boolean noneMatch(Predicate<? super T> predicate) {
-    Objects.requireNonNull(predicate);
+    Objects.requireNonNull(predicate, "predicate to test none match cannot be null");
     for (T t : this) {
       if (predicate.test(t)) {
         return false;
@@ -180,7 +182,7 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
    * @throws NullPointerException if accumulator is null
    */
   default T reduce(T identity, BinaryOperator<T> accumulator) {
-    Objects.requireNonNull(accumulator);
+    Objects.requireNonNull(accumulator, "binary operator to reduce the collection cannot be null");
     return stream().reduce(identity, accumulator);
   }
 
@@ -194,7 +196,7 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
    * @throws NullPointerException if accumulator is null
    */
   default Optional<T> reduce(BinaryOperator<T> accumulator) {
-    Objects.requireNonNull(accumulator);
+    Objects.requireNonNull(accumulator, "binary operator to reduce the collection cannot be null");
     return stream().reduce(accumulator);
   }
 
@@ -207,7 +209,7 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
    * @throws NullPointerException if comparator is null
    */
   default Optional<T> min(Comparator<? super T> comparator) {
-    Objects.requireNonNull(comparator);
+    Objects.requireNonNull(comparator, "comparator to find the min element cannot be null");
     return Try.of(() -> stream().min(comparator))
         .orElse(Optional.empty());
   }
@@ -221,7 +223,7 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
    * @throws NullPointerException if comparator is null
    */
   default Optional<T> max(Comparator<? super T> comparator) {
-    Objects.requireNonNull(comparator);
+    Objects.requireNonNull(comparator, "comparator to find the max element cannot be null");
     return Try.of(() -> stream().max(comparator))
         .orElse(Optional.empty());
   }
@@ -246,7 +248,7 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
    * @throws NullPointerException if {@code comparator} is null
    */
   default Optional<T> findFirst(Predicate<? super T> predicate) {
-    Objects.requireNonNull(predicate);
+    Objects.requireNonNull(predicate, "predicate to find the first matched element cannot be null");
     for (T t : this) {
       if (predicate.test(t)) {
         return Optional.ofNullable(t);
