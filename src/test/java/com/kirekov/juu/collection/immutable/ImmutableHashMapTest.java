@@ -226,7 +226,7 @@ class ImmutableHashMapTest {
   }
 
   @Test
-  void toMutableMap() {
+  void shouldBuildNewImmutableMapFromMutableMap() {
     Map<String, Integer> mutable = new HashMap<>();
     mutable.put("1", 1);
     mutable.put("2", 2);
@@ -288,7 +288,7 @@ class ImmutableHashMapTest {
   }
 
   @Test
-  void getOrDefault() {
+  void shouldReturnDefaultValueIfItIsNotPresent() {
     Map<String, Integer> mutable = new HashMap<>();
     mutable.put("1", 1);
     mutable.put("2", 2);

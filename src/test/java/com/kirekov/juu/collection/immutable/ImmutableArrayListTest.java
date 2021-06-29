@@ -74,7 +74,7 @@ class ImmutableArrayListTest {
   }
 
   @Test
-  void getThrowsIndexOutOfBoundsException() {
+  void shouldThrowIndexOutOfBoundsException() {
     Set<Integer> set = new HashSet<>();
     set.add(1);
     set.add(2);
@@ -750,7 +750,7 @@ class ImmutableArrayListTest {
   }
 
   @Test
-  void toList() {
+  void shouldReturnTheEqualImmutableList() {
     int item1 = 1251;
     int item2 = -14214;
     int item3 = 0;
@@ -765,7 +765,7 @@ class ImmutableArrayListTest {
   }
 
   @Test
-  void toMutableList() {
+  void shouldReturnTheEqualMutableList() {
     int item1 = 1251;
     int item2 = -14214;
     int item3 = 0;
@@ -790,7 +790,7 @@ class ImmutableArrayListTest {
   }
 
   @Test
-  void toSet() {
+  void shouldReturnTheEqualImmutableSet() {
     int item1 = 1251;
     int item2 = -14214;
     int item3 = 0;
@@ -810,7 +810,7 @@ class ImmutableArrayListTest {
   }
 
   @Test
-  void toMutableSet() {
+  void shouldReturnTheEqualMutableSet() {
     int item1 = 1251;
     int item2 = -14214;
     int item3 = 0;
@@ -882,7 +882,7 @@ class ImmutableArrayListTest {
   }
 
   @Test
-  void toStringTest() {
+  void shouldStringContainingElements() {
     int item1 = 1251;
     int item2 = -14214;
     int item3 = 0;

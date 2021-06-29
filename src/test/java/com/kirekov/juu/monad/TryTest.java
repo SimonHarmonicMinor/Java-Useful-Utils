@@ -43,7 +43,7 @@ class TryTest {
   }
 
   @Test
-  void getFirstReturnsFirstPresent() {
+  void shouldReturnTheValueFromTheFirstNonFailSupplier() {
     Try<Integer> t = Try.getFirst(
         Arrays.asList(
             () -> {
@@ -60,7 +60,7 @@ class TryTest {
   }
 
   @Test
-  void getFirstReturnsEmpty() {
+  void shouldReturnEmptyContainerIfAllSuppliersHaveFailed() {
     Try<Integer> t = Try.getFirst(
         Arrays.asList(
             () -> {
@@ -78,7 +78,7 @@ class TryTest {
   }
 
   @Test
-  void getThrowsNoSuchElementException() {
+  void shouldThrowExceptionIfContainerIsEmpty() {
     Try<Integer> t = Try.empty();
     assertThrows(EmptyContainerException.class, t::get);
   }

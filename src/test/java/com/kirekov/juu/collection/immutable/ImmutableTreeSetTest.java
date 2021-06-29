@@ -222,7 +222,7 @@ class ImmutableTreeSetTest {
   }
 
   @Test
-  void toMutableNavigableSet() {
+  void shouldReturnTheEqualImmutableNavigableMap() {
     ImmutableNavigableSet<String> set = ImmutableTreeSet.of(
         Arrays.asList("1", "2", "3", "4", "5")
     );
@@ -348,7 +348,7 @@ class ImmutableTreeSetTest {
   }
 
   @Test
-  void toMutableSortedSet() {
+  void shouldReturnNewMutableSortedSet() {
     ImmutableNavigableSet<String> set = ImmutableTreeSet.of(
         Arrays.asList("1", "2", "3", "4", "5")
     );
@@ -428,7 +428,7 @@ class ImmutableTreeSetTest {
   }
 
   @Test
-  void toList() {
+  void shouldReturnMutableListFromTheSet() {
     ImmutableNavigableSet<String> set = ImmutableTreeSet.of(
         Arrays.asList("1", "2", "3", "4", "5")
     );
@@ -442,7 +442,7 @@ class ImmutableTreeSetTest {
   }
 
   @Test
-  void toSet() {
+  void shouldReturnTheEqualMutableSet() {
     ImmutableNavigableSet<String> set = ImmutableTreeSet.of(
         Arrays.asList("1", "2", "3", "4", "5")
     );
@@ -519,7 +519,7 @@ class ImmutableTreeSetTest {
 
 
   @Test
-  void toStringTest() {
+  void shouldReturnNonNullString() {
     ImmutableNavigableSet<String> set = ImmutableTreeSet.of(
         Arrays.asList("1", "2", "3", "4", "5")
     );
