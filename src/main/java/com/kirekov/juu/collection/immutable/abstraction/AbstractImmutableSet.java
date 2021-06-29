@@ -15,15 +15,15 @@ public abstract class AbstractImmutableSet<T> implements ImmutableSet<T> {
     if (isEmpty()) {
       return "{}";
     }
-    StringBuilder builder = new StringBuilder().append("{");
-    Iterator<T> it = iterator();
+    final StringBuilder builder = new StringBuilder().append("{");
+    final Iterator<T> it = iterator();
     while (it.hasNext()) {
-      T element = it.next();
+      final T element = it.next();
       builder.append(element);
-      if (!it.hasNext()) {
-        builder.append("}");
-      } else {
+      if (it.hasNext()) {
         builder.append(", ");
+      } else {
+        builder.append("}");
       }
     }
     return builder.toString();

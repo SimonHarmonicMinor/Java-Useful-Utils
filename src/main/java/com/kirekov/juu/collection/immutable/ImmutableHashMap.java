@@ -80,7 +80,7 @@ public final class ImmutableHashMap<K, V> implements ImmutableMap<K, V> {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ImmutableHashMap<?, ?> that = (ImmutableHashMap<?, ?>) o;
+    final ImmutableHashMap<?, ?> that = (ImmutableHashMap<?, ?>) o;
     return hashMap.equals(that.hashMap);
   }
 

@@ -793,7 +793,7 @@ class ImmutableTreeMapTest {
   }
 
   @Test
-  void toMutableNavigableMap() {
+  void shouldReturnNewMutableNavigableMap() {
     Map<String, Integer> map = new TreeMap<>();
     map.put("1", 1);
     map.put("2", 2);
@@ -1083,7 +1083,7 @@ class ImmutableTreeMapTest {
   }
 
   @Test
-  void toMutableMap() {
+  void shouldReturnTheEqualMutableMap() {
     Map<String, Integer> map1 = new HashMap<>();
     map1.put("1", 1);
     map1.put("2", 2);

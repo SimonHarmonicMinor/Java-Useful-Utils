@@ -97,9 +97,9 @@ public final class ImmutableCollectors {
   private static <T, K, V> BiConsumer<Map<K, V>, T> uniqKeysMapAccumulator(
       Function<? super T, ? extends K> keyMapper, Function<? super T, ? extends V> valueMapper) {
     return (map, element) -> {
-      K k = keyMapper.apply(element);
-      V v = Objects.requireNonNull(valueMapper.apply(element));
-      V u = map.putIfAbsent(k, v);
+      final K k = keyMapper.apply(element);
+      final V v = Objects.requireNonNull(valueMapper.apply(element));
+      final V u = map.putIfAbsent(k, v);
       if (u != null) {
         throw duplicateKeyException(k, u, v);
       }
@@ -108,10 +108,10 @@ public final class ImmutableCollectors {
 
   private static <K, V, M extends Map<K, V>> BinaryOperator<M> uniqKeysMapMerger() {
     return (m1, m2) -> {
-      for (Map.Entry<K, V> e : m2.entrySet()) {
-        K k = e.getKey();
-        V v = Objects.requireNonNull(e.getValue());
-        V u = m1.putIfAbsent(k, v);
+      for (final Map.Entry<K, V> e : m2.entrySet()) {
+        final K k = e.getKey();
+        final V v = Objects.requireNonNull(e.getValue());
+        final V u = m1.putIfAbsent(k, v);
         if (u != null) {
           throw duplicateKeyException(k, u, v);
         }

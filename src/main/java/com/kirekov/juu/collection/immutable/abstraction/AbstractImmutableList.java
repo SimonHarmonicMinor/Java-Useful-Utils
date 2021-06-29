@@ -14,7 +14,7 @@ public abstract class AbstractImmutableList<T> implements ImmutableList<T> {
     if (isEmpty()) {
       return "[]";
     }
-    StringBuilder builder = new StringBuilder().append("[");
+    final StringBuilder builder = new StringBuilder().append("[");
     for (int i = 0; i < size(); i++) {
       builder.append(get(i));
       if (i == size() - 1) {

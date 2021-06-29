@@ -37,7 +37,7 @@ final class PairImpl<K, V> implements Pair<K, V> {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    PairImpl<?, ?> pair = (PairImpl<?, ?>) o;
+    final PairImpl<?, ?> pair = (PairImpl<?, ?>) o;
     return Objects.equals(key, pair.key) && Objects.equals(value, pair.value);
   }
 

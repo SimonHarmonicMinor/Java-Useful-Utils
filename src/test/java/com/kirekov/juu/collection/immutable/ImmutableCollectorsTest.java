@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 class ImmutableCollectorsTest {
 
   @Test
-  void toList() {
+  void shouldCollectListFromTheStream() {
     ImmutableList<String> list =
         Stream.of("1", "2", "3", "4")
             .collect(ImmutableCollectors.toList());
@@ -22,7 +22,7 @@ class ImmutableCollectorsTest {
   }
 
   @Test
-  void toSet() {
+  void shouldCollectSetFromTheList() {
     ImmutableSet<String> set =
         Stream.of("1", "2", "3", "4", "3", "2")
             .collect(ImmutableCollectors.toSet());
@@ -34,7 +34,7 @@ class ImmutableCollectorsTest {
   }
 
   @Test
-  void toMap() {
+  void shouldCollectMapFromTheStream() {
     ImmutableMap<Integer, String> map =
         Stream.of(
             Pair.of(1, "1"),

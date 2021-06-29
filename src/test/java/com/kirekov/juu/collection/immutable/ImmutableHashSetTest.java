@@ -144,7 +144,7 @@ class ImmutableHashSetTest {
   }
 
   @Test
-  void toList() {
+  void shouldCreateImmutableListFromTheSet() {
     String item1 = "dasgsdfg";
     String item2 = "123afdasgsdfg";
     String item3 = "223afda14fsdffg";
@@ -164,7 +164,7 @@ class ImmutableHashSetTest {
   }
 
   @Test
-  void toSet() {
+  void shouldReturnTheEqualImmutableSet() {
     String item1 = "dasgsdfg";
     String item2 = "123afdasgsdfg";
     String item3 = "223afda14fsdffg";
@@ -229,7 +229,7 @@ class ImmutableHashSetTest {
   }
 
   @Test
-  void toStringTest() {
+  void shouldReturnNonNullString() {
     String item1 = "dasgsdfg";
     String item2 = "123afdasgsdfg";
     String item3 = "223afda14fsdffg";

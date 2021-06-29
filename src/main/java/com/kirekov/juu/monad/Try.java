@@ -100,8 +100,8 @@ public final class Try<T> implements Streaming<T> {
   public static <T, E extends Exception> Try<T> getFirst(
       Iterable<CheckedSupplier<? extends T, E>> suppliers) {
     Objects.requireNonNull(suppliers);
-    for (CheckedSupplier<? extends T, E> supplier : suppliers) {
-      Try<T> t = Try.of(supplier);
+    for (final CheckedSupplier<? extends T, E> supplier : suppliers) {
+      final Try<T> t = Try.of(supplier);
       if (t.isPresent()) {
         return t;
       }
@@ -359,7 +359,7 @@ public final class Try<T> implements Streaming<T> {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Try<?> other = (Try<?>) o;
+    final Try<?> other = (Try<?>) o;
     return Objects.equals(value, other.value);
   }
 

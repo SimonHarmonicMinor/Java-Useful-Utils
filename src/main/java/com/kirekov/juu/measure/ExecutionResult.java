@@ -65,7 +65,7 @@ public final class ExecutionResult<T> {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ExecutionResult<?> that = (ExecutionResult<?>) o;
+    final ExecutionResult<?> that = (ExecutionResult<?>) o;
     return time == that.time
         && Objects.equals(result, that.result)
         && measureUnit == that.measureUnit;
