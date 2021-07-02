@@ -28,8 +28,9 @@ public final class ImmutableHashSet<T> extends AbstractImmutableSet<T> {
    * @param iterable the source of elements
    */
   public ImmutableHashSet(Iterable<T> iterable) {
+    super();
     hashSet = new HashSet<>();
-    for (T element : iterable) {
+    for (final T element : iterable) {
       hashSet.add(element);
     }
   }
@@ -37,8 +38,8 @@ public final class ImmutableHashSet<T> extends AbstractImmutableSet<T> {
   @Override
   public ImmutableSet<T> concatWith(Iterable<T> iterable) {
     Objects.requireNonNull(iterable, "iterable to concat with cannot be null");
-    HashSet<T> newHashSet = new HashSet<>(this.hashSet);
-    for (T t : iterable) {
+    final HashSet<T> newHashSet = new HashSet<>(this.hashSet);
+    for (final T t : iterable) {
       newHashSet.add(t);
     }
     return new ImmutableHashSet<>(newHashSet);
@@ -47,8 +48,8 @@ public final class ImmutableHashSet<T> extends AbstractImmutableSet<T> {
   @Override
   public <R> ImmutableSet<R> map(Function<? super T, ? extends R> mapper) {
     Objects.requireNonNull(mapper, "mapper function cannot be null");
-    HashSet<R> newHashSet = new HashSet<>(size());
-    for (T t : this) {
+    final HashSet<R> newHashSet = new HashSet<>(size());
+    for (final T t : this) {
       newHashSet.add(mapper.apply(t));
     }
     return new ImmutableHashSet<>(newHashSet);
@@ -57,9 +58,9 @@ public final class ImmutableHashSet<T> extends AbstractImmutableSet<T> {
   @Override
   public <R> ImmutableSet<R> flatMap(Function<? super T, ? extends Iterable<R>> mapper) {
     Objects.requireNonNull(mapper, "flat mapper function cannot be null");
-    HashSet<R> newHashSet = new HashSet<>(size());
-    for (T t : this) {
-      ImmutableHashSet<R> immutableHashSet = new ImmutableHashSet<>(mapper.apply(t));
+    final HashSet<R> newHashSet = new HashSet<>(size());
+    for (final T t : this) {
+      final ImmutableHashSet<R> immutableHashSet = new ImmutableHashSet<>(mapper.apply(t));
       newHashSet.addAll(immutableHashSet.hashSet);
     }
     return new ImmutableHashSet<>(newHashSet);
@@ -68,8 +69,8 @@ public final class ImmutableHashSet<T> extends AbstractImmutableSet<T> {
   @Override
   public ImmutableSet<T> filter(Predicate<? super T> predicate) {
     Objects.requireNonNull(predicate, "filtering predicate cannot be null");
-    HashSet<T> newHashSet = new HashSet<>(size());
-    for (T t : this) {
+    final HashSet<T> newHashSet = new HashSet<>(size());
+    for (final T t : this) {
       if (predicate.test(t)) {
         newHashSet.add(t);
       }
@@ -120,7 +121,7 @@ public final class ImmutableHashSet<T> extends AbstractImmutableSet<T> {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ImmutableHashSet<?> that = (ImmutableHashSet<?>) o;
+    final ImmutableHashSet<?> that = (ImmutableHashSet<?>) o;
     return hashSet.equals(that.hashSet);
   }
 

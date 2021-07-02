@@ -87,12 +87,13 @@ public final class ImmutableTreeSet<T>
    * @throws NullPointerException if {@code iterable} is null
    */
   ImmutableTreeSet(Iterable<T> iterable, Comparator<? super T> comparator) {
+    super();
     Objects.requireNonNull(
         iterable,
         "iterable to create ImmutableTreeSet cannot be null"
     );
     navigableSet = new TreeSet<>(comparator);
-    for (T t : iterable) {
+    for (final T t : iterable) {
       navigableSet.add(t);
     }
   }
@@ -104,6 +105,7 @@ public final class ImmutableTreeSet<T>
    * @throws NullPointerException if {@code sortedSet} is null
    */
   ImmutableTreeSet(SortedSet<T> sortedSet) {
+    super();
     Objects.requireNonNull(
         sortedSet,
         "sortedSet to create ImmutableTreeSet cannot be null"
@@ -222,8 +224,8 @@ public final class ImmutableTreeSet<T>
   @Override
   public ImmutableSet<T> concatWith(Iterable<T> iterable) {
     Objects.requireNonNull(iterable, "iterable to concat with cannot be null");
-    TreeSet<T> newTreeSet = new TreeSet<>(navigableSet);
-    for (T t : iterable) {
+    final TreeSet<T> newTreeSet = new TreeSet<>(navigableSet);
+    for (final T t : iterable) {
       newTreeSet.add(t);
     }
     return new ImmutableTreeSet<>(newTreeSet);
@@ -232,8 +234,8 @@ public final class ImmutableTreeSet<T>
   @Override
   public <R> ImmutableSet<R> map(Function<? super T, ? extends R> mapper) {
     Objects.requireNonNull(mapper, "mapper function cannot be null");
-    HashSet<R> hashSet = new HashSet<>(size());
-    for (T t : this) {
+    final HashSet<R> hashSet = new HashSet<>(size());
+    for (final T t : this) {
       hashSet.add(mapper.apply(t));
     }
     return new ImmutableHashSet<>(hashSet);
@@ -242,9 +244,9 @@ public final class ImmutableTreeSet<T>
   @Override
   public <R> ImmutableSet<R> flatMap(Function<? super T, ? extends Iterable<R>> mapper) {
     Objects.requireNonNull(mapper, "flat mapper function cannot be null");
-    HashSet<R> hashSet = new HashSet<>();
-    for (T t : this) {
-      for (R r : mapper.apply(t)) {
+    final HashSet<R> hashSet = new HashSet<>();
+    for (final T t : this) {
+      for (final R r : mapper.apply(t)) {
         hashSet.add(r);
       }
     }
@@ -254,8 +256,8 @@ public final class ImmutableTreeSet<T>
   @Override
   public ImmutableSet<T> filter(Predicate<? super T> predicate) {
     Objects.requireNonNull(predicate, "filtering predicate cannot be null");
-    TreeSet<T> newTreeSet = new TreeSet<>(comparator());
-    for (T t : this) {
+    final TreeSet<T> newTreeSet = new TreeSet<>(comparator());
+    for (final T t : this) {
       if (predicate.test(t)) {
         newTreeSet.add(t);
       }
@@ -307,7 +309,7 @@ public final class ImmutableTreeSet<T>
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ImmutableTreeSet<?> that = (ImmutableTreeSet<?>) o;
+    final ImmutableTreeSet<?> that = (ImmutableTreeSet<?>) o;
     return navigableSet.equals(that.navigableSet);
   }
 

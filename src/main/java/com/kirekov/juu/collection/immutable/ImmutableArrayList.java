@@ -33,22 +33,23 @@ public final class ImmutableArrayList<T> extends AbstractImmutableList<T> {
    * @param iterable the source of elements
    */
   public ImmutableArrayList(Iterable<T> iterable) {
+    super();
     arrayList = new ArrayList<>();
-    for (T element : iterable) {
+    for (final T element : iterable) {
       arrayList.add(element);
     }
   }
 
   @Override
   public T get(int index) {
-    int normalized = normalizeIndex(index);
+    final int normalized = normalizeIndex(index);
     checkIndex(normalized);
     return arrayList.get(normalized);
   }
 
   @Override
   public OptionalInt indexOf(T element) {
-    int index = arrayList.indexOf(element);
+    final int index = arrayList.indexOf(element);
     if (index == -1) {
       return OptionalInt.empty();
     }
@@ -57,7 +58,7 @@ public final class ImmutableArrayList<T> extends AbstractImmutableList<T> {
 
   @Override
   public OptionalInt lastIndexOf(T element) {
-    int index = arrayList.lastIndexOf(element);
+    final int index = arrayList.lastIndexOf(element);
     if (index == -1) {
       return OptionalInt.empty();
     }
@@ -71,23 +72,23 @@ public final class ImmutableArrayList<T> extends AbstractImmutableList<T> {
 
   @Override
   public ImmutableList<T> slice(int fromIndex, int toIndex) {
-    int fromNorm = normalizeIndex(fromIndex);
-    int toNorm = normalizeIndex(toIndex);
+    final int fromNorm = normalizeIndex(fromIndex);
+    final int toNorm = normalizeIndex(toIndex);
     return slice(fromNorm, toNorm, fromNorm < toNorm ? 1 : -1);
   }
 
   @Override
   public ImmutableList<T> slice(int fromIndex, int toIndex, int stepSize) {
     int fromNorm = normalizeIndex(fromIndex);
-    int toNorm = normalizeIndex(toIndex);
+    final int toNorm = normalizeIndex(toIndex);
     checkIndex(fromNorm);
     checkStepSize(stepSize);
-    BiFunction<Integer, Integer, Boolean> condition =
+    final BiFunction<Integer, Integer, Boolean> condition =
         fromNorm <= toNorm
             ? (from, to) -> from < to && from < size()
             : (from, to) -> from > to && from >= 0;
-    Function<Integer, Integer> nextValueFunc = index -> index + stepSize;
-    ArrayList<T> newArrayList = new ArrayList<>();
+    final Function<Integer, Integer> nextValueFunc = index -> index + stepSize;
+    final ArrayList<T> newArrayList = new ArrayList<>();
     while (condition.apply(fromNorm, toNorm)) {
       newArrayList.add(get(fromNorm));
       fromNorm = nextValueFunc.apply(fromNorm);
@@ -109,8 +110,8 @@ public final class ImmutableArrayList<T> extends AbstractImmutableList<T> {
   @Override
   public ImmutableList<T> concatWith(Iterable<T> iterable) {
     Objects.requireNonNull(iterable, "iterable to concat with cannot be null");
-    ArrayList<T> copy = new ArrayList<>(this.arrayList);
-    for (T t : iterable) {
+    final ArrayList<T> copy = new ArrayList<>(this.arrayList);
+    for (final T t : iterable) {
       copy.add(t);
     }
     return new ImmutableArrayList<>(copy);
@@ -119,11 +120,11 @@ public final class ImmutableArrayList<T> extends AbstractImmutableList<T> {
   @Override
   public <R> ImmutableList<Pair<T, R>> zipWith(ImmutableList<R> list) {
     Objects.requireNonNull(list, "list to zip with cannot be null");
-    int maxSize = Math.max(size(), list.size());
-    ArrayList<Pair<T, R>> newArrayList = new ArrayList<>(maxSize);
+    final int maxSize = Math.max(size(), list.size());
+    final ArrayList<Pair<T, R>> newArrayList = new ArrayList<>(maxSize);
     for (int i = 0; i < maxSize; i++) {
-      T left = getValByIndex(this, i);
-      R right = getValByIndex(list, i);
+      final T left = getValByIndex(this, i);
+      final R right = getValByIndex(list, i);
       newArrayList.add(Pair.of(left, right));
     }
     return new ImmutableArrayList<>(newArrayList);
@@ -131,7 +132,7 @@ public final class ImmutableArrayList<T> extends AbstractImmutableList<T> {
 
   @Override
   public ImmutableList<Pair<T, T>> zipWithNext() {
-    ArrayList<Pair<T, T>> newArrayList = new ArrayList<>(size());
+    final ArrayList<Pair<T, T>> newArrayList = new ArrayList<>(size());
     for (int i = 0; i < size() - 1; i++) {
       newArrayList.add(Pair.of(get(i), get(i + 1)));
     }
@@ -141,8 +142,8 @@ public final class ImmutableArrayList<T> extends AbstractImmutableList<T> {
   @Override
   public <R> ImmutableList<R> map(Function<? super T, ? extends R> mapper) {
     Objects.requireNonNull(mapper, "mapper function cannot be null");
-    ArrayList<R> newList = new ArrayList<>(arrayList.size());
-    for (T t : arrayList) {
+    final ArrayList<R> newList = new ArrayList<>(arrayList.size());
+    for (final T t : arrayList) {
       newList.add(mapper.apply(t));
     }
     return new ImmutableArrayList<>(newList);
@@ -151,7 +152,7 @@ public final class ImmutableArrayList<T> extends AbstractImmutableList<T> {
   @Override
   public <R> ImmutableList<R> mapIndexed(BiFunction<Integer, ? super T, ? extends R> mapper) {
     Objects.requireNonNull(mapper, "indexed mapper function cannot be null");
-    ArrayList<R> newList = new ArrayList<>(arrayList.size());
+    final ArrayList<R> newList = new ArrayList<>(arrayList.size());
     for (int i = 0; i < arrayList.size(); i++) {
       newList.add(mapper.apply(i, arrayList.get(i)));
     }
@@ -161,9 +162,9 @@ public final class ImmutableArrayList<T> extends AbstractImmutableList<T> {
   @Override
   public <R> ImmutableList<R> flatMap(Function<? super T, ? extends Iterable<R>> mapper) {
     Objects.requireNonNull(mapper, "flat mapper function cannot be null");
-    ArrayList<R> newList = new ArrayList<>(arrayList.size());
-    for (T t : arrayList) {
-      ImmutableArrayList<R> listElement = new ImmutableArrayList<>(mapper.apply(t));
+    final ArrayList<R> newList = new ArrayList<>(arrayList.size());
+    for (final T t : arrayList) {
+      final ImmutableArrayList<R> listElement = new ImmutableArrayList<>(mapper.apply(t));
       newList.addAll(listElement.arrayList);
     }
     return new ImmutableArrayList<>(newList);
@@ -174,9 +175,9 @@ public final class ImmutableArrayList<T> extends AbstractImmutableList<T> {
       BiFunction<Integer, ? super T, ? extends Iterable<R>> mapper
   ) {
     Objects.requireNonNull(mapper, "indexed flat mapper function cannot be null");
-    ArrayList<R> newList = new ArrayList<>(arrayList.size());
+    final ArrayList<R> newList = new ArrayList<>(arrayList.size());
     for (int i = 0; i < arrayList.size(); i++) {
-      ImmutableArrayList<R> listElement =
+      final ImmutableArrayList<R> listElement =
           new ImmutableArrayList<>(mapper.apply(i, arrayList.get(i)));
       newList.addAll(listElement.arrayList);
     }
@@ -186,8 +187,8 @@ public final class ImmutableArrayList<T> extends AbstractImmutableList<T> {
   @Override
   public ImmutableList<T> filter(Predicate<? super T> predicate) {
     Objects.requireNonNull(predicate, "filtering predicate cannot be null");
-    ArrayList<T> newList = new ArrayList<>(arrayList.size());
-    for (T t : arrayList) {
+    final ArrayList<T> newList = new ArrayList<>(arrayList.size());
+    for (final T t : arrayList) {
       if (predicate.test(t)) {
         newList.add(t);
       }
@@ -198,7 +199,7 @@ public final class ImmutableArrayList<T> extends AbstractImmutableList<T> {
   @Override
   public ImmutableList<T> filterIndexed(BiPredicate<Integer, ? super T> predicate) {
     Objects.requireNonNull(predicate, "indexed filtering predicate cannot be null");
-    ArrayList<T> newList = new ArrayList<>(arrayList.size());
+    final ArrayList<T> newList = new ArrayList<>(arrayList.size());
     for (int i = 0; i < arrayList.size(); i++) {
       if (predicate.test(i, arrayList.get(i))) {
         newList.add(arrayList.get(i));
@@ -218,7 +219,7 @@ public final class ImmutableArrayList<T> extends AbstractImmutableList<T> {
   @Override
   public ImmutableList<T> sorted(Comparator<? super T> comparator) {
     Objects.requireNonNull(comparator, "sorting comparator cannot be null");
-    ArrayList<T> copy = new ArrayList<>(arrayList);
+    final ArrayList<T> copy = new ArrayList<>(arrayList);
     copy.sort(comparator);
     return new ImmutableArrayList<>(copy);
   }
@@ -228,7 +229,7 @@ public final class ImmutableArrayList<T> extends AbstractImmutableList<T> {
     if (size < 0) {
       throw new IllegalArgumentException(String.format("Limit size is less than zero: %s", size));
     }
-    ArrayList<T> newList = new ArrayList<>(arrayList.size());
+    final ArrayList<T> newList = new ArrayList<>(arrayList.size());
     for (int i = 0; i < Math.min(size(), size); i++) {
       newList.add(arrayList.get(i));
     }
@@ -240,7 +241,7 @@ public final class ImmutableArrayList<T> extends AbstractImmutableList<T> {
     if (size < 0) {
       throw new IllegalArgumentException(String.format("Skip size is less than zero: %s", size));
     }
-    ArrayList<T> newList = new ArrayList<>(arrayList.size());
+    final ArrayList<T> newList = new ArrayList<>(arrayList.size());
     for (int i = Math.min(size, size()); i < arrayList.size(); i++) {
       newList.add(arrayList.get(i));
     }
@@ -290,7 +291,7 @@ public final class ImmutableArrayList<T> extends AbstractImmutableList<T> {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ImmutableArrayList<?> that = (ImmutableArrayList<?>) o;
+    final ImmutableArrayList<?> that = (ImmutableArrayList<?>) o;
     return arrayList.equals(that.arrayList);
   }
 

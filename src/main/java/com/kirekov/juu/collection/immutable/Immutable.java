@@ -117,7 +117,7 @@ public final class Immutable {
    * @throws NullPointerException if {@code elements} is null
    */
   @SafeVarargs
-  @SuppressWarnings("varargs")
+  @SuppressWarnings({"varargs", "PMD.LinguisticNaming"})
   public static <T> ImmutableSet<T> setOf(T... elements) {
     Objects.requireNonNull(elements);
     return setOf(Arrays.stream(elements).collect(Collectors.toSet()));
@@ -133,6 +133,7 @@ public final class Immutable {
    * @return immutable set
    * @throws NullPointerException if {@code elements} is null
    */
+  @SuppressWarnings("PMD.LinguisticNaming")
   public static <T> ImmutableSet<T> setOf(Iterable<T> elements) {
     Objects.requireNonNull(elements);
     if (!elements.iterator().hasNext()) {
@@ -170,8 +171,8 @@ public final class Immutable {
     if (!pairs.iterator().hasNext()) {
       return emptyMap();
     }
-    HashMap<K, V> hashMap = new HashMap<>();
-    for (Pair<K, V> p : pairs) {
+    final HashMap<K, V> hashMap = new HashMap<>();
+    for (final Pair<K, V> p : pairs) {
       hashMap.put(p.getKey(), p.getValue());
     }
     return new ImmutableHashMap<>(hashMap);

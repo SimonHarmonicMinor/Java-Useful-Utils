@@ -273,7 +273,7 @@ public final class ImmutableTreeMap<K, V> implements ImmutableNavigableMap<K, V>
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ImmutableTreeMap<?, ?> that = (ImmutableTreeMap<?, ?>) o;
+    final ImmutableTreeMap<?, ?> that = (ImmutableTreeMap<?, ?>) o;
     return navigableMap.equals(that.navigableMap);
   }
 
