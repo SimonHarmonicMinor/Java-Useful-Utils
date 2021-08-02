@@ -39,21 +39,18 @@ class TryTest {
     Runnable runnable = mock(Runnable.class);
     Try<Integer> t =
         Try.of(() -> {
-              runnable.run();
-              return 1;
-            })
-            .map(val -> {
-              runnable.run();
-              return val + 10;
-            })
-            .flatMap(val -> {
-              runnable.run();
-              return Try.success(val + 12);
-            })
-            .filter(val -> {
-              runnable.run();
-              return val > 0;
-            });
+          runnable.run();
+          return 1;
+        }).map(val -> {
+          runnable.run();
+          return val + 10;
+        }).flatMap(val -> {
+          runnable.run();
+          return Try.success(val + 12);
+        }).filter(val -> {
+          runnable.run();
+          return val > 0;
+        });
     verify(runnable, times(0)).run();
     assertDoesNotThrow((ThrowingSupplier<Integer>) t::orElseThrow);
     verify(runnable, times(4)).run();
@@ -139,9 +136,8 @@ class TryTest {
   @Test
   void shouldCalculateTheOrElseTryClauseIfThePreviousOneFails() {
     Try<Integer> t = Try.<Integer>of(() -> {
-          throw new Exception();
-        })
-        .orElseTry(() -> 56);
+      throw new Exception();
+    }).orElseTry(() -> 56);
     assertEquals(56, t.orElseThrow());
   }
 
