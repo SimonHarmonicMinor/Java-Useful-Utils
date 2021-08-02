@@ -102,7 +102,7 @@ This library has two monads: [`Try`](#try) and [`Lazy`](#lazy).
 ###### Try
 
 `Try` allows you to work with methods that may throw an exception
-in the same way as `Optional`. For instance, suppose we have such code:
+in the same way as `Optional` in a **lazy** way. For instance, suppose we have such code:
 
 ```java
 int num;
@@ -127,7 +127,7 @@ JUU allows to rewrite this snippet as two equations:
 
 ```java
 int num = Try.of(() -> Integer.parseInt(getStringValue()))
-             .orElse(getDefaultIntValue());
+             .orElseGet(() -> getDefaultIntValue());
 return Try.of(() -> executeRpc(num))
           .orElse(SOME_DEFAULT_VALUE);
 ```
@@ -189,6 +189,30 @@ the reason would be the type of `ArithmeticException`.
 The class only catches `Exception` type. 
 It means that all `Throwable` instances are skipped.
 The motivation is that `Error` extends from `Throwable` but these exceptions should not be caught manually.
+
+The fact that `Try` monad acts *lazily* means
+that you build a pipeline of execution that triggers on any *terminal* operation.
+
+```java
+Try<Integer> t = Try.of(() -> {
+      println("First step");
+      return 1;
+    }).map(val -> {
+      println("Second step");
+      return val + 1;
+    }).filter(val -> {
+      println("Third step");
+      return val > 0;
+    });
+// nothing prints here
+    
+assert 2 == t.orElseThrow();
+// First step
+// Second step
+// Third step
+```
+
+All terminal operations are listed in the [javadoc](./src/main/java/com/kirekov/juu/monad/Try.java).
 
 ###### Lazy
 
