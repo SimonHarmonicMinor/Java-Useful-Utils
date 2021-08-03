@@ -21,7 +21,7 @@ java {
 }
 
 group 'com.kirekov'
-version 'DEV-SNAPSHOT'
+version '2.0.0'
 description 'Just some useful utils for everyday coding'
 
 pmd {
