@@ -1,13 +1,10 @@
 package com.kirekov.juu.collection.immutable;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
@@ -19,14 +16,7 @@ import java.util.stream.Collector;
  * @see java.util.stream.Collectors
  * @since 1.0
  */
-public class ImmutableCollectors {
-
-  static final Set<Collector.Characteristics> CH_ID =
-      Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.IDENTITY_FINISH));
-  static final Set<Collector.Characteristics> CH_UNORDERED_ID =
-      Collections.unmodifiableSet(
-          EnumSet.of(
-              Collector.Characteristics.UNORDERED, Collector.Characteristics.IDENTITY_FINISH));
+public final class ImmutableCollectors {
 
   /**
    * Suppresses default constructor, ensuring non-instantiability.
@@ -66,7 +56,7 @@ public class ImmutableCollectors {
    * @see ImmutableCollectors#toCollection(Function)
    */
   public static <T> Collector<T, List<T>, ImmutableList<T>> toList() {
-    return toCollection(list -> new ImmutableArrayList<>(list, false));
+    return toCollection(ImmutableArrayList::new);
   }
 
   /**
@@ -77,7 +67,7 @@ public class ImmutableCollectors {
    * @see ImmutableCollectors#toCollection(Function)
    */
   public static <T> Collector<T, ?, ImmutableSet<T>> toSet() {
-    return toCollection(set -> new ImmutableHashSet<>(set, false));
+    return toCollection(ImmutableHashSet::new);
   }
 
   /**
@@ -100,16 +90,16 @@ public class ImmutableCollectors {
         HashMap::new,
         uniqKeysMapAccumulator(keyMapper, valueMapper),
         uniqKeysMapMerger(),
-        map -> new ImmutableHashMap<>(map, false)
+        ImmutableHashMap::new
     );
   }
 
   private static <T, K, V> BiConsumer<Map<K, V>, T> uniqKeysMapAccumulator(
       Function<? super T, ? extends K> keyMapper, Function<? super T, ? extends V> valueMapper) {
     return (map, element) -> {
-      K k = keyMapper.apply(element);
-      V v = Objects.requireNonNull(valueMapper.apply(element));
-      V u = map.putIfAbsent(k, v);
+      final K k = keyMapper.apply(element);
+      final V v = Objects.requireNonNull(valueMapper.apply(element));
+      final V u = map.putIfAbsent(k, v);
       if (u != null) {
         throw duplicateKeyException(k, u, v);
       }
@@ -118,10 +108,10 @@ public class ImmutableCollectors {
 
   private static <K, V, M extends Map<K, V>> BinaryOperator<M> uniqKeysMapMerger() {
     return (m1, m2) -> {
-      for (Map.Entry<K, V> e : m2.entrySet()) {
-        K k = e.getKey();
-        V v = Objects.requireNonNull(e.getValue());
-        V u = m1.putIfAbsent(k, v);
+      for (final Map.Entry<K, V> e : m2.entrySet()) {
+        final K k = e.getKey();
+        final V v = Objects.requireNonNull(e.getValue());
+        final V u = m1.putIfAbsent(k, v);
         if (u != null) {
           throw duplicateKeyException(k, u, v);
         }

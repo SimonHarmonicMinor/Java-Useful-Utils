@@ -64,56 +64,90 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
   OptionalInt lastIndexOf(T element);
 
   /**
-   * Proxy method for {@code this.slice(fromIndex, size(), 1)}.
+   * Returns sublist starting from {@code fromIndex}. Supports negative indices.
+   *
+   * <pre>{@code
+   * ImmutableList<Integer> list = getList(); // [1, 2, 3, 4, 5, 6]
+   * list.slice(1);                           // [2, 3, 4, 5, 6]
+   * list.slice(-2);                          // [5, 6]
+   * list.slice(-4);                          // [3, 4, 5, 6]
+   * }</pre>
    *
    * @param fromIndex start index (inclusively)
    * @return sublist
+   * @throws IndexOutOfBoundsException if {@code fromIndex} is out of bounds
    * @see ImmutableList#slice(int, int, int)
    */
   ImmutableList<T> slice(int fromIndex);
 
   /**
-   * Proxy method for {@code this.slice(fromIndex, toIndex, 1)} if {@code fromIndex} is before
-   * {@code toIndex} and {@code this.slice(fromIndex, toIndex, -1)} otherwise.
+   * Returns sublist from {@code fromIndex} to {@code toIndex} exclusively. Supports negative
+   * indices. If {@code fromIndex} is placed before {@code toIndex}, the result list order is
+   * descending.
+   *
+   * <pre>{@code
+   * ImmutableList<Integer> list = getList(); // [1, 2, 3, 4, 5, 6]
+   * list.slice(1, 3);                        // [2, 3]
+   * list.slice(-3, -1);                      // [4, 5]
+   * list.slice(5, 1);                        // [6, 5, 4, 3]
+   * list.slice(-2, -6);                      // [5, 4, 3, 2]
+   * }</pre>
    *
    * @param fromIndex start index (inclusively)
    * @param toIndex   end index (exclusively)
    * @return sublist
+   * @throws IndexOutOfBoundsException if {@code fromIndex} is out of bounds
    * @see ImmutableList#slice(int, int, int)
    */
   ImmutableList<T> slice(int fromIndex, int toIndex);
 
   /**
    * Returns sublist from {@code fromIndex} inclusively to {@code toIndex} exclusively with the
-   * given step size.<br> Supports negative indices. If {@code stepSize} is negative, then the list
-   * will be traversed backwards.
+   * given step size. Supports negative indices. If {@code stepSize} is negative, then the list is
+   * to be traversed backwards.
    *
    * <pre>{@code
    * ImmutableList<Integer> list = getList(); // [1, 2, 3, 4, 5, 6]
-   * list.slice(0, 3, 1);         // [1, 2, 3]
-   * list.slice(-1, 2, -1);       // [6, 5, 4]
-   * list.slice(0, 6, 2);         // [0, 3, 5]
+   * list.slice(0, 3, 1);                     // [1, 2, 3]
+   * list.slice(-1, 2, -1);                   // [6, 5, 4]
+   * list.slice(0, 6, 2);                     // [0, 3, 5]
    * }</pre>
    *
    * @param fromIndex start index (inclusively)
    * @param toIndex   end index (exclusively)
    * @param stepSize  the size of the step traversing
    * @return result sublist
-   * @throws IndexOutOfBoundsException if fromIndex is out of bounds
-   * @throws IllegalArgumentException  if stepSize is zero
+   * @throws IndexOutOfBoundsException if {@code fromIndex} is out of bounds
+   * @throws IllegalArgumentException  if {@code stepSize} is zero
    * @see ImmutableList#get(int)
    */
   ImmutableList<T> slice(int fromIndex, int toIndex, int stepSize);
 
   /**
-   * Proxy method for {@code this.step(0, stepSize)} if {@code stepSize} is bigger than zero,
-   * otherwise {@code this.step(-1, stepSize)} shall be used.
+   * Returns new list with elements traversed by step step size. If {@code stepSize} is negative,
+   * the list ought to be traversed in reversed order.
+   *
+   * <pre>{@code
+   * ImmutableList<Integer> list = getList(); // [1, 2, 3, 4, 5, 6]
+   * list.step(2);                            // [1, 3, 5]
+   * list.step(-3);                           // [6, 3]
+   * }</pre>
    *
    * @param stepSize the size of step traversing
    * @return stepped list
+   * @throws IllegalArgumentException if {@code stepSize} is zero
    * @see ImmutableList#step(int, int)
    */
-  ImmutableList<T> step(int stepSize);
+  default ImmutableList<T> step(int stepSize) {
+    if (stepSize == 0) {
+      throw new IllegalArgumentException("Step size cannot be 0");
+    }
+    if (stepSize > 0) {
+      return step(0, stepSize);
+    } else {
+      return step(-1, stepSize);
+    }
+  }
 
   /**
    * Returns sublist traversed with given step starting from the given index.
@@ -139,15 +173,6 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
    * @see ImmutableList#get(int)
    */
   ImmutableList<T> step(int fromIndex, int stepSize);
-
-  /**
-   * Concatenates current list with provided iterable object and returns new list.
-   *
-   * @param iterable iterable object to join with
-   * @return new list that contains current elements and elements provided with {@code iterable}
-   * @throws NullPointerException if {@code iterable} is null
-   */
-  ImmutableList<T> concatWith(Iterable<T> iterable);
 
   /**
    * Zips current list with provided list and returns pairs, where key contains the element from the
@@ -179,14 +204,28 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
   ImmutableList<Pair<T, T>> zipWithNext();
 
   /**
-   * Maps the content of the list from one type to another.
-   *
-   * @param mapper mapping function
-   * @param <R>    the result type
-   * @return new list
-   * @throws NullPointerException if {@code mapper} is null
+   * {@inheritDoc}
    */
+  @Override
+  ImmutableList<T> concatWith(Iterable<T> iterable);
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   <R> ImmutableList<R> map(Function<? super T, ? extends R> mapper);
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  <R> ImmutableList<R> flatMap(Function<? super T, ? extends Iterable<R>> mapper);
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  ImmutableList<T> filter(Predicate<? super T> predicate);
 
   /**
    * Maps the content of the list from one type to another. Mapper accepts current index and current
@@ -200,28 +239,6 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
   <R> ImmutableList<R> mapIndexed(BiFunction<Integer, ? super T, ? extends R> mapper);
 
   /**
-   * Joins {@link Iterable} objects that mapper returns. For instance,
-   *
-   * <pre>{@code
-   * class Job {
-   *     String name;
-   *     List<Person> people;
-   *     ...
-   * }
-   * ...
-   * ImmutableList<Job> jobs = getJobs();
-   * ImmutableList<Person> people =
-   *      jobs.flatMap(j -&gt; j.getPeople());
-   * }</pre>
-   *
-   * @param mapper mapping function, that returns {@link Iterable}
-   * @param <R>    the type of the return list
-   * @return new list
-   * @throws NullPointerException if {@code mapper} is null
-   */
-  <R> ImmutableList<R> flatMap(Function<? super T, ? extends Iterable<R>> mapper);
-
-  /**
    * This method has exactly the same behaviour as {@link ImmutableList#flatMap(Function)}, but
    * mapper accepts two arguments. The first is the current index and the second is the current
    * value.
@@ -233,15 +250,6 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
    * @see ImmutableList#flatMap(Function)
    */
   <R> ImmutableList<R> flatMapIndexed(BiFunction<Integer, ? super T, ? extends Iterable<R>> mapper);
-
-  /**
-   * Returns new list which values match provided predicate.
-   *
-   * @param predicate predicate to apply to each element to determine if it should be included
-   * @return new list
-   * @throws NullPointerException if {@code predicate} is null
-   */
-  ImmutableList<T> filter(Predicate<? super T> predicate);
 
   /**
    * Returns new list which values match provided predicate.
@@ -297,5 +305,7 @@ public interface ImmutableList<T> extends ImmutableCollection<T> {
    *
    * @return reversed list
    */
-  ImmutableList<T> reversed();
+  default ImmutableList<T> reversed() {
+    return step(-1);
+  }
 }

@@ -19,11 +19,13 @@ public interface Pair<K, V> {
   /**
    * Overrides method from {@link Object#equals(Object)}. Must be implemented.
    */
+  @Override
   boolean equals(Object o);
 
   /**
    * Overrides method from {@link Object#hashCode()}. Must be implemented.
    */
+  @Override
   int hashCode();
 
   /**

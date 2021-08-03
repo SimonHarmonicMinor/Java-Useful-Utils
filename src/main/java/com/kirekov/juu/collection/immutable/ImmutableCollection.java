@@ -10,6 +10,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BinaryOperator;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -85,7 +86,8 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
    * @throws NullPointerException if "elements" is null
    */
   default boolean containsAll(Iterable<?> elements) {
-    Objects.requireNonNull(elements);
+    Objects
+        .requireNonNull(elements, "iterable or elements to test all their presence cannot be null");
     for (Object t : elements) {
       if (notContains(t)) {
         return false;
@@ -102,7 +104,8 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
    * @throws NullPointerException if "elements" is null
    */
   default boolean containsAny(Iterable<?> elements) {
-    Objects.requireNonNull(elements);
+    Objects.requireNonNull(elements,
+        "iterable or elements to test any of their presence cannot be null");
     for (Object t : elements) {
       if (contains(t)) {
         return true;
@@ -119,7 +122,7 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
    * @throws NullPointerException if predicate is null
    */
   default boolean allMatch(Predicate<? super T> predicate) {
-    Objects.requireNonNull(predicate);
+    Objects.requireNonNull(predicate, "predicate to match all elements cannot be null");
     for (T t : this) {
       if (!predicate.test(t)) {
         return false;
@@ -136,7 +139,7 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
    * @throws NullPointerException if predicate is null
    */
   default boolean anyMatch(Predicate<? super T> predicate) {
-    Objects.requireNonNull(predicate);
+    Objects.requireNonNull(predicate, "predicate to test any match cannot be null");
     for (T t : this) {
       if (predicate.test(t)) {
         return true;
@@ -153,7 +156,7 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
    * @throws NullPointerException if predicate is null
    */
   default boolean noneMatch(Predicate<? super T> predicate) {
-    Objects.requireNonNull(predicate);
+    Objects.requireNonNull(predicate, "predicate to test none match cannot be null");
     for (T t : this) {
       if (predicate.test(t)) {
         return false;
@@ -179,7 +182,7 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
    * @throws NullPointerException if accumulator is null
    */
   default T reduce(T identity, BinaryOperator<T> accumulator) {
-    Objects.requireNonNull(accumulator);
+    Objects.requireNonNull(accumulator, "binary operator to reduce the collection cannot be null");
     return stream().reduce(identity, accumulator);
   }
 
@@ -193,7 +196,7 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
    * @throws NullPointerException if accumulator is null
    */
   default Optional<T> reduce(BinaryOperator<T> accumulator) {
-    Objects.requireNonNull(accumulator);
+    Objects.requireNonNull(accumulator, "binary operator to reduce the collection cannot be null");
     return stream().reduce(accumulator);
   }
 
@@ -206,7 +209,7 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
    * @throws NullPointerException if comparator is null
    */
   default Optional<T> min(Comparator<? super T> comparator) {
-    Objects.requireNonNull(comparator);
+    Objects.requireNonNull(comparator, "comparator to find the min element cannot be null");
     return Try.of(() -> stream().min(comparator))
         .orElse(Optional.empty());
   }
@@ -220,7 +223,7 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
    * @throws NullPointerException if comparator is null
    */
   default Optional<T> max(Comparator<? super T> comparator) {
-    Objects.requireNonNull(comparator);
+    Objects.requireNonNull(comparator, "comparator to find the max element cannot be null");
     return Try.of(() -> stream().max(comparator))
         .orElse(Optional.empty());
   }
@@ -245,7 +248,7 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
    * @throws NullPointerException if {@code comparator} is null
    */
   default Optional<T> findFirst(Predicate<? super T> predicate) {
-    Objects.requireNonNull(predicate);
+    Objects.requireNonNull(predicate, "predicate to find the first matched element cannot be null");
     for (T t : this) {
       if (predicate.test(t)) {
         return Optional.ofNullable(t);
@@ -322,6 +325,7 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
    *
    * @return hashcode of the collection
    */
+  @Override
   int hashCode();
 
   /**
@@ -330,5 +334,56 @@ public interface ImmutableCollection<T> extends ParallelStreaming<T>, Iterable<T
    * @param obj the object whose equality with the collection is to be tested
    * @return true if objects are equal, otherwise false
    */
+  @Override
   boolean equals(Object obj);
+
+  /**
+   * Maps content from one type to another.
+   *
+   * @param mapper mapping function
+   * @param <R>    the result type
+   * @return new collection
+   */
+  <R> ImmutableCollection<R> map(Function<? super T, ? extends R> mapper);
+
+  /**
+   * Joins {@link Iterable} objects that mapper returns. For instance,
+   *
+   * <pre>{@code
+   * class Job {
+   *     String name;
+   *     Collection<Person> people;
+   *     ...
+   * }
+   * ...
+   * ImmutableCollection<Job> jobs = getJobs();
+   * ImmutableCollection<Person> people =
+   *      jobs.flatMap(j -> j.getPeople());
+   * }</pre>
+   *
+   * @param mapper mapping function, that returns {@link Iterable}
+   * @param <R>    the type of the return collection
+   * @return new list
+   * @throws NullPointerException if {@code mapper} is null
+   */
+  <R> ImmutableCollection<R> flatMap(Function<? super T, ? extends Iterable<R>> mapper);
+
+  /**
+   * Returns new collection which values match provided predicate.
+   *
+   * @param predicate predicate to apply to each element to determine if it should be included
+   * @return new collection
+   * @throws NullPointerException if {@code predicate} is null
+   */
+  ImmutableCollection<T> filter(Predicate<? super T> predicate);
+
+  /**
+   * Concatenates current collection with provided iterable object and returns new collections.
+   *
+   * @param iterable iterable object to join with
+   * @return new collection that contains current elements and elements provided with {@code
+   * iterable}
+   * @throws NullPointerException if {@code iterable} is null
+   */
+  ImmutableCollection<T> concatWith(Iterable<T> iterable);
 }

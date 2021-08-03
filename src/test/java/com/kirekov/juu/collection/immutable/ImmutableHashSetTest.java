@@ -28,7 +28,7 @@ class ImmutableHashSetTest {
     hashSet.add(item4);
     hashSet.add(item4);
 
-    ImmutableSet<Integer> immutableSet = new ImmutableHashSet<>(hashSet, true);
+    ImmutableSet<Integer> immutableSet = new ImmutableHashSet<>(hashSet);
 
     assertEquals(4, immutableSet.size());
     assertTrue(immutableSet.contains(item1));
@@ -39,41 +39,14 @@ class ImmutableHashSetTest {
     hashSet.clear();
 
     assertEquals(4, immutableSet.size());
-  }
-
-  @Test
-  void instantiateWithoutCloning() {
-    HashSet<Integer> hashSet = new HashSet<>();
-    int item1 = 1;
-    int item2 = 2;
-    int item3 = 3;
-    int item4 = 4;
-
-    hashSet.add(item1);
-    hashSet.add(item2);
-    hashSet.add(item3);
-    hashSet.add(item4);
-    hashSet.add(item4);
-
-    ImmutableSet<Integer> immutableSet = new ImmutableHashSet<>(hashSet, false);
-
-    assertEquals(4, immutableSet.size());
-    assertTrue(immutableSet.contains(item1));
-    assertTrue(immutableSet.contains(item2));
-    assertTrue(immutableSet.contains(item3));
-    assertTrue(immutableSet.contains(item4));
-
-    hashSet.clear();
-
-    assertTrue(immutableSet.isEmpty());
   }
 
   @Test
   void concatWith() {
-    String item1 = "dasgsdfg";
-    String item2 = "123afdasgsdfg";
-    String item3 = "123afda14fsdffg";
-    String item4 = "123adfgdfgfda14fsdffg";
+    String item1 = "dasgsdfggdgsf";
+    String item2 = "123afdasgsdfgherjer";
+    String item3 = "123afda14fsdffgdfsdfh";
+    String item4 = "123adfgdfgfda14fsdffgfgdfgfdgh";
 
     ImmutableSet<String> immutableSet = new ImmutableHashSet<>(
         Stream.of(item1, item2, item3, item4).collect(Collectors.toSet())
@@ -171,7 +144,7 @@ class ImmutableHashSetTest {
   }
 
   @Test
-  void toList() {
+  void shouldCreateImmutableListFromTheSet() {
     String item1 = "dasgsdfg";
     String item2 = "123afdasgsdfg";
     String item3 = "223afda14fsdffg";
@@ -191,7 +164,7 @@ class ImmutableHashSetTest {
   }
 
   @Test
-  void toSet() {
+  void shouldReturnTheEqualImmutableSet() {
     String item1 = "dasgsdfg";
     String item2 = "123afdasgsdfg";
     String item3 = "223afda14fsdffg";
@@ -256,7 +229,7 @@ class ImmutableHashSetTest {
   }
 
   @Test
-  void toStringTest() {
+  void shouldReturnNonNullString() {
     String item1 = "dasgsdfg";
     String item2 = "123afdasgsdfg";
     String item3 = "223afda14fsdffg";

@@ -9,7 +9,7 @@ import java.util.Objects;
  *
  * @param <T> the type of the element
  */
-public class UnmodifiableIterator<T> implements Iterator<T> {
+public final class UnmodifiableIterator<T> implements Iterator<T> {
 
   private final Iterator<T> iterator;
 
@@ -42,7 +42,7 @@ public class UnmodifiableIterator<T> implements Iterator<T> {
    * @throws UnsupportedOperationException always
    */
   @Override
-  public final void remove() {
+  public void remove() {
     throw new UnsupportedOperationException("Element's removing is not allowed");
   }
 }

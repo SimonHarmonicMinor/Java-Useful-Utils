@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  * @see Pair
  * @since 1.0
  */
-public class Immutable {
+public final class Immutable {
 
   private static final ImmutableArrayList<?> EMPTY_ARRAY_LIST =
       new ImmutableArrayList<>(Collections.emptyList());
@@ -72,15 +72,6 @@ public class Immutable {
     return (ImmutableMap<K, V>) EMPTY_HASH_MAP;
   }
 
-
-  private static <T> ImmutableList<T> listOf(Iterable<T> elements, boolean needsCloning) {
-    Objects.requireNonNull(elements);
-    if (!elements.iterator().hasNext()) {
-      return emptyList();
-    }
-    return new ImmutableArrayList<>(elements, needsCloning);
-  }
-
   /**
    * Creates new immutable list from given elements. If array is empty, returns {@link
    * Immutable#emptyList()}. This is the preferred way of creating immutable lists, unless you need
@@ -94,7 +85,7 @@ public class Immutable {
   @SafeVarargs
   @SuppressWarnings("varargs")
   public static <T> ImmutableList<T> listOf(T... elements) {
-    return listOf(Arrays.stream(elements).collect(Collectors.toList()), false);
+    return listOf(Arrays.stream(elements).collect(Collectors.toList()));
   }
 
   /**
@@ -108,19 +99,11 @@ public class Immutable {
    * @throws NullPointerException if {@code elements} is null
    */
   public static <T> ImmutableList<T> listOf(Iterable<T> elements) {
-    return listOf(elements, true);
-  }
-
-  static <T> ImmutableList<T> listOfWithoutCloning(Iterable<T> elements) {
-    return listOf(elements, false);
-  }
-
-  private static <T> ImmutableSet<T> setOf(Iterable<T> elements, boolean needsCloning) {
     Objects.requireNonNull(elements);
     if (!elements.iterator().hasNext()) {
-      return emptySet();
+      return emptyList();
     }
-    return new ImmutableHashSet<>(elements, needsCloning);
+    return new ImmutableArrayList<>(elements);
   }
 
   /**
@@ -134,10 +117,10 @@ public class Immutable {
    * @throws NullPointerException if {@code elements} is null
    */
   @SafeVarargs
-  @SuppressWarnings("varargs")
+  @SuppressWarnings({"varargs", "PMD.LinguisticNaming"})
   public static <T> ImmutableSet<T> setOf(T... elements) {
     Objects.requireNonNull(elements);
-    return setOf(Arrays.stream(elements).collect(Collectors.toSet()), false);
+    return setOf(Arrays.stream(elements).collect(Collectors.toSet()));
   }
 
   /**
@@ -150,12 +133,13 @@ public class Immutable {
    * @return immutable set
    * @throws NullPointerException if {@code elements} is null
    */
+  @SuppressWarnings("PMD.LinguisticNaming")
   public static <T> ImmutableSet<T> setOf(Iterable<T> elements) {
-    return setOf(elements, true);
-  }
-
-  static <T> ImmutableSet<T> setOfWithoutCloning(Iterable<T> elements) {
-    return setOf(elements, false);
+    Objects.requireNonNull(elements);
+    if (!elements.iterator().hasNext()) {
+      return emptySet();
+    }
+    return new ImmutableHashSet<>(elements);
   }
 
   /**
@@ -187,11 +171,11 @@ public class Immutable {
     if (!pairs.iterator().hasNext()) {
       return emptyMap();
     }
-    HashMap<K, V> hashMap = new HashMap<>();
-    for (Pair<K, V> p : pairs) {
+    final HashMap<K, V> hashMap = new HashMap<>();
+    for (final Pair<K, V> p : pairs) {
       hashMap.put(p.getKey(), p.getValue());
     }
-    return new ImmutableHashMap<>(hashMap, false);
+    return new ImmutableHashMap<>(hashMap);
   }
 
   /**

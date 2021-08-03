@@ -9,7 +9,7 @@ import java.util.function.Supplier;
  *
  * @since 0.1
  */
-public class Profiler {
+public final class Profiler {
 
   private static final long STILL_MEASURING = -1L;
 

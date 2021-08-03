@@ -3,14 +3,23 @@ Truly immutable collections, functional errors handling, laziness and measuremen
 
 This library has no dependencies (except the test scope).
 
+If you want to contribute, check out the [Contributing Guide](./CONTRIBUTING.md).
+
+`master` branch provides the latest `DEV-SNAPSHOT` documentation.
+You can find the specific version info by git tags.
+
 ### Table of contents
 * [Quick start](#quick-start)
 * [Status](#status)
 * [Usage](#usage)
+* [Authors](#authors)
 
 ### Quick start
 
+You need Java 8+ to use the library.
+
 Maven:
+
 ```xml
 <dependency>
     <groupId>com.kirekov</groupId>
@@ -24,10 +33,14 @@ implementation 'com.kirekov:java-useful-utils'
 
 ### Status
 [![Maven Central](https://img.shields.io/maven-central/v/com.kirekov/java-useful-utils)](https://mvnrepository.com/artifact/com.kirekov/java-useful-utils)
+[![Javadoc](https://javadoc.io/badge2/com.kirekov/java-useful-utils/javadoc.svg)](https://javadoc.io/doc/com.kirekov/java-useful-utils)
 [![Build Status](https://travis-ci.com/SimonHarmonicMinor/Java-Useful-Utils.svg?branch=master)](https://travis-ci.com/SimonHarmonicMinor/Java-Useful-Utils)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=SimonHarmonicMinor_Java-Useful-Utils&metric=alert_status)](https://sonarcloud.io/dashboard?id=SimonHarmonicMinor_Java-Useful-Utils)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=SimonHarmonicMinor_Java-Useful-Utils&metric=coverage)](https://sonarcloud.io/dashboard?id=SimonHarmonicMinor_Java-Useful-Utils)
 [![Hits-of-Code](https://hitsofcode.com/github/SimonHarmonicMinor/Java-Useful-Utils)](https://hitsofcode.com/github/SimonHarmonicMinor/Java-Useful-Utils/view)
+[![checkstyle](https://img.shields.io/badge/checkstyle-intergrated-informational)](https://checkstyle.sourceforge.io/)
+[![PMD](https://img.shields.io/badge/PMD-intergrated-informational)](https://pmd.github.io/pmd-6.35.0/pmd_rules_java.html)
+[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/SimonHarmonicMinor/Java-Useful-Utils/blob/master/LICENSE)
 
 ### Usage
 The library consists of three big parts.
@@ -89,7 +102,7 @@ This library has two monads: [`Try`](#try) and [`Lazy`](#lazy).
 ###### Try
 
 `Try` allows you to work with methods that may throw an exception
-in the same way as `Optional`. For instance, suppose we have such code:
+in the same way as `Optional` in a **lazy** way. For instance, suppose we have such code:
 
 ```java
 int num;
@@ -114,7 +127,7 @@ JUU allows to rewrite this snippet as two equations:
 
 ```java
 int num = Try.of(() -> Integer.parseInt(getStringValue()))
-             .orElse(getDefaultIntValue());
+             .orElseGet(() -> getDefaultIntValue());
 return Try.of(() -> executeRpc(num))
           .orElse(SOME_DEFAULT_VALUE);
 ```
@@ -160,18 +173,46 @@ If you need the exception that led to the error, you can use
 ```java
 Try.of(() -> Integer.parseInt(getStringValue))
    .map(x -> 2 % x)
-   .orElseGet(reason -> {
+   .orElseGet((Exception reason) -> {
        log.error("Something went wrong", reason);
        return 0;
    })
 ```
 
-`reason` has the type of `Throwable` and it's the instance of that very
+`reason` has the type of `Exception` and it's the instance of that very
 exception that broke the chain. 
 For instance, if `Integer.parseInt` threw an exception, 
 the `reason` would be the type of `NumberFormatException`.
 On the other hand, if `x == 0` in the `map` callback,
-the reason would be the type of `ArithmeticException`. 
+the reason would be the type of `ArithmeticException`.
+
+The class only catches `Exception` type. 
+It means that all `Throwable` instances are skipped.
+The motivation is that `Error` extends from `Throwable` but these exceptions should not be caught manually.
+
+The fact that `Try` monad acts *lazily* means
+that you build a pipeline of execution that triggers on any *terminal* operation.
+
+```java
+Try<Integer> t = Try.of(() -> {
+      println("First step");
+      return 1;
+    }).map(val -> {
+      println("Second step");
+      return val + 1;
+    }).filter(val -> {
+      println("Third step");
+      return val > 0;
+    });
+// nothing prints here
+    
+assert 2 == t.orElseThrow();
+// First step
+// Second step
+// Third step
+```
+
+All terminal operations are listed in the [javadoc](./src/main/java/com/kirekov/juu/monad/Try.java).
 
 ###### Lazy
 
@@ -336,3 +377,6 @@ Also lib has implementations for each primitive type.
 `MutableInt`, `MutableDouble`, `MutableShort`,
 `MutableLong`, `MutableFloat`, `MutableChar`,
 `MutableByte`, `MutableBoolean`.
+
+### Authors
+- [@SimonHarmonicMinor](https://github.com/SimonHarmonicMinor)

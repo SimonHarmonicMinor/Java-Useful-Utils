@@ -3,7 +3,7 @@ package com.kirekov.juu.collection.mutable;
 /**
  * Container which allows to hold short value and change it if necessary.
  */
-public class MutableShort {
+public final class MutableShort {
 
   private short value;
 

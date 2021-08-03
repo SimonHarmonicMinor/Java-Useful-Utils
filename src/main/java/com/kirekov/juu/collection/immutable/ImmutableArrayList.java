@@ -1,7 +1,6 @@
 package com.kirekov.juu.collection.immutable;
 
-import com.kirekov.juu.monad.Try;
-import java.io.Serializable;
+import com.kirekov.juu.collection.immutable.abstraction.AbstractImmutableList;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -22,59 +21,35 @@ import java.util.stream.Stream;
  * @see ImmutableList
  * @see List
  * @see ArrayList
- * @see Serializable
  * @since 1.0
  */
-public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
+public final class ImmutableArrayList<T> extends AbstractImmutableList<T> {
 
-  private final ArrayList<T> arrayList;
+  private final List<T> arrayList;
 
+  /**
+   * Constructor.
+   *
+   * @param iterable the source of elements
+   */
   public ImmutableArrayList(Iterable<T> iterable) {
-    this(iterable, true);
-  }
-
-  ImmutableArrayList(Iterable<T> iterable, boolean needCloning) {
-    Objects.requireNonNull(iterable);
-    if (iterable instanceof ArrayList) {
-      this.arrayList =
-          needCloning ? new ArrayList<>((ArrayList<T>) iterable) : (ArrayList<T>) iterable;
-    } else if (iterable instanceof ImmutableArrayList) {
-      ImmutableArrayList<T> immutableArrayList = (ImmutableArrayList<T>) iterable;
-      this.arrayList = immutableArrayList.arrayList;
-    } else {
-      arrayList = new ArrayList<>();
-      for (T element : iterable) {
-        arrayList.add(element);
-      }
-    }
-  }
-
-  private int normalizeIndex(int index) {
-    return index >= 0 ? index : size() + index;
-  }
-
-  private void checkStepSize(int stepSize) {
-    if (stepSize == 0) {
-      throw new IllegalArgumentException("Step size cannot be zero");
-    }
-  }
-
-  private void checkIndex(int index) {
-    if (index < 0 || index >= size()) {
-      throw new IndexOutOfBoundsException(String.format("Index %d is out of bounds", index));
+    super();
+    arrayList = new ArrayList<>();
+    for (final T element : iterable) {
+      arrayList.add(element);
     }
   }
 
   @Override
   public T get(int index) {
-    int normalized = normalizeIndex(index);
+    final int normalized = normalizeIndex(index);
     checkIndex(normalized);
     return arrayList.get(normalized);
   }
 
   @Override
   public OptionalInt indexOf(T element) {
-    int index = arrayList.indexOf(element);
+    final int index = arrayList.indexOf(element);
     if (index == -1) {
       return OptionalInt.empty();
     }
@@ -83,7 +58,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
 
   @Override
   public OptionalInt lastIndexOf(T element) {
-    int index = arrayList.lastIndexOf(element);
+    final int index = arrayList.lastIndexOf(element);
     if (index == -1) {
       return OptionalInt.empty();
     }
@@ -97,37 +72,28 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
 
   @Override
   public ImmutableList<T> slice(int fromIndex, int toIndex) {
-    int fromNorm = normalizeIndex(fromIndex);
-    int toNorm = normalizeIndex(toIndex);
+    final int fromNorm = normalizeIndex(fromIndex);
+    final int toNorm = normalizeIndex(toIndex);
     return slice(fromNorm, toNorm, fromNorm < toNorm ? 1 : -1);
   }
 
   @Override
   public ImmutableList<T> slice(int fromIndex, int toIndex, int stepSize) {
     int fromNorm = normalizeIndex(fromIndex);
-    int toNorm = normalizeIndex(toIndex);
+    final int toNorm = normalizeIndex(toIndex);
     checkIndex(fromNorm);
     checkStepSize(stepSize);
-    BiFunction<Integer, Integer, Boolean> condition =
+    final BiFunction<Integer, Integer, Boolean> condition =
         fromNorm <= toNorm
             ? (from, to) -> from < to && from < size()
             : (from, to) -> from > to && from >= 0;
-    Function<Integer, Integer> nextValueFunc = index -> index + stepSize;
-    ArrayList<T> newArrayList = new ArrayList<>();
+    final Function<Integer, Integer> nextValueFunc = index -> index + stepSize;
+    final ArrayList<T> newArrayList = new ArrayList<>();
     while (condition.apply(fromNorm, toNorm)) {
       newArrayList.add(get(fromNorm));
       fromNorm = nextValueFunc.apply(fromNorm);
     }
-    return Immutable.listOfWithoutCloning(newArrayList);
-  }
-
-  @Override
-  public ImmutableList<T> step(int stepSize) {
-    if (stepSize > 0) {
-      return step(0, stepSize);
-    } else {
-      return step(-1, stepSize);
-    }
+    return new ImmutableArrayList<>(newArrayList);
   }
 
   @Override
@@ -143,114 +109,108 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
 
   @Override
   public ImmutableList<T> concatWith(Iterable<T> iterable) {
-    Objects.requireNonNull(iterable);
-    ArrayList<T> copy = new ArrayList<>(this.arrayList);
-    for (T t : iterable) {
+    Objects.requireNonNull(iterable, "iterable to concat with cannot be null");
+    final ArrayList<T> copy = new ArrayList<>(this.arrayList);
+    for (final T t : iterable) {
       copy.add(t);
     }
-    return Immutable.listOfWithoutCloning(copy);
-  }
-
-  private static <R> R getValByIndex(ImmutableList<R> immutableList, int index) {
-    if (index < immutableList.size()) {
-      return immutableList.get(index);
-    }
-    return null;
+    return new ImmutableArrayList<>(copy);
   }
 
   @Override
   public <R> ImmutableList<Pair<T, R>> zipWith(ImmutableList<R> list) {
-    Objects.requireNonNull(list);
-    int maxSize = Math.max(size(), list.size());
-    ArrayList<Pair<T, R>> newArrayList = new ArrayList<>(maxSize);
+    Objects.requireNonNull(list, "list to zip with cannot be null");
+    final int maxSize = Math.max(size(), list.size());
+    final ArrayList<Pair<T, R>> newArrayList = new ArrayList<>(maxSize);
     for (int i = 0; i < maxSize; i++) {
-      T left = getValByIndex(this, i);
-      R right = getValByIndex(list, i);
+      final T left = getValByIndex(this, i);
+      final R right = getValByIndex(list, i);
       newArrayList.add(Pair.of(left, right));
     }
-    return Immutable.listOfWithoutCloning(newArrayList);
+    return new ImmutableArrayList<>(newArrayList);
   }
 
   @Override
   public ImmutableList<Pair<T, T>> zipWithNext() {
-    ArrayList<Pair<T, T>> newArrayList = new ArrayList<>(size());
+    final ArrayList<Pair<T, T>> newArrayList = new ArrayList<>(size());
     for (int i = 0; i < size() - 1; i++) {
       newArrayList.add(Pair.of(get(i), get(i + 1)));
     }
-    return Immutable.listOfWithoutCloning(newArrayList);
+    return new ImmutableArrayList<>(newArrayList);
   }
 
   @Override
   public <R> ImmutableList<R> map(Function<? super T, ? extends R> mapper) {
-    Objects.requireNonNull(mapper);
-    ArrayList<R> newList = new ArrayList<>(arrayList.size());
-    for (T t : arrayList) {
+    Objects.requireNonNull(mapper, "mapper function cannot be null");
+    final ArrayList<R> newList = new ArrayList<>(arrayList.size());
+    for (final T t : arrayList) {
       newList.add(mapper.apply(t));
     }
-    return Immutable.listOfWithoutCloning(newList);
+    return new ImmutableArrayList<>(newList);
   }
 
   @Override
   public <R> ImmutableList<R> mapIndexed(BiFunction<Integer, ? super T, ? extends R> mapper) {
-    Objects.requireNonNull(mapper);
-    ArrayList<R> newList = new ArrayList<>(arrayList.size());
+    Objects.requireNonNull(mapper, "indexed mapper function cannot be null");
+    final ArrayList<R> newList = new ArrayList<>(arrayList.size());
     for (int i = 0; i < arrayList.size(); i++) {
       newList.add(mapper.apply(i, arrayList.get(i)));
     }
-    return Immutable.listOfWithoutCloning(newList);
+    return new ImmutableArrayList<>(newList);
   }
 
   @Override
   public <R> ImmutableList<R> flatMap(Function<? super T, ? extends Iterable<R>> mapper) {
-    Objects.requireNonNull(mapper);
-    ArrayList<R> newList = new ArrayList<>(arrayList.size());
-    for (T t : arrayList) {
-      ImmutableArrayList<R> listElement = new ImmutableArrayList<>(mapper.apply(t));
+    Objects.requireNonNull(mapper, "flat mapper function cannot be null");
+    final ArrayList<R> newList = new ArrayList<>(arrayList.size());
+    for (final T t : arrayList) {
+      final ImmutableArrayList<R> listElement = new ImmutableArrayList<>(mapper.apply(t));
       newList.addAll(listElement.arrayList);
     }
-    return Immutable.listOfWithoutCloning(newList);
+    return new ImmutableArrayList<>(newList);
   }
 
   @Override
   public <R> ImmutableList<R> flatMapIndexed(
-      BiFunction<Integer, ? super T, ? extends Iterable<R>> mapper) {
-    Objects.requireNonNull(mapper);
-    ArrayList<R> newList = new ArrayList<>(arrayList.size());
+      BiFunction<Integer, ? super T, ? extends Iterable<R>> mapper
+  ) {
+    Objects.requireNonNull(mapper, "indexed flat mapper function cannot be null");
+    final ArrayList<R> newList = new ArrayList<>(arrayList.size());
     for (int i = 0; i < arrayList.size(); i++) {
-      ImmutableArrayList<R> listElement =
+      final ImmutableArrayList<R> listElement =
           new ImmutableArrayList<>(mapper.apply(i, arrayList.get(i)));
       newList.addAll(listElement.arrayList);
     }
-    return Immutable.listOfWithoutCloning(newList);
+    return new ImmutableArrayList<>(newList);
   }
 
   @Override
   public ImmutableList<T> filter(Predicate<? super T> predicate) {
-    Objects.requireNonNull(predicate);
-    ArrayList<T> newList = new ArrayList<>(arrayList.size());
-    for (T t : arrayList) {
+    Objects.requireNonNull(predicate, "filtering predicate cannot be null");
+    final ArrayList<T> newList = new ArrayList<>(arrayList.size());
+    for (final T t : arrayList) {
       if (predicate.test(t)) {
         newList.add(t);
       }
     }
-    return Immutable.listOfWithoutCloning(newList);
+    return new ImmutableArrayList<>(newList);
   }
 
   @Override
   public ImmutableList<T> filterIndexed(BiPredicate<Integer, ? super T> predicate) {
-    Objects.requireNonNull(predicate);
-    ArrayList<T> newList = new ArrayList<>(arrayList.size());
+    Objects.requireNonNull(predicate, "indexed filtering predicate cannot be null");
+    final ArrayList<T> newList = new ArrayList<>(arrayList.size());
     for (int i = 0; i < arrayList.size(); i++) {
       if (predicate.test(i, arrayList.get(i))) {
         newList.add(arrayList.get(i));
       }
     }
-    return Immutable.listOfWithoutCloning(newList);
+    return new ImmutableArrayList<>(newList);
   }
 
   @Override
   public void forEachIndexed(BiConsumer<Integer, ? super T> action) {
-    Objects.requireNonNull(action);
+    Objects.requireNonNull(action, "indexed for-each consumer cannot be null");
     for (int i = 0; i < arrayList.size(); i++) {
       action.accept(i, arrayList.get(i));
     }
@@ -258,10 +218,10 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
 
   @Override
   public ImmutableList<T> sorted(Comparator<? super T> comparator) {
-    Objects.requireNonNull(comparator);
-    ArrayList<T> copy = new ArrayList<>(arrayList);
+    Objects.requireNonNull(comparator, "sorting comparator cannot be null");
+    final ArrayList<T> copy = new ArrayList<>(arrayList);
     copy.sort(comparator);
-    return Immutable.listOfWithoutCloning(copy);
+    return new ImmutableArrayList<>(copy);
   }
 
   @Override
@@ -269,11 +229,11 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
     if (size < 0) {
       throw new IllegalArgumentException(String.format("Limit size is less than zero: %s", size));
     }
-    ArrayList<T> newList = new ArrayList<>(arrayList.size());
+    final ArrayList<T> newList = new ArrayList<>(arrayList.size());
     for (int i = 0; i < Math.min(size(), size); i++) {
       newList.add(arrayList.get(i));
     }
-    return Immutable.listOfWithoutCloning(newList);
+    return new ImmutableArrayList<>(newList);
   }
 
   @Override
@@ -281,16 +241,11 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
     if (size < 0) {
       throw new IllegalArgumentException(String.format("Skip size is less than zero: %s", size));
     }
-    ArrayList<T> newList = new ArrayList<>(arrayList.size());
+    final ArrayList<T> newList = new ArrayList<>(arrayList.size());
     for (int i = Math.min(size, size()); i < arrayList.size(); i++) {
       newList.add(arrayList.get(i));
     }
-    return Immutable.listOfWithoutCloning(newList);
-  }
-
-  @Override
-  public ImmutableList<T> reversed() {
-    return step(-1);
+    return new ImmutableArrayList<>(newList);
   }
 
   @Override
@@ -300,8 +255,7 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
 
   @Override
   public boolean contains(Object element) {
-    return Try.of(() -> arrayList.contains(element))
-        .orElse(false);
+    return arrayList.contains(element);
   }
 
   @Override
@@ -331,16 +285,41 @@ public class ImmutableArrayList<T> implements ImmutableList<T>, Serializable {
 
   @Override
   public boolean equals(Object o) {
-    return ImmutableCollectionUtils.listEquals(this, o);
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    final ImmutableArrayList<?> that = (ImmutableArrayList<?>) o;
+    return arrayList.equals(that.arrayList);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(arrayList);
+    return arrayList.hashCode();
   }
 
-  @Override
-  public String toString() {
-    return ImmutableCollectionUtils.listToString(this);
+  private int normalizeIndex(int index) {
+    return index >= 0 ? index : size() + index;
+  }
+
+  private void checkStepSize(int stepSize) {
+    if (stepSize == 0) {
+      throw new IllegalArgumentException("Step size cannot be zero");
+    }
+  }
+
+  private void checkIndex(int index) {
+    if (index < 0 || index >= size()) {
+      throw new IndexOutOfBoundsException(String.format("Index %d is out of bounds", index));
+    }
+  }
+
+  private static <R> R getValByIndex(ImmutableList<R> immutableList, int index) {
+    if (index < immutableList.size()) {
+      return immutableList.get(index);
+    }
+    return null;
   }
 }

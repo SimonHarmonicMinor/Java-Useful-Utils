@@ -78,35 +78,6 @@ class ImmutableTreeSetTest {
   }
 
   @Test
-  void ofSortedSetWithoutCloning() {
-    SortedSet<String> sortedSet = new TreeSet<>(Arrays.asList("1", "2", "3", "4"));
-    int i = 1;
-    for (String str : sortedSet) {
-      assertEquals(String.valueOf(i), str);
-      i++;
-    }
-
-    ImmutableTreeSet<String> set = new ImmutableTreeSet<>(
-        sortedSet,
-        false
-    );
-    assertFalse(set.isEmpty());
-    assertTrue(set.isNotEmpty());
-    assertEquals(4, set.size());
-
-    i = 1;
-    for (String str : set) {
-      assertEquals(String.valueOf(i), str);
-      i++;
-    }
-
-    sortedSet.clear();
-
-    assertTrue(set.isEmpty());
-    assertFalse(set.isNotEmpty());
-  }
-
-  @Test
   void lowerHigher() {
     ImmutableTreeSet<String> set = ImmutableTreeSet.of(
         Arrays.asList("1", "2", "3", "4", "5")
@@ -251,7 +222,7 @@ class ImmutableTreeSetTest {
   }
 
   @Test
-  void toMutableNavigableSet() {
+  void shouldReturnTheEqualImmutableNavigableMap() {
     ImmutableNavigableSet<String> set = ImmutableTreeSet.of(
         Arrays.asList("1", "2", "3", "4", "5")
     );
@@ -377,7 +348,7 @@ class ImmutableTreeSetTest {
   }
 
   @Test
-  void toMutableSortedSet() {
+  void shouldReturnNewMutableSortedSet() {
     ImmutableNavigableSet<String> set = ImmutableTreeSet.of(
         Arrays.asList("1", "2", "3", "4", "5")
     );
@@ -457,7 +428,7 @@ class ImmutableTreeSetTest {
   }
 
   @Test
-  void toList() {
+  void shouldReturnMutableListFromTheSet() {
     ImmutableNavigableSet<String> set = ImmutableTreeSet.of(
         Arrays.asList("1", "2", "3", "4", "5")
     );
@@ -471,7 +442,7 @@ class ImmutableTreeSetTest {
   }
 
   @Test
-  void toSet() {
+  void shouldReturnTheEqualMutableSet() {
     ImmutableNavigableSet<String> set = ImmutableTreeSet.of(
         Arrays.asList("1", "2", "3", "4", "5")
     );
@@ -523,7 +494,32 @@ class ImmutableTreeSetTest {
   }
 
   @Test
-  void toStringTest() {
+  void equalsShouldReturnTrueOnTheSameObject() {
+    ImmutableNavigableSet<String> set1 = ImmutableTreeSet.of(
+        Arrays.asList("1", "2", "3", "4", "5")
+    );
+    assertEquals(set1, set1);
+  }
+
+  @Test
+  void equalsShouldReturnOnNullComparison() {
+    ImmutableNavigableSet<String> set1 = ImmutableTreeSet.of(
+        Arrays.asList("1", "2", "3")
+    );
+    assertNotEquals(null, set1);
+  }
+
+  @Test
+  void equalsShouldReturnOnDifferentClassesComparison() {
+    ImmutableNavigableSet<String> set1 = ImmutableTreeSet.of(
+        Arrays.asList("1", "2", "3")
+    );
+    assertNotEquals(set1, new TreeSet<>());
+  }
+
+
+  @Test
+  void shouldReturnNonNullString() {
     ImmutableNavigableSet<String> set = ImmutableTreeSet.of(
         Arrays.asList("1", "2", "3", "4", "5")
     );

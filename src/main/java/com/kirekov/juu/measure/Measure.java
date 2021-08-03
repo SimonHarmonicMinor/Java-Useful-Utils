@@ -13,7 +13,7 @@ import java.util.function.Supplier;
  * @see ExecutionResult
  * @since 0.1
  */
-public class Measure<T> {
+public final class Measure<T> {
 
   private final Supplier<T> supplier;
 
@@ -59,8 +59,8 @@ public class Measure<T> {
    * @return execution result measured in millis.
    */
   public ExecutionResult<T> inMillis() {
-    long time = System.currentTimeMillis();
-    T result = supplier.get();
+    final long time = System.currentTimeMillis();
+    final T result = supplier.get();
     return new ExecutionResult<>(result, System.currentTimeMillis() - time, MeasureUnit.MILLIS);
   }
 
@@ -70,8 +70,8 @@ public class Measure<T> {
    * @return execution result measured in nanos.
    */
   public ExecutionResult<T> inNanos() {
-    long time = System.nanoTime();
-    T result = supplier.get();
+    final long time = System.nanoTime();
+    final T result = supplier.get();
     return new ExecutionResult<>(result, System.nanoTime() - time, MeasureUnit.NANOS);
   }
 
@@ -82,9 +82,9 @@ public class Measure<T> {
    * @since 1.1
    */
   public ExecutionResult<T> inSeconds() {
-    long start = System.currentTimeMillis();
-    T result = supplier.get();
-    long finish = System.currentTimeMillis();
+    final long start = System.currentTimeMillis();
+    final T result = supplier.get();
+    final long finish = System.currentTimeMillis();
     return new ExecutionResult<>(result, millisToSeconds(finish - start), MeasureUnit.SECONDS);
   }
 }

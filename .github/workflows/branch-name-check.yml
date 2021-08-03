@@ -1,0 +1,28 @@
+name: 'Branch name check'
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
+  pull_request_target:
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
+
+jobs:
+  branch-name-check:
+    name: Branch name check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check current branch name
+        shell: python
+        run: |
+          import os
+          import re
+          branch = os.getenv('GITHUB_HEAD_REF')
+          assert re.match(r"^[\d|\w]+/#\d+-.+", branch), 'The branch should be formatted as "type/#TASK_ID-description" but received {}'.format(branch)
+          print('"{}" branch is successfully checked'.format(branch))

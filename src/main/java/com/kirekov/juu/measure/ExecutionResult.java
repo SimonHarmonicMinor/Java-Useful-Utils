@@ -10,7 +10,7 @@ import java.util.Objects;
  * @see MeasureUnit
  * @since 0.1
  */
-public class ExecutionResult<T> {
+public final class ExecutionResult<T> {
 
   private final T result;
   private final long time;
@@ -65,7 +65,7 @@ public class ExecutionResult<T> {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ExecutionResult<?> that = (ExecutionResult<?>) o;
+    final ExecutionResult<?> that = (ExecutionResult<?>) o;
     return time == that.time
         && Objects.equals(result, that.result)
         && measureUnit == that.measureUnit;

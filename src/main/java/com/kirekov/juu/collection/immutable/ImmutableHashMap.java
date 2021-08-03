@@ -1,10 +1,7 @@
 package com.kirekov.juu.collection.immutable;
 
-import com.kirekov.juu.lambda.TriFunction;
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * An immutable implementation of java native {@link HashMap}.
@@ -13,12 +10,11 @@ import java.util.Objects;
  * @param <V> the type of the value
  * @see ImmutableMap
  * @see HashMap
- * @see Serializable
  * @since 1.0
  */
-public class ImmutableHashMap<K, V> implements ImmutableMap<K, V>, Serializable {
+public final class ImmutableHashMap<K, V> implements ImmutableMap<K, V> {
 
-  private final HashMap<K, V> hashMap;
+  private final Map<K, V> hashMap;
   private final ImmutableSet<K> keys;
   private final ImmutableList<V> values;
   private final ImmutableSet<Pair<K, V>> pairs;
@@ -30,15 +26,7 @@ public class ImmutableHashMap<K, V> implements ImmutableMap<K, V>, Serializable 
    * @param map source map
    */
   public ImmutableHashMap(Map<K, V> map) {
-    this(map, true);
-  }
-
-  ImmutableHashMap(Map<K, V> map, boolean needsCloning) {
-    if (needsCloning || !(map instanceof HashMap)) {
-      this.hashMap = new HashMap<>(map);
-    } else {
-      this.hashMap = (HashMap<K, V>) map;
-    }
+    this.hashMap = new HashMap<>(map);
     this.keys = Immutable.setOf(hashMap.keySet());
     this.values = Immutable.listOf(hashMap.values());
     this.pairs = ImmutableMapUtils.toPairSet(hashMap.entrySet());
@@ -50,11 +38,6 @@ public class ImmutableHashMap<K, V> implements ImmutableMap<K, V>, Serializable 
   }
 
   @Override
-  public boolean isEmpty() {
-    return hashMap.isEmpty();
-  }
-
-  @Override
   public boolean containsKey(Object key) {
     return hashMap.containsKey(key);
   }
@@ -62,32 +45,6 @@ public class ImmutableHashMap<K, V> implements ImmutableMap<K, V>, Serializable 
   @Override
   public boolean containsValue(Object value) {
     return hashMap.containsValue(value);
-  }
-
-  @Override
-  public boolean containsPair(Pair<K, V> pair) {
-    Objects.requireNonNull(pair);
-    return pairSet().contains(pair);
-  }
-
-  @Override
-  public ImmutableMap<K, V> concatWithOverride(ImmutableMap<K, V> map) {
-    Objects.requireNonNull(map);
-    return ImmutableMapUtils.concatenationWithOverride(this.hashMap, map);
-  }
-
-  @Override
-  public ImmutableMap<K, V> concatWithoutOverride(ImmutableMap<K, V> map) {
-    Objects.requireNonNull(map);
-    return ImmutableMapUtils.concatenationWithoutOverride(this.hashMap, map);
-  }
-
-  @Override
-  public ImmutableMap<K, V> concatWith(
-      ImmutableMap<K, V> map, TriFunction<K, V, V, V> overrideBehaviour) {
-    Objects.requireNonNull(map);
-    Objects.requireNonNull(overrideBehaviour);
-    return ImmutableMapUtils.concatenation(this.hashMap, map, overrideBehaviour);
   }
 
   @Override
@@ -117,11 +74,18 @@ public class ImmutableHashMap<K, V> implements ImmutableMap<K, V>, Serializable 
 
   @Override
   public boolean equals(Object o) {
-    return ImmutableCollectionUtils.mapEquals(this, o);
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    final ImmutableHashMap<?, ?> that = (ImmutableHashMap<?, ?>) o;
+    return hashMap.equals(that.hashMap);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(hashMap);
+    return hashMap.hashCode();
   }
 }

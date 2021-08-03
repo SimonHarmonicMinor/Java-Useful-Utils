@@ -46,23 +46,6 @@ class ImmutableArrayListTest {
   }
 
   @Test
-  void instantiateWithoutCloning() {
-    ArrayList<Integer> arrayList = new ArrayList<>();
-    arrayList.add(1);
-    arrayList.add(2);
-    arrayList.add(3);
-    ImmutableArrayList<Integer> immutableArrayList = new ImmutableArrayList<>(arrayList, false);
-    assertEquals(3, immutableArrayList.size());
-    assertEquals(1, immutableArrayList.get(0));
-    assertEquals(2, immutableArrayList.get(1));
-    assertEquals(3, immutableArrayList.get(2));
-
-    arrayList.clear();
-
-    assertEquals(0, immutableArrayList.size());
-  }
-
-  @Test
   void instantiateWithImmutableArrayList() {
     ArrayList<Integer> arrayList = new ArrayList<>();
     arrayList.add(1);
@@ -91,7 +74,7 @@ class ImmutableArrayListTest {
   }
 
   @Test
-  void getThrowsIndexOutOfBoundsException() {
+  void shouldThrowIndexOutOfBoundsException() {
     Set<Integer> set = new HashSet<>();
     set.add(1);
     set.add(2);
@@ -767,7 +750,7 @@ class ImmutableArrayListTest {
   }
 
   @Test
-  void toList() {
+  void shouldReturnTheEqualImmutableList() {
     int item1 = 1251;
     int item2 = -14214;
     int item3 = 0;
@@ -782,7 +765,7 @@ class ImmutableArrayListTest {
   }
 
   @Test
-  void toMutableList() {
+  void shouldReturnTheEqualMutableList() {
     int item1 = 1251;
     int item2 = -14214;
     int item3 = 0;
@@ -807,7 +790,7 @@ class ImmutableArrayListTest {
   }
 
   @Test
-  void toSet() {
+  void shouldReturnTheEqualImmutableSet() {
     int item1 = 1251;
     int item2 = -14214;
     int item3 = 0;
@@ -827,7 +810,7 @@ class ImmutableArrayListTest {
   }
 
   @Test
-  void toMutableSet() {
+  void shouldReturnTheEqualMutableSet() {
     int item1 = 1251;
     int item2 = -14214;
     int item3 = 0;
@@ -899,7 +882,7 @@ class ImmutableArrayListTest {
   }
 
   @Test
-  void toStringTest() {
+  void shouldStringContainingElements() {
     int item1 = 1251;
     int item2 = -14214;
     int item3 = 0;
@@ -913,6 +896,14 @@ class ImmutableArrayListTest {
 
     assertNotNull(list1.toString());
     assertNotNull(list2.toString());
+    assertEquals(
+        String.format(
+            "[%s, %s, %s, %s, %s]",
+            item1, item2, item3, item4, item5
+        ),
+        list1.toString()
+    );
+    assertEquals("[]", list2.toString());
   }
 
   @Test

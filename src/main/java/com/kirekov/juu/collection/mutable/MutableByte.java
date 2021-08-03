@@ -5,7 +5,7 @@ package com.kirekov.juu.collection.mutable;
  *
  * @see MutableValue
  */
-public class MutableByte {
+public final class MutableByte {
 
   private byte value;
 

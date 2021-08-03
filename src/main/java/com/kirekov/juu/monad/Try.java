@@ -1,170 +1,117 @@
 package com.kirekov.juu.monad;
 
 import com.kirekov.juu.collection.Streaming;
-import com.kirekov.juu.exception.EmptyContainerException;
 import com.kirekov.juu.lambda.CheckedFunction;
 import com.kirekov.juu.lambda.CheckedSupplier;
-import java.util.Arrays;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Monad for retrieving values just like {@link java.util.Optional}, but instead a container
- * considered as an empty one if an exception has been thrown during calculations.
+ * Monad for retrieving values just like {@link Optional}, but instead a container considered as an
+ * empty one if an exception has been thrown during calculations.
  * <br>
- * If container is empty, it keeps the reason of emptiness — the exception that led to it. The
- * exception can be retrieved with {@link Try#getReasonOfEmptiness()}.
- * <p>Class overrides {@link Object#equals(Object)} and {@link Object#hashCode()} methods.</p>
+ * The monad acts <b>lazily</b>. So, all methods build a pipeline which execution is triggered on
+ * any terminal operation.
+ * <br>
+ * List of terminal operations.
+ * <ul>
+ *   <li>{@linkplain Try#orElse(Object)}</li>
+ *   <li>{@linkplain Try#orElseGet(Supplier)}</li>
+ *   <li>{@linkplain Try#orElseGet(Function)}</li>
+ *   <li>{@linkplain Try#orElseThrow()}</li>
+ *   <li>{@linkplain Try#orElseThrow(Supplier)}</li>
+ *   <li>{@linkplain Try#stream()}</li>
+ * </ul>
+ * <p>The class only catches exceptions of type {@link Exception}. It means that all {@linkplain
+ * Throwable} instances shall be skipped. The motivation is that {@link Error} extends from
+ * {@linkplain Throwable} but this exceptions should not be caught manually.</p>
+ * <br>
+ * The class is thread-safe if the pipeline is thread-safe too.
  *
  * @param <T> the type of the return value
  * @since 1.0
  */
-public class Try<T> implements Streaming<T> {
+public final class Try<T> implements Streaming<T> {
 
-  private static final String CONTAINER_IS_EMPTY_MSG = "Container is empty";
-  private static final Try<?> EMPTY = new Try<>(null,
-      new EmptyContainerException(CONTAINER_IS_EMPTY_MSG, null));
+  private final CheckedSupplier<? extends T, ? extends Exception> valueSupplier;
 
-  private final T value;
-  private final Throwable reasonOfEmptiness;
-
-  private Try(T value, Throwable reasonOfEmptiness) {
-    this.value = value;
-    this.reasonOfEmptiness = reasonOfEmptiness;
+  private Try(CheckedSupplier<? extends T, ? extends Exception> value) {
+    this.valueSupplier = value;
   }
 
   /**
-   * Returns an empty container. Does not create the new one, returns the same instance every time
-   * The reason of emptiness defines as {@linkplain EmptyContainerException} with null cause.
+   * Create a monad with successful result.
+   *
+   * @param value the value to retrieve
+   * @param <T>   the type of the value
+   * @return monad with successful execution
+   */
+  public static <T> Try<T> success(T value) {
+    return new Try<>(() -> value);
+  }
+
+  /**
+   * Create a monad with error result. The execution throws {@linkplain NoSuchElementException}.
    *
    * @param <T> the type of the return value
-   * @return empty container
+   * @return monad with error result
    */
-  @SuppressWarnings("unchecked")
-  public static <T> Try<T> empty() {
-    return (Try<T>) EMPTY;
+  public static <T> Try<T> error() {
+    return new Try<>(() -> {
+      throw new NoSuchElementException("'Try' container is empty");
+    });
   }
 
   /**
-   * Returns an empty container with defined reason of emptiness.
+   * Create a monad with error result. The execution throws {@code exceptionToThrow}.
    *
-   * @param <T>               the type of the return value
-   * @param reasonOfEmptiness the reason of emptiness
-   * @return empty container
-   * @throws NullPointerException if {@code reasonOfEmptiness} is null
+   * @param <T>              the type of the return value
+   * @param exceptionToThrow the exception that is ought to be thrown
+   * @return monad with error result
+   * @throws NullPointerException if {@code exceptionToThrow} is null
    */
-  public static <T> Try<T> empty(Throwable reasonOfEmptiness) {
-    Objects.requireNonNull(reasonOfEmptiness);
-    return new Try<>(null, reasonOfEmptiness);
+  public static <T> Try<T> error(Exception exceptionToThrow) {
+    Objects.requireNonNull(exceptionToThrow, "exceptionToThrow cannot be null");
+    return new Try<>(() -> {
+      throw exceptionToThrow;
+    });
   }
 
+
   /**
-   * Instantiates a container by calculating the value of the supplier. If supplier fails with an
-   * exception, returns {@link Try#empty(Throwable)}.
+   * Create a monad of the given supplier. This is an intermediate operation.
    *
-   * @param supplier function that returns value
+   * @param supplier supplier that returns value
    * @param <T>      the type of the return value
-   * @param <E>      the type of the exception that supplier may throw
-   * @return a container with the retrieved value or an empty one, if calculation failed with an
-   * exception
+   * @return monad that holds that given supplier
    * @throws NullPointerException if suppliers parameter is null
    */
-  public static <T, E extends Throwable> Try<T> of(CheckedSupplier<T, E> supplier) {
-    Objects.requireNonNull(supplier);
-    try {
-      return new Try<>(supplier.get(), null);
-    } catch (Throwable e) {
-      return empty(e);
-    }
+  public static <T> Try<T> of(CheckedSupplier<? extends T, ? extends Exception> supplier) {
+    Objects.requireNonNull(supplier, "supplier cannot be null");
+    return new Try<>(supplier);
   }
 
   /**
-   * Returns a container with the value of the first calculated supplier that didn't fail. If all
-   * suppliers fail, returns {@link Try#empty()}.
-   *
-   * @param suppliers collection of suppliers
-   * @param <T>       the type of the return value
-   * @param <E>       the type of the exception that supplier may throw
-   * @return a container with the value of the succeeded supplier or {@link Try#empty()}
-   * @throws NullPointerException if suppliers parameter is null
-   * @see Try#of(CheckedSupplier)
-   */
-  public static <T, E extends Throwable> Try<T> getFirst(
-      Iterable<CheckedSupplier<T, E>> suppliers) {
-    Objects.requireNonNull(suppliers);
-    for (CheckedSupplier<T, E> supplier : suppliers) {
-      Try<T> t = Try.of(supplier);
-      if (t.isPresent()) {
-        return t;
-      }
-    }
-    return empty();
-  }
-
-  /**
-   * Proxy method for {@link Try#getFirst(Iterable)}.
-   *
-   * @param suppliers varargs of suppliers
-   * @param <T>       the type of the return value
-   * @param <E>       the type of the exception that supplier may throw
-   * @return a container with the value of the succeeded supplier or {@link Try#empty()}
-   * @throws NullPointerException if suppliers parameter is null
-   */
-  @SafeVarargs
-  @SuppressWarnings("varargs")
-  public static <T, E extends Throwable> Try<T> getFirst(CheckedSupplier<T, E>... suppliers) {
-    Objects.requireNonNull(suppliers);
-    return getFirst(Arrays.stream(suppliers).collect(Collectors.toList()));
-  }
-
-  /**
-   * Whether the value is present in the container.
-   *
-   * @return true if value is present and false otherwise
-   */
-  public boolean isPresent() {
-    return !isEmpty();
-  }
-
-  /**
-   * Whether the container is empty.
-   *
-   * @return true if container is empty and false otherwise
-   */
-  public boolean isEmpty() {
-    return reasonOfEmptiness != null;
-  }
-
-  /**
-   * Maps the value from one to another and returns new container. If container is empty already,
-   * returns new empty one with the same reason of emptiness. So, {@code mapper} will not be
-   * executed on empty container.
+   * Map the value from one to another and return new monad. This is an intermediate operation.
    *
    * @param mapper mapping function
    * @param <U>    the type of the new value
-   * @param <E>    the type of the exception that mapper may throw
-   * @return a container with the new value or an empty one
-   * @throws NullPointerException if mapper is null
+   * @return a monad with mapped function
+   * @throws NullPointerException if {@code mapper} is null
    */
-  public <U, E extends Throwable> Try<U> map(CheckedFunction<? super T, ? extends U, E> mapper) {
-    Objects.requireNonNull(mapper);
-    if (isEmpty()) {
-      return empty(reasonOfEmptiness);
-    }
-    return Try.of(() -> mapper.apply(value));
+  public <U> Try<U> map(CheckedFunction<? super T, ? extends U, ? extends Exception> mapper) {
+    Objects.requireNonNull(mapper, "mapper cannot be null");
+    return Try.of(() -> mapper.apply(valueSupplier.get()));
   }
 
   /**
-   * Maps the value from one to another and returns new container. The mapping function must return
-   * another {@link Try} container. If calculation does not fail, returns the new container,
-   * otherwise returns an empty one. If container is empty already, returns new empty one with the
-   * same reason of emptiness. So, {@code mapper} will not be executed on empty container.
+   * Map the value from one to another and returns new monad. The mapping function must return
+   * another {@link Try} container. This is an intermediate operation.
    * <br>
    * For instance,
    * <pre>{@code
@@ -182,191 +129,173 @@ public class Try<T> implements Streaming<T> {
    *
    * @param mapper mapping function
    * @param <U>    the type of the new value
-   * @param <E>    the type of the exception that mapper may throw
-   * @return a container with new value or an empty one
-   * @throws NullPointerException if mapper is null
+   * @return monad with new value or an empty one
+   * @throws NullPointerException if {@code mapper} is null
    * @see Try#map(CheckedFunction)
    */
-  @SuppressWarnings("unchecked")
-  public <U, E extends Throwable> Try<U> flatMap(
-      CheckedFunction<? super T, ? extends Try<? extends U>, E> mapper) {
-    Objects.requireNonNull(mapper);
-    if (isEmpty()) {
-      return empty(reasonOfEmptiness);
-    }
-    try {
-      return (Try<U>) mapper.apply(value);
-    } catch (Throwable e) {
-      return empty(e);
-    }
+  public <U> Try<U> flatMap(
+      CheckedFunction<? super T, ? extends Try<? extends U>, ? extends Exception> mapper) {
+    Objects.requireNonNull(mapper, "mapper cannot be null");
+    return Try.of(() -> mapper.apply(valueSupplier.get()).orElseThrow());
   }
 
   /**
-   * If container is empty or predicate's test returns false, returns {@link Try#empty(Throwable)},
-   * otherwise returns the container itself.
+   * Filter the value with the given {@code predicate}. If {@code predicate} returns {@code false},
+   * the {@linkplain NoSuchElementException} is thrown. This is an intermediate operation.
    *
    * @param predicate predicate function
    * @return the container itself or an empty one
    * @throws NullPointerException if predicate is null
    */
   public Try<T> filter(Predicate<? super T> predicate) {
-    Objects.requireNonNull(predicate);
-    if (isEmpty()) {
-      return empty(reasonOfEmptiness);
-    } else if (!predicate.test(value)) {
-      return empty(new EmptyContainerException(
-          String.format("Predicate %s has returned false", predicate)
-      ));
-    }
-    return this;
+    Objects.requireNonNull(predicate, "predicate cannot be null");
+    return Try.of(() -> {
+      final T value = valueSupplier.get();
+      if (predicate.test(value)) {
+        return value;
+      }
+      throw new NoSuchElementException("The filter does not pass");
+    });
   }
 
   /**
-   * Gets value from the container.
+   * Calculate the value and return the new monad that holds it. Otherwise, return the monad of the
+   * default value. This is an intermediate operation.
+   * <br>
+   * <pre>{@code
+   * Try.of(() -> "str")
+   *    .orElseTry(() -> "newStr")
+   *    .orElse("null")
+   * }</pre>
+   * returns {@code "str"}.
+   * <pre>{@code
+   * Try.<String>of(() -> {throw new Exception();})
+   *    .orElseTry(() -> "newStr")
+   *    .orElse("null")
+   * }</pre>
+   * returns {@code "newStr"}
+   * <pre>{@code
+   * Try.<String>of(() -> {throw new Exception();})
+   *    .orElseTry(() -> {throw new Exception();})
+   *    .orElse("null")
+   * }</pre>
+   * returns {@code "null"}.
    *
-   * @return the value of the container
-   * @throws EmptyContainerException if container is empty. The cause of the exception is the reason
-   *                                 of emptiness
+   * @param defaultValueSupplier supplier that provides the default value
+   * @return the monad of the calculated value or the default one
+   * @throws NullPointerException if {@code defaultValueSupplier} is null
    */
-  public T get() {
-    if (isPresent()) {
-      return value;
-    }
-    throw new EmptyContainerException(CONTAINER_IS_EMPTY_MSG, reasonOfEmptiness);
+  public Try<T> orElseTry(CheckedSupplier<? extends T, ? extends Exception> defaultValueSupplier) {
+    Objects.requireNonNull(defaultValueSupplier, "defaultValueSupplier cannot be null");
+    return new Try<>(() -> {
+      try {
+        return valueSupplier.get();
+      } catch (Exception e) {
+        return defaultValueSupplier.get();
+      }
+    });
   }
 
   /**
-   * Gets value from the container if it is not empty. Otherwise returns {@code other}.
+   * Calculate the value and return it, if the calculation does not fail. Otherwise, return the
+   * default value. This is a terminal operation.
    *
    * @param other the default value
-   * @return the value of the container if it is not empty, otherwise returns default value
+   * @return the calculated value or the default one
    */
   public T orElse(T other) {
-    return isPresent() ? value : other;
+    try {
+      return valueSupplier.get();
+    } catch (Exception e) {
+      return other;
+    }
   }
 
   /**
-   * If container is not empty, returns itself, otherwise returns the new one with the given
-   * supplier.
+   * Calculate the value and return it, if the calculation does not fail. Otherwise, return the
+   * defaultValue. This is a terminal operation.
    *
-   * @param supplier supplier for the new container
-   * @param <E>      the type of the exception that container may throw
-   * @return the container itself or the new one
-   * @throws NullPointerException if supplier is null
+   * @param defaultValueSupplier supplier the provides the default value
+   * @return the calculated value or the default one
+   * @throws NullPointerException if {@code defaultValueSupplier} is null
    */
-  public <E extends Throwable> Try<T> orElseTry(CheckedSupplier<T, E> supplier) {
-    Objects.requireNonNull(supplier);
-    return isPresent() ? this : Try.of(supplier);
+  public T orElseGet(Supplier<? extends T> defaultValueSupplier) {
+    Objects.requireNonNull(defaultValueSupplier, "defaultValueSupplier cannot be null");
+    try {
+      return valueSupplier.get();
+    } catch (Exception e) {
+      return defaultValueSupplier.get();
+    }
   }
 
   /**
-   * If container is not empty, returns its value, otherwise returns the result of the given
-   * supplier.
+   * Calculate the value and return it, if the calculation does not fail. Otherwise, return the
+   * default value. This is a terminal operation.
    *
-   * @param supplier supplier which returns default value
-   * @return the value of the container or the default one
-   * @throws NullPointerException if supplier is null
+   * @param defaultValueFunction function that accepts the exception that occurred and returns the
+   *                             default value
+   * @return the calculated value or the default one
+   * @throws NullPointerException if {@code defaultValueFunction} is null
    */
-  public T orElseGet(Supplier<? extends T> supplier) {
-    Objects.requireNonNull(supplier);
-    return isPresent() ? value : supplier.get();
+  public T orElseGet(Function<? super Exception, ? extends T> defaultValueFunction) {
+    Objects.requireNonNull(defaultValueFunction, "defaultValueFunction cannot be null");
+    try {
+      return valueSupplier.get();
+    } catch (Exception e) {
+      return defaultValueFunction.apply(e);
+    }
   }
 
   /**
-   * If container is not empty, returns itself, otherwise passes the reason of emptiness to the
-   * given provider and returns its result.
+   * Calculate the value and return it, if the calculation does not fail. Otherwise, throws the
+   * exception that led to error.
    *
-   * @param reasonOfEmptinessProvider provider which accepts reason of emptiness and returns the
-   *                                  default
-   * @return the value of the container or the default one
-   * @throws NullPointerException if {@code reasonOfEmptiness} is null
+   * @return the value of the container
    */
-  public T orElseGet(Function<Throwable, ? extends T> reasonOfEmptinessProvider) {
-    Objects.requireNonNull(reasonOfEmptinessProvider);
-    return isPresent() ? value : reasonOfEmptinessProvider.apply(reasonOfEmptiness);
+  public T orElseThrow() {
+    try {
+      return valueSupplier.get();
+    } catch (Exception e) {
+      return throwException(e);
+    }
   }
 
   /**
-   * If container is not empty, returns its value, otherwise throws given exception.
+   * Calculate the value and return it, if the calculation does not fail. Otherwise, throw the
+   * supplied exception. This is a terminal operation.
    *
    * @param exceptionSupplier supplier, that returns exception
    * @param <E>               the type of the exception
    * @return the value of the container
-   * @throws E                    if container is empty
-   * @throws NullPointerException if exceptionSupplier is null
+   * @throws E                    if the value calculation fails
+   * @throws NullPointerException if {@code exceptionSupplier} is null
    */
-  public <E extends Throwable> T orElseThrow(Supplier<? extends E> exceptionSupplier) throws E {
+  public <E extends Exception> T orElseThrow(Supplier<? extends E> exceptionSupplier) throws E {
     Objects.requireNonNull(exceptionSupplier);
-    if (isPresent()) {
-      return value;
-    }
-    throw exceptionSupplier.get();
-  }
-
-  /**
-   * If container is not empty, calls consumer with its value.
-   *
-   * @param consumer consumer that will be called, if container is not empty
-   * @throws NullPointerException if consumer is null
-   */
-  public void ifPresent(Consumer<T> consumer) {
-    Objects.requireNonNull(consumer);
-    if (isPresent()) {
-      consumer.accept(value);
+    try {
+      return valueSupplier.get();
+    } catch (Exception e) {
+      throw exceptionSupplier.get();
     }
   }
 
   /**
-   * If container is empty, provides reason of emptiness.
+   * Transform a monad to {@linkplain Stream}. This is a terminal operation.
    *
-   * @param reasonOfEmptinessProvider consumer that accepts reason of emptiness
-   * @throws NullPointerException if {@code reasonOfEmptiness} is null
-   */
-  public void ifEmpty(Consumer<Throwable> reasonOfEmptinessProvider) {
-    Objects.requireNonNull(reasonOfEmptinessProvider);
-    if (isEmpty()) {
-      reasonOfEmptinessProvider.accept(reasonOfEmptiness);
-    }
-  }
-
-  /**
-   * If container is empty, returns reason of emptiness. Otherwise returns {@link
-   * Optional#empty()}.
-   *
-   * @return reason of emptiness
-   */
-  public Optional<Throwable> getReasonOfEmptiness() {
-    if (isEmpty()) {
-      return Optional.ofNullable(reasonOfEmptiness);
-    } else {
-      return Optional.empty();
-    }
-  }
-
-  /**
-   * Transforms container to {@linkplain Stream}.
-   *
-   * @return stream of container's value if it is not empty, otherwise {@link Stream#empty()}
+   * @return stream of container's value, if the calculation passes. Otherwise, returns {@link
+   * Stream#empty()}
    */
   @Override
   public Stream<T> stream() {
-    return isPresent() ? Stream.of(value) : Stream.empty();
+    try {
+      return Stream.of(valueSupplier.get());
+    } catch (Exception e) {
+      return Stream.empty();
+    }
   }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    Try<?> other = (Try<?>) o;
-    return Objects.equals(value, other.value);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(value);
+  @SuppressWarnings("unchecked")
+  private static <E extends Exception, T> T throwException(Exception exception) throws E {
+    throw (E) exception;
   }
 }
