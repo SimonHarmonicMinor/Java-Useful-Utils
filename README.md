@@ -97,7 +97,7 @@ return Optional.ofNullable(getNullableString())
                .orElse("Oh my god. It is empty");
 ```
 
-This library has two monads: [`Try`](#try) and [`Lazy`](#lazy).
+This library has one monads: [`Try`](#try).
 
 ###### Try
 
@@ -213,34 +213,6 @@ assert 2 == t.orElseThrow();
 ```
 
 All terminal operations are listed in the [javadoc](./src/main/java/com/kirekov/juu/monad/Try.java).
-
-###### Lazy
-
-The name of the monad defines its purpose.
-
-```java
-Lazy<String> lazy = Lazy.of(this::executeRpc)
-                        .map(String::valueOf);
-                        .map(this::reverseString);
-
-String result = lazy.calculate();
-```
-
-The thing is that all declared steps won't be executed
-until `calculate` method call. This behaviour is similar
-to laziness of Haskell language. `Lazy` can be used to measure 
-execution time of different chains.
-
-```java
-ImmutableList<Lazy<Integer>> list = getList();
-ExecutionResult<Integer> minTimeResult =
-        list.map(lazy -> Measure.executionTime(lazy::calculate)
-                                .inMillis())
-            .min(Comparator.comparingLong(ExecutionResult::getTime))
-            .orElseThrow(IllegalStateException::new);       
-```
-
-You can also combine `Lazy` and `Try` monads to prevent unexpected errors.
 
 ##### Collections
 
