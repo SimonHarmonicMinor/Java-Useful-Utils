@@ -274,7 +274,7 @@ on every `add` call.
 
 JUU library provides new collections, which interfaces
 do not inherits from java native Collections. 
-Here is the scheme ![scheme](./juu1.1.png)
+Here is the scheme ![scheme](./juu2.0.0.png)
 
 The recommended way to instantiate immutable collections is to use `Immutable` class.
 ```java
